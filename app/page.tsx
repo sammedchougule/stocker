@@ -5,11 +5,9 @@ import { StockProvider } from '@/context/StockContext'
 export default function Home() {
   return (
     <main>
-      <StockProvider>
-        
+      <StockProvider>    
         <Indices />
         <TodaysStocks />
-        
       </StockProvider>
     </main>
   )

@@ -1,7 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { ThemeProvider } from '@/context/ThemeContext'
 import { StockProvider } from '@/context/StockContext'
 import Navbar from '@/components/Navbar'
 import Marquee from '@/components/Marquee'
@@ -21,7 +20,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider>
           <StockProvider>
             <div className="min-h-screen pt-20">
               <Marquee />
@@ -31,7 +29,6 @@ export default function RootLayout({
               </div>
             </div>
           </StockProvider>
-        </ThemeProvider>
       </body>
     </html>
   )
