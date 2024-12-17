@@ -41,7 +41,7 @@ const TodaysStocks = () => {
       filtered = stocks.filter(stock => stock.indices && stock.indices[largeCapFilter])
     }
     
-    let sorted = [...filtered]
+    const sorted = [...filtered] // let
     switch (activeFilter) {
       case 'gainers':
         return sorted.sort((a, b) => b.changepct - a.changepct).slice(0, 5)
