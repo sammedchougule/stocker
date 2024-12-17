@@ -40,6 +40,4 @@ yarn-error.log*
 next-env.d.ts
 
 # sheet link
-/context
-
 context/StockContext.tsx
