@@ -57,7 +57,7 @@ export default function Marquee() {
         gradient={false}
         pauseOnHover={true}
       >
-        {filteredStocks.map((stock, index) => (
+        {filteredStocks.map((stock) => (
           <span key={stock.symbol} className="inline-block mx-1">
             <span className="mr-2 text-md font-medium text-gray-900 ">{stock.symbol}</span>
             <span className="mr-2 text-md text-gray-900 ">₹{formatPrice(stock.price)}</span>
