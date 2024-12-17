@@ -189,16 +189,18 @@ const TodaysStocks = () => {
                   <div key={stock.symbol} className="grid grid-cols-12 gap-4 items-center py-3 px-2 sm:px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleStockClick(stock)}>
                     <div className="col-span-1 sm:col-span-1">
                       <div className=" flex items-center justify-center">
-                        <Image
-                          className='w-8 h-8 rounded-full'
-                          src={`/images/${stock.symbol}.svg`}
-                          alt={stock.companyname}
-                          width={32}
-                          height={32}
-                          onError={(e) => {
-                            e.target.src ='/images/nse.svg';
-                          }}
-                        />
+                      <Image
+                        className='w-8 h-8 rounded-full'
+                        src={`/images/${stock.symbol}.svg`}
+                        alt={stock.companyname}
+                        width={32}
+                        height={32}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement; // Cast the event target to HTMLImageElement
+                          target.src = '/images/nse.svg'; // Now TypeScript knows 'target' has a 'src' property
+                        }}
+                      />
+
                       </div>
                     </div>
                     <div className="col-span-5 sm:col-span-4 min-w-0">
