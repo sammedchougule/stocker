@@ -89,7 +89,8 @@ const Indices: React.FC = () => {
             width={32}
             height={32}
             onError={(e) => {
-              e.target.src = '/images/nse.svg';
+              const target = e.target as HTMLImageElement; // Cast the event target to HTMLImageElement
+              target.src = '/images/nse.svg'; // Now TypeScript knows 'target' has a 'src' property
             }}
           />
             <span className="text-lg font-md truncate max-w-[150px]">{sector.companyname}</span>
