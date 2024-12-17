@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, Timer, ArrowUp, ArrowDown, Plus, ListFilter } from 'lucide-react'
+import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, Plus, ListFilter } from 'lucide-react'
 import { Button } from '@/components/ui/buttons'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { useStockContext } from '@/context/StockContext'
@@ -103,7 +103,7 @@ const TodaysStocks = () => {
         <Card>
           <CardHeader className="pb-4 px-2 sm:px-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Today's stocks</h2>
+              <h2 className="text-xl font-semibold">Today&apos;s stocks</h2>
               <button
                 onClick={cycleLargeCapFilter}
                 className="flex items-center gap-1 text-blue-500 hover:text-blue-600 bg-transparent border-none cursor-pointer"
@@ -244,7 +244,7 @@ const TodaysStocks = () => {
         {/* Market Mood Index */}
         <div className="text-center">
           <h3 className="text-lg font-medium mb-2">Market Mood Index</h3>
-          <p className="text-sm text-gray-500 mb-6">Know what's the sentiment on the street today</p>
+          <p className="text-sm text-gray-500 mb-6">Know whats the sentiment on the street today</p>
           {/* Gauge Component */}
           <div className="relative w-full aspect-square">
             <svg viewBox="0 0 200 100" className="w-full">
