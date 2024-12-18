@@ -8,8 +8,8 @@ import Marquee from '@/components/Marquee'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Stock Data Table',
-  description: 'Displaying top 20 stocks data',
+  title: 'Stocker',
+  description: 'Stock Market Details',
 }
 
 export default function RootLayout({

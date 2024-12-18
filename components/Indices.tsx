@@ -93,11 +93,11 @@ const Indices: React.FC = () => {
               target.src = '/images/nse.svg'; // Now TypeScript knows 'target' has a 'src' property
             }}
           />
-            <span className="text-lg font-md truncate max-w-[150px]">{sector.companyname}</span>
+            <span className="text-md font-md truncate max-w-[150px]">{sector.companyname}</span>
           </div>
 
           <div className="text-right">
-            <div className="text-lg font-md">{sector.price}</div>
+            <div className="text-md font-md">{sector.price}</div>
             <div className="flex items-center justify-end mt-0.5">
               <span
                 className={`inline-flex items-center rounded px-1 py-1 ${
@@ -137,8 +137,8 @@ const Indices: React.FC = () => {
   return (
     <div className="container mx-auto sm:px-6 lg:px-8 mt-4">
       <Card className="overflow-y-auto max-h-[calc(100vh-8rem)]">
-        <Card className="p-4">
-          <CardHeader className="p-0 pb-4">
+        <Card className="p-2">
+          <CardHeader className="p-2 pb-2">
             <div className="flex justify-between items-center border-b">
               <h2 className="text-xl font-medium">Sectoral Indices</h2>
               <a href="#" className="text-md text-blue-500">
