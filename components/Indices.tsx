@@ -80,7 +80,7 @@ const Indices: React.FC = () => {
   const renderCard = (startIndex: number, endIndex: number) => (
     <div className="grid grid-cols-1 gap-5">
       {filteredSectors.slice(startIndex, endIndex).map((sector) => (
-        <div key={sector.symbol} className="flex justify-between items-start px-1 cursor-pointer" onClick={() => handleStockClick(sector)}>
+        <div key={sector.symbol} className="flex justify-between items-start cursor-pointer" onClick={() => handleStockClick(sector)}>
           <div className="flex items-center space-x-1">
           <Image
             className='w-8 h-8 rounded-full'
@@ -112,7 +112,7 @@ const Indices: React.FC = () => {
                   <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
                 )}
                 <span className="text-sm font-md">
-                  {typeof sector.changepct === 'number' ? sector.changepct : 'N/A'}%
+                  {sector.changepct}%
                 </span>
               </span>
             </div>
@@ -135,9 +135,9 @@ const Indices: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-      <div className="overflow-y-auto max-h-[calc(100vh-8rem)]">
-        <Card className="bg-white  p-4">
+    <div className="container mx-auto sm:px-6 lg:px-8 mt-4">
+      <Card className="overflow-y-auto max-h-[calc(100vh-8rem)]">
+        <Card className="p-4">
           <CardHeader className="p-0 pb-4">
             <div className="flex justify-between items-center border-b">
               <h2 className="text-xl font-medium">Sectoral Indices</h2>
@@ -215,7 +215,8 @@ const Indices: React.FC = () => {
             )}
           </CardContent>
         </Card>
-      </div>
+      </Card>
+
       <StockModal
         stock={selectedStock}
         isOpen={isModalOpen}

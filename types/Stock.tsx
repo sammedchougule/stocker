@@ -26,6 +26,7 @@ export interface Stock {
   sector: string | null;
   view_chart: string | null;
   indices: Indices | null;
+  type: string | null;
   exchange: string | null;
   currency: string | null;
   closeyest: number;

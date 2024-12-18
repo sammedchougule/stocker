@@ -32,7 +32,7 @@ export default function Marquee() {
 
   const formatPrice = (price: number | string) => {
     if (typeof price === 'number') {
-      return price.toFixed(2)
+      return price
     }
     return price
   }

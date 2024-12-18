@@ -47,7 +47,7 @@ export function StockProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      const res = await fetch('https://script.googleusercontent.com/macros/echo?user_content_key=k4oVSbP-0wo1trd0NodV7Scw61-7t4Gq9SJA1Dh95VbwkIfAGMrxZJ0OdYPVPzp46tTt2644dECWGnQuRqJUB0-GCyPPWVSPm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnBJjfwGN67HEzwyFasDmQlqVGkJ0yt8eNTrmSs6iw0kRY-_N19F95OBqia-VZczVJPld9kAXb2_ghiDmprgxYKMyalA9mEWtU9z9Jw9Md8uu&lib=M0Ouv2QVPVuP80qJXjRJ8pPuEh5b1rvZ_')
+      const res = await fetch('https://script.google.com/macros/s/AKfycby2di5WbIb6hBfePb-zN6DyJZOTTkfzZ84BOGX2Dzn0ZT6jF6grcaI60AUYOARO0lcbSg/exec')
       
       if (!res.ok) {
         throw new Error('Failed to fetch data')
