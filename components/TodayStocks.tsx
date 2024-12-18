@@ -175,11 +175,11 @@ const TodaysStocks = () => {
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="px-2 sm:px-6">
+          {/* <CardContent className="px-2 sm:px-6">
             <div className="grid grid-cols-12 gap-4 py-2 text-sm font-medium text-gray-500 px-2 sm:px-0">
-              <div className="col-span-6 sm:col-span-5 text-center">STOCKS</div>
-              <div className="col-span-3 sm:col-span-3 text-right">PRICE</div>
-              <div className="col-span-3 sm:col-span-4 text-right">CHANGE</div>
+              <div className="col-span-6 sm:col-span-4 text-center">STOCKS</div>
+              <div className="col-span-3 sm:col-span-4 text-right">PRICE</div>
+              <div className="col-span-3 sm:col-span-3 text-right">CHANGE</div>
             </div>
             {loading ? (
               renderSkeleton()
@@ -204,15 +204,15 @@ const TodaysStocks = () => {
                       </div>
                     </div>
                     <div className="col-span-5 sm:col-span-4 min-w-0">
-                      <div className="font-medium text-gray-900 truncate">{stock.companyname}</div>
-                      <div className="text-sm text-gray-500 truncate">{stock.symbol}</div>
+                      <div className="font-medium max-w-[120px] truncate">{stock.symbol}</div>
+                      <div className="text-sm text-gray-600 truncate">{stock.companyname}</div>
                     </div>
-                    <div className="col-span-3 sm:col-span-3 text-right">
-                      <div className="font-medium text-gray-900">₹ {stock.price.toFixed(2)}</div>
+                    <div className="col-span-3 sm:col-span-4 text-right">
+                      <div className="font-medium">₹ {stock.price}</div>
                     </div>
-                    <div className="col-span-3 sm:col-span-4 flex items-center justify-end gap-2">
+                    <div className="col-span-3 sm:col-span-3 flex items-center justify-end gap-2">
                       <span
-                        className={`inline-flex items-center rounded px-1.5 py-1 ${
+                        className={`inline-flex items-center rounded p-1 ${
                           stock.changepct >= 0
                             ? 'text-green-500 bg-green-50 rounded-lg'
                             : 'text-red-500 bg-red-50 rounded-lg'
@@ -223,8 +223,8 @@ const TodaysStocks = () => {
                         ) : (
                           <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
                         )}
-                        <span className="text-sm font-semibold">
-                          {stock.changepct.toFixed(2)}%
+                        <span className="text-sm">
+                          {stock.changepct}%
                         </span>
                       </span>
                       <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -235,7 +235,71 @@ const TodaysStocks = () => {
                 ))}
               </div>
             )}
-          </CardContent>
+          </CardContent> */}
+          <CardContent className="px-2 sm:px-6">
+      <div className="grid grid-cols-12 gap-4 py-2 text-sm font-medium text-gray-500 px-2 sm:px-0">
+        {/* Adjusted heading alignment and col span */}
+        <div className="col-span-4 sm:col-span-4  text-left ">STOCKS</div>
+        <div className="col-span-4 sm:col-span-4 text-right">PRICE</div>
+        <div className="col-span-4 sm:col-span-4 text-right pr-2">CHANGE</div>
+      </div>
+      {loading ? (
+        renderSkeleton()
+      ) : (
+        <div className="divide-y">
+          {filteredStocks.map((stock) => (
+            <div key={stock.symbol} className="grid grid-cols-12 gap-4 items-center py-3 px-2 sm:px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleStockClick(stock)}>
+               {/* Adjusted Stock Info  col span */}
+              <div className="col-span-1 sm:col-span-1">
+                <div className=" flex items-center justify-center">
+                <Image
+                  className='w-8 h-8 rounded-full'
+                  src={`/images/${stock.symbol}.svg`}
+                  alt={stock.companyname}
+                  width={32}
+                  height={32}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/images/nse.svg';
+                  }}
+                />
+
+                </div>
+              </div>
+              <div className="col-span-3 sm:col-span-3 min-w-0">
+                <div className="font-medium max-w-[120px] truncate">{stock.companyname}</div>
+                <div className="text-sm text-gray-600 truncate">{stock.symbol}</div>
+              </div>
+               {/* Adjusted price and change col span */}
+              <div className="col-span-4 sm:col-span-4 text-right">
+                <div className="font-medium">₹ {stock.price}</div>
+              </div>
+              <div className="col-span-4 sm:col-span-4 flex items-center justify-end gap-2 pr-2">
+                <span
+                  className={`inline-flex items-center rounded p-1 ${
+                    stock.changepct >= 0
+                      ? 'text-green-500 bg-green-50 rounded-lg'
+                      : 'text-red-500 bg-red-50 rounded-lg'
+                  }`}
+                >
+                  {stock.changepct >= 0 ? (
+                    <ArrowUpIcon className="w-3.5 h-3.5 mr-0.5" />
+                  ) : (
+                    <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
+                  )}
+                  <span className="text-sm">
+                    {stock.changepct}%
+                  </span>
+                </span>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </CardContent>
         </Card>
       </div>
 
