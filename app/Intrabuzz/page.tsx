@@ -264,7 +264,7 @@ export default function Intrabuzz() {
                     <TableCell>{stock.companyname}</TableCell>
                     <TableCell className="text-right">₹{stock.price}</TableCell>
                     <TableCell className={`text-right ${stock.changepct >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {stock.changepct.toFixed(2)}%
+                      {stock.changepct}%
                     </TableCell>
                     <TableCell className="text-right">{((stock.volumespike ?? 0 ) * 100).toFixed(2)}</TableCell>
                   </TableRow>
