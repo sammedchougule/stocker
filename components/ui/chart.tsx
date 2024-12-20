@@ -146,13 +146,11 @@ export function Chart({
           style={tooltipStyles}
         >
           <div>
-            <strong>{(tooltipData as any).name}</strong>
+            <strong>{tooltipData.name}</strong>
           </div>
-          <div>{(tooltipData as any).value}</div>
+          <div>{tooltipData.value}</div>
         </TooltipInPortal>
       )}
     </div>
   )
 }
-
-
