@@ -11,9 +11,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, ArrowUp, ArrowDown } from 'lucide-react'
+import { Plus, ArrowUp, ArrowDown, TableIcon, LayoutGrid } from 'lucide-react'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { StockModal } from '@/components/StockModal';
+import { Button } from '@/components/ui/buttons'
+import Image from 'next/image';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 type SortOption = 
   | 'changepct_desc' 
@@ -21,7 +32,7 @@ type SortOption =
   | 'volumespike_desc' 
   | 'volumespike_asc' 
 
-type FilterOption = 'all' | 'Nifty50' | 'NiftyBank' | 'NiftyIT' | 'NiftyAuto'
+type FilterOption = 'all' | 'Nifty50' | 'NiftyBank' | 'NiftyIt' | 'NiftyAuto' | 'NiftyF&O'
 
 const COLORS = [
   'bg-[#4A5568]', 'bg-[#B8860B]', 'bg-[#0088CC]', 'bg-[#663399]',
@@ -33,6 +44,10 @@ export default function Intrabuzz() {
   const { stocks, loading } = useStockContext()
   const [sortBy, setSortBy] = useState<SortOption>('changepct_desc')
   const [filterBy, setFilterBy] = useState<FilterOption>('all')
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
+
+  const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredAndSortedStocks = useMemo(() => {
     if (!stocks) return []
@@ -42,6 +57,13 @@ export default function Intrabuzz() {
     if (filterBy !== 'all') {
       filtered = filtered.filter(stock => 
         stock.indices && stock.indices[filterBy as keyof typeof stock.indices]
+      )
+    } else {
+      // When 'all' is selected, show stocks from any of the specified indices
+      filtered = filtered.filter(stock => 
+        stock.indices && (
+          stock.indices.Nifty50
+        )
       )
     }
 
@@ -68,10 +90,15 @@ export default function Intrabuzz() {
     return COLORS[index % COLORS.length]
   }
 
+  const handleStockClick = (stock: Stock) => {
+    setSelectedStock(stock);
+    setIsModalOpen(true);
+  };
+
   const StockCard = ({ stock }: { stock: Stock }) => (
-    <Card className="relative flex flex-col">
+    <Card className="relative flex flex-col cursor-pointer" onClick={() => handleStockClick(stock)}>
       <CardHeader className="pb-2">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center" >
           <div className={`w-28 px-3 py-1 rounded-md text-white font-medium text-sm flex items-center justify-center ${getRandomColor(stock.symbol)}`}>
             <span className="text-center whitespace-nowrap text-[13px] leading-none">
               {stock.symbol}
@@ -83,7 +110,7 @@ export default function Intrabuzz() {
         </div>
       </CardHeader>
       <CardContent className="pb-2 flex-grow">
-        <h3 className="text-sm font-medium text-gray-900 leading-tight line-clamp-2">
+        <h3 className="text-md font-medium text-gray-900 leading-tight line-clamp-2">
           {stock.companyname}
         </h3>
       </CardContent>
@@ -92,19 +119,13 @@ export default function Intrabuzz() {
           ₹{stock.price}
         </div>
         <div className="flex justify-between w-full">
-          <div className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium
-            ${typeof stock.changepct === 'number'
-              ? (stock.changepct >= 0 ? 'text-green-700 bg-green-50' : 'text-red-700 bg-red-50')
-              : 'text-gray-700 bg-gray-50'
-            }`}>
-            {typeof stock.changepct === 'number' ? (
-              <>
+          <div className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium
+            ${(stock.changepct >= 0 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100')
+              }`}>
                 {stock.changepct >= 0 ? '↑' : '↓'} {stock.changepct}%
-              </>
-            ) : 'N/A'}
           </div>
-          <div className="text-xs font-medium text-gray-500">
-            Vol: {(stock.volumespike ?? 0 ) * 100}
+          <div className="text-xs font-medium text-gray-600 bg-yellow-100 px-2 py-1 rounded-md">
+            Vol: {((stock.volumespike ?? 0 ) * 100).toFixed(2)}
           </div>
         </div>
       </CardFooter>
@@ -140,59 +161,125 @@ export default function Intrabuzz() {
             <SelectValue placeholder="Filter by Index" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Stocks</SelectItem>
+            <SelectItem value="all">All Indices</SelectItem>
             <SelectItem value="Nifty50">Nifty 50</SelectItem>
+            <SelectItem value="NiftyF&O">Nifty F&O</SelectItem>
             <SelectItem value="NiftyBank">Nifty Bank</SelectItem>
-            <SelectItem value="NiftyIT">Nifty IT</SelectItem>
+            <SelectItem value="NiftyIt">Nifty IT</SelectItem>
             <SelectItem value="NiftyAuto">Nifty Auto</SelectItem>
           </SelectContent>
         </Select>
 
-        <Select
-          value={sortBy}
-          onValueChange={(value: SortOption) => setSortBy(value)}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="changepct_desc">
-              <span className="flex items-center">
-                <ArrowDown className="w-4 h-4 mr-2" />
-                Change % 
-              </span>
-            </SelectItem>
-            <SelectItem value="changepct_asc">
-              <span className="flex items-center">
-                <ArrowUp className="w-4 h-4 mr-2" />
-                Change % 
-              </span>
-            </SelectItem>
-            <SelectItem value="volumespike_desc">
-              <span className="flex items-center">
-                <ArrowDown className="w-4 h-4 mr-2" />
-                Volume Spike 
-              </span>
-            </SelectItem>
-            <SelectItem value="volumespike_asc">
-              <span className="flex items-center">
-                <ArrowUp className="w-4 h-4 mr-2" />
-                Volume Spike 
-              </span>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-2">
+          <Select
+            value={sortBy}
+            onValueChange={(value: SortOption) => setSortBy(value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="changepct_desc">
+                <span className="flex items-center">
+                  <ArrowDown className="w-4 h-4 mr-2" />
+                  Change % 
+                </span>
+              </SelectItem>
+              <SelectItem value="changepct_asc">
+                <span className="flex items-center">
+                  <ArrowUp className="w-4 h-4 mr-2" />
+                  Change % 
+                </span>
+              </SelectItem>
+              <SelectItem value="volumespike_desc">
+                <span className="flex items-center">
+                  <ArrowDown className="w-4 h-4 mr-2" />
+                  Volume Spike 
+                </span>
+              </SelectItem>
+              <SelectItem value="volumespike_asc">
+                <span className="flex items-center">
+                  <ArrowUp className="w-4 h-4 mr-2" />
+                  Volume Spike 
+                </span>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setViewMode(viewMode === 'card' ? 'table' : 'card')}
+          >
+            {viewMode === 'card' ? <TableIcon className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        {loading
-          ? Array(10).fill(0).map((_, index) => <SkeletonCard key={index} />)
-          : filteredAndSortedStocks.map((stock) => (
-              <StockCard key={stock.symbol} stock={stock} />
-            ))
-        }
-      </div>
-    </div>
+      {viewMode === 'card' ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {loading
+            ? Array(10).fill(0).map((_, index) => <SkeletonCard key={index} />)
+            : filteredAndSortedStocks.map((stock) => (
+                <StockCard key={stock.symbol} stock={stock} />
+              ))
+          }
+        </div>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Image</TableHead>
+              <TableHead>Symbol</TableHead>
+              <TableHead>Company Name</TableHead>
+              <TableHead className="text-right">Price</TableHead>
+              <TableHead className="text-right">Change %</TableHead>
+              <TableHead className="text-right">Volume Spike</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {loading
+              ? Array(10).fill(0).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell><Skeleton circle width={30} height={30} /></TableCell>
+                    <TableCell><Skeleton width={60} /></TableCell>
+                    <TableCell><Skeleton width={150} /></TableCell>
+                    <TableCell className="text-right"><Skeleton width={80} /></TableCell>
+                    <TableCell className="text-right"><Skeleton width={60} /></TableCell>
+                    <TableCell className="text-right"><Skeleton width={80} /></TableCell>
+                  </TableRow>
+                ))
+              : filteredAndSortedStocks.map((stock) => (
+                  <TableRow className='cursor-pointer' key={stock.symbol} onClick={() => handleStockClick(stock)}>
+                    <TableCell className="font-medium">
+                      <Image
+                        className='w-8 h-8 rounded-full'
+                        src={`/images/${stock.symbol}.svg`}
+                        alt={stock.companyname}
+                        width={32}
+                        height={32}
+                      />
+                    </TableCell>
+                    <TableCell className="font-medium">{stock.symbol}</TableCell>
+                    <TableCell>{stock.companyname}</TableCell>
+                    <TableCell className="text-right">₹{stock.price}</TableCell>
+                    <TableCell className={`text-right ${stock.changepct >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {stock.changepct.toFixed(2)}%
+                    </TableCell>
+                    <TableCell className="text-right">{((stock.volumespike ?? 0 ) * 100).toFixed(2)}</TableCell>
+                  </TableRow>
+                ))
+            }
+          </TableBody>
+        </Table>
+      )}
+
+      <StockModal
+        stock={selectedStock}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </div> 
   )
 }
 
