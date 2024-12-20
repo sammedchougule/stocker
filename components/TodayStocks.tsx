@@ -197,10 +197,6 @@ const TodaysStocks = () => {
                           height={32}
                           src={`/images/${stock.symbol}.svg`}
                           alt={stock.companyname}
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = '/images/nse.svg';
-                          }}
                         />
                     </div>
                     <div className="col-span-3 sm:col-span-3 min-w-0">
