@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -7,8 +8,7 @@ import { Group } from "@visx/group"
 import { scaleBand, scaleLinear } from "@visx/scale"
 import { Bar } from "@visx/shape"
 import { useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip"
-import { localPoint } from "@visx/event"
-
+import { localPoint } from "@visx/event";
 import { cn } from "@/utils/utils"
 
 const tooltipStyles = {
@@ -29,11 +29,6 @@ export interface ChartProps extends React.HTMLAttributes<HTMLDivElement> {
   margin?: { top: number; right: number; bottom: number; left: number }
   xAxisLabel?: string
   yAxisLabel?: string
-}
-
-interface DataPoint {
-  name: string
-  value: number
 }
 
 export function Chart({
@@ -69,7 +64,7 @@ export function Chart({
     tooltipOpen,
     showTooltip,
     hideTooltip,
-  } = useTooltip<DataPoint>()
+  } = useTooltip()
 
   const { containerRef, TooltipInPortal } = useTooltipInPortal({
     scroll: true,
@@ -128,14 +123,12 @@ export function Chart({
                   hideTooltip()
                 }}
                 onMouseMove={(event) => {
-                  const eventSvgCoords = localPoint(event) 
-                  if (eventSvgCoords) {
-                    showTooltip({
-                      tooltipData: d,
-                      tooltipTop: eventSvgCoords.y,
-                      tooltipLeft: eventSvgCoords.x,
-                    })
-                  }
+                  const eventSvgCoords = localPoint(event)
+                  showTooltip({
+                    tooltipData: d,
+                    tooltipTop: eventSvgCoords?.y,
+                    tooltipLeft: eventSvgCoords?.x,
+                  })
                 }}
               />
             )
@@ -149,11 +142,42 @@ export function Chart({
           style={tooltipStyles}
         >
           <div>
-            <strong>{tooltipData.name}</strong>
+            <strong>{(tooltipData as any).name}</strong>
           </div>
-          <div>{tooltipData.value}</div>
+          <div>{(tooltipData as any).value}</div>
         </TooltipInPortal>
       )}
     </div>
   )
 }
+
+interface ChartContainerProps {
+  children: React.ReactNode
+  config: Record<string, { label: string; color: string }>
+  className?: string
+}
+
+export function ChartContainer({ children, config, className }: ChartContainerProps) {
+  return (
+    <div className={cn("relative", className)}>
+      {children}
+      <div className="mt-4 flex flex-wrap gap-4">
+        {Object.entries(config).map(([key, { label, color }]) => (
+          <div key={key} className="flex items-center">
+            <div className="mr-2 h-3 w-3 rounded-full" style={{ backgroundColor: color }} />
+            <span className="text-sm font-medium">{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export function ChartTooltip({ children }: { children: React.ReactNode }) {
+  return <>{children}</>
+}
+
+export function ChartTooltipContent({ children }: { children: React.ReactNode }) {
+  return <div className="rounded-lg bg-white p-2 shadow-md">{children}</div>
+}
+
