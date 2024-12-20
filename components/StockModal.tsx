@@ -62,7 +62,7 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
               </div>
               <div>
                 <p className="text-sm">Market Cap</p>
-                <p className="text-sm">₹{stock.marketcap ? `${(stock.marketcap / 10000000)} Cr` : 'N/A'}</p>
+                <p className="text-sm">₹{stock.marketcap ? `${stock.marketcap} Cr` : 'N/A'}</p>
               </div>
               <div>
                 <p className="text-sm">P/E Ratio</p>
