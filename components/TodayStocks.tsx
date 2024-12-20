@@ -35,8 +35,9 @@ const TodaysStocks = () => {
 
   const filteredStocks = useMemo(() => {
     if (!stocks) return []
+
+    let filtered = stocks.filter(stock => stock.type === 'EQ')
     
-    let filtered = stocks
     if (largeCapFilter !== 'All') {
       filtered = stocks.filter(stock => stock.indices && stock.indices[largeCapFilter])
     }
