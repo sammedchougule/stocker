@@ -104,7 +104,7 @@ export default function Intrabuzz() {
             ) : 'N/A'}
           </div>
           <div className="text-xs font-medium text-gray-500">
-            Vol: {(stock.volumespike * 100)}
+            Vol: {(stock.volumespike ?? 0 ) * 100}
           </div>
         </div>
       </CardFooter>
