@@ -30,6 +30,11 @@ export interface ChartProps extends React.HTMLAttributes<HTMLDivElement> {
   yAxisLabel?: string
 }
 
+interface DataPoint {
+  name: string
+  value: number
+}
+
 export function Chart({
   data,
   width = 500,
@@ -63,7 +68,7 @@ export function Chart({
     tooltipOpen,
     showTooltip,
     hideTooltip,
-  } = useTooltip()
+  } = useTooltip<DataPoint>()
 
   const { containerRef, TooltipInPortal } = useTooltipInPortal({
     scroll: true,
