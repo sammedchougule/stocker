@@ -7,6 +7,7 @@ import { Group } from "@visx/group"
 import { scaleBand, scaleLinear } from "@visx/scale"
 import { Bar } from "@visx/shape"
 import { useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip"
+import { localPoint } from "@visx/event"
 
 import { cn } from "@/utils/utils"
 
@@ -127,12 +128,14 @@ export function Chart({
                   hideTooltip()
                 }}
                 onMouseMove={(event) => {
-                  const eventSvgCoords = localPoint(event)
-                  showTooltip({
-                    tooltipData: d,
-                    tooltipTop: eventSvgCoords?.y,
-                    tooltipLeft: eventSvgCoords?.x,
-                  })
+                  const eventSvgCoords = localPoint(event) 
+                  if (eventSvgCoords) {
+                    showTooltip({
+                      tooltipData: d,
+                      tooltipTop: eventSvgCoords.y,
+                      tooltipLeft: eventSvgCoords.x,
+                    })
+                  }
                 }}
               />
             )
