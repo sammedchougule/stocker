@@ -43,7 +43,7 @@ const COLORS = [
 export default function Intrabuzz() {
   const { stocks, loading } = useStockContext()
   const [sortBy, setSortBy] = useState<SortOption>('changepct_desc')
-  const [filterBy, setFilterBy] = useState<FilterOption>('all')
+  const [filterBy, setFilterBy] = useState<FilterOption>('Nifty FnO')
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
 
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
