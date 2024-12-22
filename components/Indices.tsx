@@ -137,11 +137,11 @@ const Indices: React.FC = () => {
                 See All
               </a>
             </div>
-            {lastUpdated && (
+            {/* {lastUpdated && (
               <p className="text-sm text-gray-400 ">
                 Last updated: {lastUpdated.toLocaleString()}
               </p>
-            )}
+            )} */}
           </CardHeader>
           <CardContent className="relative p-1">
             {loading ? (
