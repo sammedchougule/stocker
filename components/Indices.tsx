@@ -28,7 +28,7 @@ const INDICES = [
 ];
 
 const Indices: React.FC = () => {
-  const { stocks, loading, error, lastUpdated } = useStockContext();
+  const { stocks, loading, error } = useStockContext();   // {lastUpdated}
   const [filteredSectors, setFilteredSectors] = useState<Stock[]>([]);
   const [activeCard, setActiveCard] = useState(0);
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
