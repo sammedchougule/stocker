@@ -32,7 +32,7 @@ type SortOption =
   | 'volumespike_desc' 
   | 'volumespike_asc' 
 
-type FilterOption = 'all' | 'Nifty50' | 'NiftyBank' | 'NiftyIt' | 'NiftyAuto' | 'NiftyF&O'
+type FilterOption = 'all' | 'Nifty 50' | 'Nifty Bank' | 'Nifty IT' | 'Nifty Auto' | 'Nifty FnO'
 
 const COLORS = [
   'bg-[#4A5568]', 'bg-[#B8860B]', 'bg-[#0088CC]', 'bg-[#663399]',
@@ -161,12 +161,11 @@ export default function Intrabuzz() {
             <SelectValue placeholder="Filter by Index" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Indices</SelectItem>
-            <SelectItem value="Nifty50">Nifty 50</SelectItem>
-            <SelectItem value="NiftyF&O">Nifty F&O</SelectItem>
-            <SelectItem value="NiftyBank">Nifty Bank</SelectItem>
-            <SelectItem value="NiftyIt">Nifty IT</SelectItem>
-            <SelectItem value="NiftyAuto">Nifty Auto</SelectItem>
+            <SelectItem value="Nifty FnO">All</SelectItem>
+            <SelectItem value="Nifty 50">Nifty 50</SelectItem>
+            <SelectItem value="Nifty Bank">Nifty Bank</SelectItem>
+            <SelectItem value="Nifty IT">Nifty IT</SelectItem>
+            <SelectItem value="Nifty Auto">Nifty Auto</SelectItem>
           </SelectContent>
         </Select>
 
