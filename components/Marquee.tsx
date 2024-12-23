@@ -60,13 +60,13 @@ export default function Marquee() {
         {filteredStocks.map((stock) => (
           <span key={stock.symbol} className="inline-block mx-1">
             <span className="mr-2 text-md font-medium text-gray-900 ">{stock.symbol}</span>
-            <span className="mr-2 text-md text-gray-900 ">₹{formatPrice(stock.price)}</span>
+            <span className="mr-2 text-md text-gray-900 ">₹{Number(stock.price).toFixed(2)}</span>
             <span
               className={`font-semibold text-md ${
                 stock.changepct >= 0 ? "text-green-500 " : "text-red-500 "
               }`}
             >
-              {stock.changepct >= 0 ? "▲" : "▼"} {formatPrice(stock.changepct)}%
+              {stock.changepct >= 0 ? "▲" : "▼"} {Number(stock.changepct).toFixed(2)}%
             </span>
           </span>
         ))}
