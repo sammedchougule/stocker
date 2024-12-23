@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { cn } from "@/utils/utils"
 
 interface ChartProps extends React.HTMLAttributes<HTMLDivElement> {
