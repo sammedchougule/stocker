@@ -137,7 +137,7 @@ export function StockProvider({
   const fetchStocks = useCallback(async () => {
     try {
       const res = await fetch(
-        'https://script.google.com/macros/s/AKfycbwiEg6IZArG2gqeW0B_m_WxYhXYon4XEqqA1Cz7ssgZ52u3b_uTC9RMQJ9UsC9yJhr-kQ/exec'
+        'https://script.google.com/macros/s/AKfycbzK8oDQse4ERT_jddWwlK9iTLz3TNhiVAyb0Jp5L4U3q-XOyplps-HLNY0uLcNiNn0ERg/exec'
       )
       if (!res.ok) {
         throw new Error('Failed to fetch data')
