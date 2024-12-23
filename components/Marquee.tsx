@@ -30,13 +30,6 @@ export default function Marquee() {
     }
   }, [])
 
-  const formatPrice = (price: number | string) => {
-    if (typeof price === 'number') {
-      return price
-    }
-    return price
-  }
-
   const filteredStocks = useMemo(() => {
     if (!stocks) return []
     return stocks.filter(stock => nifty50Symbols.includes(stock.symbol))
