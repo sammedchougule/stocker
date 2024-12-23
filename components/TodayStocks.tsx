@@ -14,15 +14,14 @@ import Image from 'next/image';
 
 type FilterType = 'gainers' | 'losers' | 'most-active' | '52w-high' | '52w-low'
 
-type LargeCapFilter = 'All' | 'Nifty50' | 'NiftyF&O' | 'NiftyAuto' | 'NiftyBank' | 
-                      'NiftyConsumerDurables' | 'NiftyFinancialServices' | 'NiftyFmcg' | 
-                      'NiftyHealthcare' |  'NiftyIt' | 'NiftyMedia' | 'NiftyMetal' | 'NiftyMidSmallHealthcare' | 
-                      'NiftyOilGas' | 'NiftyPharma' | 'NiftyPrivateBank' | 'NiftyPsuBank' | 'NiftyRealty' | 'NiftyFinancialServices25/50'
+type LargeCapFilter = 'All' | 'Nifty Auto' | 'Nifty Bank' | 'Nifty FMCG' | 
+                      'Nifty Healthcare' | 'Nifty IT' | 'Nifty Media' | 'Nifty Metal' |
+                      'Nifty Pharma' | 'Nifty PVT Bank' | 'Nifty PSU Bank' | 'Nifty Realty'
 
-const largeCapFilters: LargeCapFilter[] = ['All' , 'Nifty50' , 'NiftyF&O' , 'NiftyAuto' , 'NiftyBank', 
-                                          'NiftyConsumerDurables' , 'NiftyFinancialServices' , 'NiftyFmcg' , 
-                                          'NiftyHealthcare' ,  'NiftyIt' , 'NiftyMedia' , 'NiftyMetal' , 'NiftyMidSmallHealthcare' , 
-                                          'NiftyOilGas' , 'NiftyPharma' , 'NiftyPrivateBank' , 'NiftyPsuBank' , 'NiftyRealty' , 'NiftyFinancialServices25/50']
+const largeCapFilters: LargeCapFilter[] = ['All' , 'Nifty Auto' , 'Nifty Bank', 'Nifty FMCG' , 
+                                          'Nifty Healthcare' ,  'Nifty IT' , 'Nifty Media' , 'Nifty Metal' , 
+                                          'Nifty Pharma' , 'Nifty PVT Bank' , 'Nifty PSU Bank' , 
+                                          'Nifty Realty' ]
 
 const TodaysStocks = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('gainers')
@@ -206,7 +205,7 @@ const TodaysStocks = () => {
                     </div>
                     {/* Adjusted price and change col span */}
                     <div className="col-span-4 sm:col-span-4 text-right">
-                      <div className="font-medium">₹ {stock.price}</div>
+                      <div className="font-medium">₹ {Number(stock.price).toFixed(2)}</div>
                     </div>
                     <div className="col-span-4 sm:col-span-4 flex items-center justify-end gap-2 pr-2">
                       <span
@@ -222,7 +221,7 @@ const TodaysStocks = () => {
                           <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
                         )}
                         <span className="text-sm">
-                          {stock.changepct}%
+                          {Number(stock.changepct).toFixed(2)}%
                         </span>
                       </span>
                       <Button variant="ghost" size="icon" className="h-8 w-8">

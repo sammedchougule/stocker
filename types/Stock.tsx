@@ -1,22 +1,18 @@
 export interface Indices {
-  Nifty50: boolean;
-  "NiftyF&O": boolean;
-  NiftyAuto: boolean;
-  NiftyBank: boolean;
-  NiftyConsumerDurables: boolean;
-  NiftyFinancialServices: boolean;
-  NiftyFmcg: boolean;
-  NiftyHealthcare: boolean;
-  NiftyIt: boolean;
-  NiftyMedia: boolean;
-  NiftyMetal: boolean;
-  NiftyMidSmallHealthcare: boolean;
-  NiftyOilGas: boolean;
-  NiftyPharma: boolean;
-  NiftyPrivateBank: boolean;
-  NiftyPsuBank: boolean;
-  NiftyRealty: boolean;
-  "NiftyFinancialServices25/50": boolean;
+  "Nifty 50": boolean;
+  "Nifty FnO": boolean;
+  "Nifty Auto": boolean;
+  "Nifty Bank": boolean;
+  "Nifty Financial Services": boolean;
+  "Nifty FMCG": boolean;
+  "Nifty Healthcare": boolean;
+  "Nifty IT": boolean;
+  "Nifty Media": boolean;
+  "Nifty Metal": boolean;
+  "Nifty Pharma": boolean;
+  "Nifty PVT Bank": boolean;
+  "Nifty PSU Bank": boolean;
+  "Nifty Realty": boolean;
 }
 
 export interface Stock {
