@@ -4,8 +4,7 @@ import React, { useMemo, useState, useRef, useEffect } from 'react'
 import { useStockContext } from '@/context/StockContext'
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, ReferenceLine, Tooltip, Cell, ResponsiveContainer } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { Stock } from '@/types/Stock'
+import { ChartContainer } from "@/components/ui/chart"
 import {
   Table,
   TableBody,
