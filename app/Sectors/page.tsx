@@ -21,6 +21,10 @@ const SECTORS = [
   'NIFTY_PHARMA', 'NIFTY_PSU_BANK', 'NIFTY_REALTY', 'NIFTY_PVT_BANK'
 ]
 
+type BarClickData = {
+  sector: string;
+};
+
 export default function Sectors() {
   const { stocks } = useStockContext()
   const [selectedSector, setSelectedSector] = useState<string | null>(null)
@@ -68,13 +72,14 @@ export default function Sectors() {
   }, [stocks])
 
   // Handle bar click event
-  const handleBarClick = (data: any) => {
-    setSelectedSector(data.sector)
-    const element = sectorRefs.current[data.sector]
+  const handleBarClick = (data: BarClickData) => {
+    setSelectedSector(data.sector);
+    const element = sectorRefs.current[data.sector];
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }
+  };
+  
 
   useEffect(() => {
     if (selectedSector) {
