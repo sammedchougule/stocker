@@ -14,7 +14,6 @@ import TodaysStocks from '@/components/TodayStocks'
 // }
 
 
-
 // app/stocks/page.tsx
 import { StockProvider } from '@/context/StockContext'
 
@@ -22,7 +21,7 @@ export const revalidate = 60 // Revalidate every 60 seconds
 
 async function fetchStockData() {
   const res = await fetch(
-    'https://script.google.com/macros/s/AKfycbwiEg6IZArG2gqeW0B_m_WxYhXYon4XEqqA1Cz7ssgZ52u3b_uTC9RMQJ9UsC9yJhr-kQ/exec'
+    'https://script.google.com/macros/s/AKfycbzK8oDQse4ERT_jddWwlK9iTLz3TNhiVAyb0Jp5L4U3q-XOyplps-HLNY0uLcNiNn0ERg/exec'
   )
   const stockData = await res.json()
   return {

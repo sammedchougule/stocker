@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { StockProvider } from '@/context/StockContext'
 import Navbar from '@/components/Navbar'
 import Marquee from '@/components/Marquee'
+import Head from 'next/head'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Stocker - Real-Time Stock Data and Portfolio Tracker',
     description: 'Track real-time stock data, build portfolios, and analyze financial reports with Stocker.',
-    url: 'https://stocker.co.in', // Your website URL
+    url: 'https://stocker.co.in',
     siteName: 'Stocker',
     images: [
       {
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
     icon: '/favicon.ico', // Replace with your favicon URL
     apple: '/apple-icon.png', // Replace with your apple icon URL
   },
-  themeColor: '#000000', // Replace with your desired theme color
+  // Removed themeColor from here
 }
 
 export const revalidate = 60 // Revalidate every 60 seconds
@@ -49,7 +50,6 @@ async function fetchStockData() {
 }
 
 export default async function RootLayout({
-
   children,
 }: {
   children: React.ReactNode
@@ -59,17 +59,21 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-          <StockProvider initialData={initialData}>
-            <div className="min-h-screen pt-20">
-              <Marquee />
-              <Navbar />
-              <div className="content-container">
-                {children}
-              </div>
+        <StockProvider initialData={initialData}>
+          <div className="min-h-screen pt-20">
+            <Marquee />
+            <Navbar />
+            <div className="content-container">
+              {children}
             </div>
-          </StockProvider>
+          </div>
+        </StockProvider>
+
+        {/* Use the Head component to add themeColor */}
+        <Head>
+          <meta name="theme-color" content="#000000" /> {/* Replace with your desired theme color */}
+        </Head>
       </body>
     </html>
   )
 }
-
