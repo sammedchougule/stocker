@@ -107,7 +107,7 @@ useEffect(() => {
 
   const IndexTable = ({ sector, stocks }: { sector: string; stocks: Stock[] }) => (
     <Card
-    className={`mt-8 transition-all duration-300 ${selectedSector === sector ? 'ring-2 ring-blue-500' : ''}`} 
+    className={`mt-8 m-2 transition-all duration-300 ${selectedSector === sector ? 'ring-2 ring-blue-500' : ''}`} 
       ref={(el: HTMLDivElement | null) => {
         sectorRefs.current[sector] = el;
       }}>
@@ -116,7 +116,7 @@ useEffect(() => {
       </CardHeader>
       <CardContent>
         <div className="h-[600px] overflow-hidden">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto h-full">
           <Table>
               <TableHeader>
                 <TableRow>
