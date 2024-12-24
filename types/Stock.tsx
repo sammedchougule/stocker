@@ -20,7 +20,7 @@ export interface Stock {
   companyname: string;
   industry: string | null;
   sector: string | null;
-  view_chart: string | null;
+  viewchart: string | null;
   indices: Indices | null;
   type: string | null;
   exchange: string | null;
