@@ -103,6 +103,7 @@ function IntrabuzzContent() {
     return filtered
   }, [stocks, sortBy, filterBy])
   
+  //TODO Generating Random BG Color For symbols
 
   const getRandomColor = (symbol: string) => {
     const [color, setColor] = useState<string | null>(null);
