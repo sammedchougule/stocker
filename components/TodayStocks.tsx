@@ -10,18 +10,38 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { StockModal } from './StockModal'
 import Image from 'next/image';
-
+import MarketMood from './MarketMood';
 
 type FilterType = 'gainers' | 'losers' | 'most-active' | '52w-high' | '52w-low'
 
-type LargeCapFilter = 'All' | 'Nifty Auto' | 'Nifty Bank' | 'Nifty FMCG' | 
-                      'Nifty Healthcare' | 'Nifty IT' | 'Nifty Media' | 'Nifty Metal' |
-                      'Nifty Pharma' | 'Nifty PVT Bank' | 'Nifty PSU Bank' | 'Nifty Realty'
+type LargeCapFilter = 
+| 'All'
+| 'Nifty Auto'
+| 'Nifty Bank'
+| 'Nifty FMCG'
+| 'Nifty Healthcare'
+| 'Nifty IT'
+| 'Nifty Media'
+| 'Nifty Metal'
+| 'Nifty Pharma'
+| 'Nifty PVT Bank'
+| 'Nifty PSU Bank'
+| 'Nifty Realty';
 
-const largeCapFilters: LargeCapFilter[] = ['All' , 'Nifty Auto' , 'Nifty Bank', 'Nifty FMCG' , 
-                                          'Nifty Healthcare' ,  'Nifty IT' , 'Nifty Media' , 'Nifty Metal' , 
-                                          'Nifty Pharma' , 'Nifty PVT Bank' , 'Nifty PSU Bank' , 
-                                          'Nifty Realty' ]
+const largeCapFilters: LargeCapFilter[] = [
+  'All',
+  'Nifty Auto',
+  'Nifty Bank',
+  'Nifty FMCG',
+  'Nifty Healthcare',
+  'Nifty IT',
+  'Nifty Media',
+  'Nifty Metal',
+  'Nifty Pharma',
+  'Nifty PVT Bank',
+  'Nifty PSU Bank',
+  'Nifty Realty',
+];
 
 const TodaysStocks = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('gainers')
@@ -29,6 +49,9 @@ const TodaysStocks = () => {
   const { stocks, loading, error } = useStockContext()
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const [mmi, setMMI] = useState(0); // Market Mood Index value
+  const [updatedTime, setUpdatedTime] = useState(''); // Last updated time
 
   const largeCapFilter = largeCapFilters[largeCapFilterIndex]
 
@@ -237,52 +260,10 @@ const TodaysStocks = () => {
       </div>
 
       {/* Market Mood Index Section - 35% width on large screens */}
-      <div className="col-span-12 lg:col-span-6 flex flex-col">
-    <Card className="h-full">
-      <CardContent className="pt-6">
-        {/* Market Mood Index */}
-        <div className="text-center">
-          <h3 className="text-lg font-medium mb-2">Market Mood Index</h3>
-          <p className="text-sm text-gray-500 mb-6">Know whats the sentiment on the street today</p>
-          {/* Gauge Component */}
-          <div className="relative w-full aspect-square">
-            <svg viewBox="0 0 200 100" className="w-full">
-              <path
-                d="M20 80 A60 60 0 0 1 180 80"
-                fill="none"
-                stroke="#e5e7eb"
-                strokeWidth="20"
-                strokeLinecap="round"
-              />
-              <path
-                d="M20 80 A60 60 0 0 1 180 80"
-                fill="none"
-                stroke="url(#gradient)"
-                strokeWidth="20"
-                strokeLinecap="round"
-                strokeDasharray="251"
-                strokeDashoffset="50"
-              />
-              <text x="20" y="95" className="text-xs" fill="#9CA3AF">FEAR</text>
-              <text x="85" y="30" className="text-xs" fill="#9CA3AF">GREED</text>
-              <text x="150" y="95" className="text-xs" fill="#9CA3AF">EXTREME</text>
-              <text x="100" y="65" className="text-2xl font-bold" fill="currentColor" textAnchor="middle">
-                74.79
-              </text>
-              <defs>
-                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#22c55e" />
-                  <stop offset="50%" stopColor="#eab308" />
-                  <stop offset="100%" stopColor="#ef4444" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-          <p className="text-sm text-gray-500 mt-4">Updated 44 minutes ago</p>
-        </div>
-      </CardContent>
-    </Card>
-  </div>
+      <div className="w-full lg:w-1/3">
+        <MarketMood stocks={stocks} />
+      </div>
+
       <StockModal
         stock={selectedStock}
         isOpen={isModalOpen}
