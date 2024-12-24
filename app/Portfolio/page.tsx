@@ -13,7 +13,7 @@ export default function Portfolio() {
         </CardHeader>
         <CardContent>
           <p className="text-center text-gray-600">
-          "The Road to Smart Investments Begins with Your Portfolio"
+          The Road to Smart Investments Begins with Your Portfolio
           </p>
           <div className="mt-6 text-center text-3xl font-bold text-green-500">
           Portfolio Page in Development!

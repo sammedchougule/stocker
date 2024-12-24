@@ -13,7 +13,7 @@ export default function Heatmap() {
         </CardHeader>
         <CardContent>
           <p className="text-center text-gray-600">
-          "Get Ready to See the Market in Full Color"
+          Get Ready to See the Market in Full Color
           </p>
           <div className="mt-6 text-center text-3xl font-bold text-orange-500">
           Our Heatmap Feature is Almost Here!

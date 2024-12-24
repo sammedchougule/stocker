@@ -13,7 +13,7 @@ export default function Screener() {
         </CardHeader>
         <CardContent>
           <p className="text-center text-gray-600">
-          "Ready to Discover Hidden Gems?""
+          Ready to Discover Hidden Gems.
           </p>
           <div className="mt-6 text-center text-3xl font-bold text-blue-500">
           Our Screener is Almost Live!
