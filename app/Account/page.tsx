@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/buttons"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { User, Mail, Phone, MapPin, Building, Briefcase } from 'lucide-react'
+import { Mail, Phone, MapPin, Building, Briefcase } from 'lucide-react'
 
 export default function Account() {
   // Dummy user data
