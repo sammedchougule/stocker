@@ -48,20 +48,19 @@ const Navbar = () => {
 
           {/* Links for Desktop */}
           <div className="hidden lg:flex space-x-6">
-            <Link href="/Portfolio" className="text-black hover:text-gray-600 flex items-center">
-              Portfolio
-            </Link>
             <Link href="/Intrabuzz" className="text-black hover:text-gray-600 flex items-center">
               IntraBuzz
-            </Link>
-            <Link href="/Heatmap" className="text-black hover:text-gray-600 flex items-center">
-              Heatmap
             </Link>
             <Link href="/Sectors" className="text-black hover:text-gray-600 flex items-center">
               Sectors
             </Link>
-            <Link href="/Screeners" className="text-black hover:text-gray-600 flex items-center">
-              Screeners
+            <Link href="/Heatmap" className="text-black hover:text-gray-600 flex items-center">
+              Heatmap
+            </Link>
+            <Link href="/Screener" className="text-black hover:text-gray-600 flex items-center">
+              Screener
+            </Link><Link href="/Portfolio" className="text-black hover:text-gray-600 flex items-center">
+              Portfolio
             </Link>
             <Link href="/Account" className="text-black hover:text-gray-600 flex items-center">
               Account
@@ -121,9 +120,9 @@ const Navbar = () => {
               <Layers className="h-5 w-5 mr-3" />
               Sectors
             </Link>
-            <Link href="/Screeners" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
+            <Link href="/Screener" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
               <Sliders className="h-5 w-5 mr-3" />
-              Screeners
+              Screener
             </Link>
             <Link href="/Account" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
               <User className="h-5 w-5 mr-3" />
@@ -187,8 +186,8 @@ const Navbar = () => {
               isActive('/Screener') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
             }`}
           >
-            <Sliders className={`h-6 w-6 ${isActive('/screeners') ? 'text-red-500' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/screeners') ? 'block' : 'hidden'}`}>Screener</span>
+            <Sliders className={`h-6 w-6 ${isActive('/screener') ? 'text-red-500' : 'text-gray-700'}`} />
+            <span className={`text-xxs text-gray-600 ${isActive('/screener') ? 'block' : 'hidden'}`}>Screener</span>
           </Link>
         </div>
       </nav>
