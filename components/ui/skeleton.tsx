@@ -1,33 +1,31 @@
-import { cn } from "@/utils/utils"
+import { cn } from "@/utils/utils";
 
-interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function Skeleton({ className, ...props }: SkeletonProps) {
+export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn("animate-pulse rounded-md bg-muted", className)}
       {...props}
     />
-  )
+  );
 }
 
-export function SkeletonCircle({ className, ...props }: SkeletonProps) {
-  return <Skeleton className={cn("rounded-full", className)} {...props} />
+export function SkeletonCircle({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <Skeleton className={cn("rounded-full", className)} {...props} />;
 }
 
-export function SkeletonText({ className, ...props }: SkeletonProps) {
-  return <Skeleton className={cn("h-4 w-[250px]", className)} {...props} />
+export function SkeletonText({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <Skeleton className={cn("h-4 w-[250px]", className)} {...props} />;
 }
 
-export function SkeletonButton({ className, ...props }: SkeletonProps) {
-  return <Skeleton className={cn("h-10 w-[100px]", className)} {...props} />
+export function SkeletonButton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <Skeleton className={cn("h-10 w-[100px]", className)} {...props} />;
 }
 
-export function SkeletonImage({ className, ...props }: SkeletonProps) {
-  return <Skeleton className={cn("h-[200px] w-[200px]", className)} {...props} />
+export function SkeletonImage({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <Skeleton className={cn("h-[200px] w-[200px]", className)} {...props} />;
 }
 
-export function SkeletonCard({ className, ...props }: SkeletonProps) {
+export function SkeletonCard({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <Skeleton className={cn("h-[300px] w-[200px]", className)} {...props}>
       <div className="space-y-3">
@@ -37,10 +35,10 @@ export function SkeletonCard({ className, ...props }: SkeletonProps) {
         <SkeletonButton className="h-8 w-full" />
       </div>
     </Skeleton>
-  )
+  );
 }
 
-export function SkeletonTable({ className, ...props }: SkeletonProps) {
+export function SkeletonTable({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={cn("space-y-4", className)} {...props}>
       <SkeletonText className="h-8 w-[250px]" />
@@ -50,6 +48,5 @@ export function SkeletonTable({ className, ...props }: SkeletonProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }
-
