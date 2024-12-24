@@ -43,6 +43,16 @@ export default function Sectors() {
     }).sort((a, b) => b.changepct - a.changepct)
   }, [stocks])
 
+  // Calculate min and max values for Y-axis
+  const { minValue, maxValue } = useMemo(() => {
+    const values = sectorData.map(d => d.changepct)
+    return {
+      minValue: Math.min(...values, 0),
+      maxValue: Math.max(...values, 0)
+    }
+  }, [sectorData])
+
+
   // Prepare stocks for each sector
   const sectorStocks = useMemo(() => {
     const indicesMap: { [key: string]: string } = {
@@ -183,6 +193,8 @@ export default function Sectors() {
                             offset: -20
                           }}
                           tick={{ fontSize: 12 }}
+                          domain={[minValue, maxValue]}
+                          tickFormatter={(value) => `${value.toFixed(2)}%`}
                         />
                         <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
                         <Tooltip
