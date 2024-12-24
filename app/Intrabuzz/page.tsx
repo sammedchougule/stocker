@@ -105,32 +105,31 @@ function IntrabuzzContent() {
   
   //TODO Generating Random BG Color For symbols
 
-  const getRandomColor = (symbol: string) => {
-    const [color, setColor] = useState<string | null>(null);
-  
-    useEffect(() => {
-      if (typeof window !== 'undefined') {
-        // Check if the color for the symbol is already stored in localStorage
-        const cachedColor = localStorage.getItem(symbol);
-        if (cachedColor) {
-          setColor(cachedColor); // Set the cached color from localStorage
-        } else {
-          // If no color is found in localStorage, generate a new color and store it
-          const newColor = generateRandomColor();
-          localStorage.setItem(symbol, newColor); // Store the generated color in localStorage
-          setColor(newColor); // Set the new color
-        }
+  const getRandomColor = (symbol: string): string => {
+    if (typeof window !== "undefined") {
+      // Check if the color for the symbol is already stored in localStorage
+      const cachedColor = localStorage.getItem(symbol);
+      if (cachedColor) {
+        return cachedColor; // Return the cached color from localStorage
       }
-    }, [symbol]);
   
-    // Initially return a fallback color (can be the same as the initial state)
-    return color ?? '#000000'; // Return the cached or generated color, or default to black
+      // Generate a new random color (excluding black) and store it
+      let newColor;
+      do {
+        newColor = generateRandomColor();
+      } while (newColor === "#000000"); // Ensure it's not black
+  
+      localStorage.setItem(symbol, newColor); // Store the generated color in localStorage
+      return newColor; // Return the new color
+    }
+  
+    return "#ffffff"; // Default color if window is not available
   };
   
   // Function to generate a random hex color
-  const generateRandomColor = () => {
+  const generateRandomColor = (): string => {
     const randomHex = Math.floor(Math.random() * 16777215).toString(16); // Generate a random hex value
-    return `#${randomHex.padStart(6, '0')}`; // Ensure 6 characters with padding
+    return `#${randomHex.padStart(6, "0")}`; // Ensure 6 characters with padding
   };
   
   
