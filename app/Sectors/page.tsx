@@ -82,27 +82,31 @@ export default function Sectors() {
     )
   }, [stocks])
 
-  // Handle bar click event
-  const handleBarClick = (data: BarClickData) => {
-    setSelectedSector(data.sector);
-    const element = sectorRefs.current[data.sector];
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-  
+ // Handle bar click event
+ const handleBarClick = (data: any) => {
+  setSelectedSector(data.sector)
+  const element = sectorRefs.current[data.sector]
+  if (element) {
+    const yOffset = -100; // Adjust this value to fine-tune the scroll position
+    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({top: y, behavior: 'smooth'});
+  }
+}
 
-  useEffect(() => {
-    if (selectedSector) {
-      const element = sectorRefs.current[selectedSector]
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
+useEffect(() => {
+  if (selectedSector) {
+    const element = sectorRefs.current[selectedSector]
+    if (element) {
+      const yOffset = -100; // Adjust this value to fine-tune the scroll position
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
     }
-  }, [selectedSector])
+  }
+}, [selectedSector])
 
   const IndexTable = ({ sector, stocks }: { sector: string; stocks: Stock[] }) => (
     <Card
+    className={`mt-8 transition-all duration-300 ${selectedSector === sector ? 'ring-2 ring-blue-500' : ''}`} 
       ref={(el: HTMLDivElement | null) => {
         sectorRefs.current[sector] = el;
       }}>
