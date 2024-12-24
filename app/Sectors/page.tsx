@@ -22,9 +22,6 @@ const SECTORS = [
   'NIFTY_PHARMA', 'NIFTY_PSU_BANK', 'NIFTY_REALTY', 'NIFTY_PVT_BANK'
 ]
 
-type BarClickData = {
-  sector: string;
-};
 
 export default function Sectors() {
   const { stocks } = useStockContext()
@@ -82,8 +79,12 @@ export default function Sectors() {
     )
   }, [stocks])
 
+  interface SectorData {
+    sector: string;
+  }
+
  // Handle bar click event
- const handleBarClick = (data: any) => {
+ const handleBarClick = (data: SectorData) => {
   setSelectedSector(data.sector)
   const element = sectorRefs.current[data.sector]
   if (element) {
