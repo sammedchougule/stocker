@@ -16,6 +16,7 @@ export const ChartContainer = React.forwardRef<HTMLDivElement, ChartProps>(
   ({ className, children, config, ...props }, ref) => {
     return (
       <div ref={ref} className={cn("", className)} {...props}>
+        {/* Dynamic styles for configuration */}
         <style>
           {Object.entries(config).map(
             ([key, value]) => `
@@ -25,11 +26,27 @@ export const ChartContainer = React.forwardRef<HTMLDivElement, ChartProps>(
           `
           )}
         </style>
+
+        {/* Gradients for pseudo-3D effect */}
+        <svg width="0" height="0">
+          <defs>
+            <linearGradient id="positiveGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#22c55e" stopOpacity={1} />
+              <stop offset="100%" stopColor="#16a34a" stopOpacity={0.8} />
+            </linearGradient>
+            <linearGradient id="negativeGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ef4444" stopOpacity={1} />
+              <stop offset="100%" stopColor="#dc2626" stopOpacity={0.8} />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        {/* Render children (chart content) */}
         {children}
       </div>
-    )
+    );
   }
-)
+);
 ChartContainer.displayName = "ChartContainer"
 
 // export const ChartTooltip = React.forwardRef<

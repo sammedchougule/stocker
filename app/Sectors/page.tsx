@@ -110,34 +110,30 @@ export default function Sectors() {
         <h3 className="text-xl font-semibold">{sector.replace('NIFTY_', '').replace('_', ' ')} Stocks</h3>
       </CardHeader>
       <CardContent>
-        <div className="h-[600px] overflow-hidden flex flex-col">
-          <div className="flex-none">
-            <Table>
+        <div className="h-[600px] overflow-hidden">
+          <div className="overflow-x-auto">
+          <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="sticky top-0 bg-white z-10">Symbol</TableHead>
-                  <TableHead className="sticky top-0 bg-white z-10 text-right">Price</TableHead>
-                  <TableHead className="sticky top-0 bg-white z-10 text-right">Change</TableHead>
-                  <TableHead className="sticky top-0 bg-white z-10 text-right">Change %</TableHead>
-                  <TableHead className="sticky top-0 bg-white z-10 text-right">Vol_Spike</TableHead>
+                  <TableHead className="sticky left-0 z-20 bg-blue-200 w-1/6">Symbol</TableHead>
+                  <TableHead className="bg-blue-200 w-1/6 text-right">Price</TableHead>
+                  <TableHead className="bg-blue-200 w-1/6 text-right">Change</TableHead>
+                  <TableHead className="bg-blue-200 w-1/6 text-right">Change %</TableHead>
+                  <TableHead className="bg-blue-200 w-1/6 text-right">Vol_Spike</TableHead>
                 </TableRow>
               </TableHeader>
-            </Table>
-          </div>
-          <div className="flex-grow overflow-auto">
-            <Table>
               <TableBody>
                 {stocks.map((stock) => (
                   <TableRow key={stock.symbol}>
-                    <TableCell className="font-medium">{stock.symbol}</TableCell>
-                    <TableCell className="text-right">₹{Number(stock.price).toFixed(2)}</TableCell>
-                    <TableCell className={`text-right ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <TableCell className="sticky left-0 z-10 bg-white font-medium w-1/6">{stock.symbol}</TableCell>
+                    <TableCell className="text-right w-1/6">₹{Number(stock.price).toFixed(2)}</TableCell>
+                    <TableCell className={`text-right w-1/6 ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {Number(stock.change).toFixed(2)}
                     </TableCell>
-                    <TableCell className={`text-right ${stock.changepct >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <TableCell className={`text-right w-1/6 ${stock.changepct >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {Number(stock.changepct).toFixed(2)}%
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right w-1/6">
                       {Number(stock.volumespike)?.toLocaleString() ?? 'N/A'}
                     </TableCell>
                   </TableRow>
@@ -161,7 +157,7 @@ export default function Sectors() {
             <div className="w-full lg:w-2/3">
               <div className="overflow-x-auto pb-4 lg:pb-0">
                 <div className="h-[600px] w-[800px] lg:w-full">
-                  <ChartContainer 
+                  {/* <ChartContainer 
                     config={{
                       changepct: {
                         label: "Change %",
@@ -173,7 +169,7 @@ export default function Sectors() {
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={sectorData}
-                        margin={{ top: 20, right: 30, left: 40, bottom: 80 }}
+                        margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
                         barSize={20}
                       >
                         <CartesianGrid strokeDasharray="3 3" />
@@ -204,7 +200,7 @@ export default function Sectors() {
                               return (
                                 <div className="bg-white p-2 border border-gray-200 rounded shadow">
                                   <p className="font-semibold">{label}</p>
-                                  <p className={value >= 0 ? 'text-[#22c55e]' : 'text-[#ef4444]'}>{Number(value).toFixed(2)}%</p>
+                                  <p className={value >= 0 ? 'font-semibold text-[#22c55e]' : 'font-semibold text-[#ef4444]'}>{Number(value).toFixed(2)}%</p>
                                 </div>
                               );
                             }
@@ -225,7 +221,95 @@ export default function Sectors() {
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>
+                  </ChartContainer> */}
+
+                  <ChartContainer 
+                    config={{
+                      changepct: {
+                        label: "Change %",
+                        color: "currentColor",
+                      },
+                    }}
+                    className="h-full"
+                  >
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={sectorData}
+                        margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
+                        barSize={30}
+                      >
+                        {/* Gradients for 3D Effect */}
+                        <defs>
+                          <linearGradient id="positiveGradient3D" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#22c55e" stopOpacity={1} />
+                            <stop offset="50%" stopColor="#16a34a" stopOpacity={0.9} />
+                            <stop offset="100%" stopColor="#15803d" stopOpacity={0.8} />
+                          </linearGradient>
+                          <linearGradient id="negativeGradient3D" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#ef4444" stopOpacity={1} />
+                            <stop offset="50%" stopColor="#dc2626" stopOpacity={0.9} />
+                            <stop offset="100%" stopColor="#b91c1c" stopOpacity={0.8} />
+                          </linearGradient>
+                        </defs>
+
+                        {/* Chart Axes */}
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="name" 
+                          angle={-45} 
+                          textAnchor="end" 
+                          height={80} 
+                          interval={0}
+                          tick={{ fontSize: 12 }}
+                        />
+                        <YAxis
+                          label={{ 
+                            value: 'Change %', 
+                            angle: -90, 
+                            position: 'insideLeft',
+                            offset: -20
+                          }}
+                          tick={{ fontSize: 12 }}
+                          domain={[minValue, maxValue]}
+                          tickFormatter={(value) => `${value.toFixed(2)}%`}
+                        />
+                        <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
+
+                        {/* Tooltip */}
+                        <Tooltip
+                          content={({ active, payload, label }) => {
+                            if (active && payload && payload.length) {
+                              const value = payload[0].value as number;
+                              return (
+                                <div className="bg-white p-2 border border-gray-200 rounded shadow">
+                                  <p className="font-semibold">{label}</p>
+                                  <p className={value >= 0 ? 'font-semibold text-[#22c55e]' : 'font-semibold text-[#ef4444]'}>{Number(value).toFixed(2)}%</p>
+                                </div>
+                              );
+                            }
+                            return null;
+                          }}
+                        />
+
+                        {/* Bars with 3D Effect */}
+                        <Bar 
+                          dataKey="changepct"
+                          cursor="pointer"
+                          onClick={(data) => handleBarClick(data)}
+                          radius={[5, 5, 0, 0]} // Rounded corners for the 3D look
+                        >
+                          {sectorData.map((entry, index) => (
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill={`url(#${entry.changepct >= 0 ? 'positiveGradient3D' : 'negativeGradient3D'})`}
+                              style={{ filter: 'drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2))' }} // Shadow for depth
+                            />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
                   </ChartContainer>
+
                 </div>
               </div>
             </div>
@@ -233,10 +317,10 @@ export default function Sectors() {
               <div className="h-[600px] overflow-hidden flex flex-col">
                 <div className="flex-none">
                   <Table>
-                    <TableHeader>
+                    <TableHeader className='bg-blue-200'>
                       <TableRow>
-                        <TableHead className="sticky top-0 bg-white z-10">Sector</TableHead>
-                        <TableHead className="sticky top-0 bg-white z-10 text-right">Change %</TableHead>
+                        <TableHead className="sticky top-0 ">Sector</TableHead>
+                        <TableHead className="sticky top-0 z-10 text-right">Change %</TableHead>
                       </TableRow>
                     </TableHeader>
                   </Table>
