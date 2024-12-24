@@ -50,9 +50,6 @@ const TodaysStocks = () => {
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const [mmi, setMMI] = useState(0); // Market Mood Index value
-  const [updatedTime, setUpdatedTime] = useState(''); // Last updated time
-
   const largeCapFilter = largeCapFilters[largeCapFilterIndex]
 
   const filteredStocks = useMemo(() => {
