@@ -145,31 +145,13 @@ const Navbar = () => {
             <span className={`text-xxs text-gray-600 ${isActive('/') ? 'block' : 'hidden'}`}>Home</span>
           </Link>
           <Link
-            href="/Portfolio"
-            className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Portfolio') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
-            }`}
-          >
-            <BriefcaseBusiness className={`h-6 w-6 ${isActive('/Portfolio') ? 'text-green-700' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/Portfolio') ? 'block' : 'hidden'}`}>Portfolio</span>
-          </Link>
-          <Link
             href="/Intrabuzz"
             className={`text-gray-700 flex flex-col items-center ${
               isActive('/Intrabuzz') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
             }`}
           >
-            <SquareActivity className={`h-6 w-6 ${isActive('/intrabuzz') ? 'text-blue-500' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/intrabuzz') ? 'block' : 'hidden'}`}>IntraBuzz</span>
-          </Link>
-          <Link
-            href="/Heatmap"
-            className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Heatmap') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
-            }`}
-          >
-            <LayoutGrid className={`h-6 w-6 ${isActive('/heatmap') ? 'text-orange-500' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/heatmap') ? 'block' : 'hidden'}`}>Heatmap</span>
+            <SquareActivity className={`h-6 w-6 ${isActive('/Intrabuzz') ? 'text-blue-500' : 'text-gray-700'}`} />
+            <span className={`text-xxs text-gray-600 ${isActive('/Intrabuzz') ? 'block' : 'hidden'}`}>IntraBuzz</span>
           </Link>
           <Link
             href="/Sectors"
@@ -177,8 +159,17 @@ const Navbar = () => {
               isActive('/Sectors') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
             }`}
           >
-            <Layers className={`h-6 w-6 ${isActive('/sectors') ? 'text-yellow-500' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/sectors') ? 'block' : 'hidden'}`}>Sectors</span>
+            <Layers className={`h-6 w-6 ${isActive('/Sectors') ? 'text-yellow-500' : 'text-gray-700'}`} />
+            <span className={`text-xxs text-gray-600 ${isActive('/Sectors') ? 'block' : 'hidden'}`}>Sectors</span>
+          </Link>
+          <Link
+            href="/Heatmap"
+            className={`text-gray-700 flex flex-col items-center ${
+              isActive('/Heatmap') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
+            }`}
+          >
+            <LayoutGrid className={`h-6 w-6 ${isActive('/Heatmap') ? 'text-orange-500' : 'text-gray-700'}`} />
+            <span className={`text-xxs text-gray-600 ${isActive('/Heatmap') ? 'block' : 'hidden'}`}>Heatmap</span>
           </Link>
           <Link
             href="/Screener"
@@ -189,6 +180,16 @@ const Navbar = () => {
             <Sliders className={`h-6 w-6 ${isActive('/screener') ? 'text-red-500' : 'text-gray-700'}`} />
             <span className={`text-xxs text-gray-600 ${isActive('/screener') ? 'block' : 'hidden'}`}>Screener</span>
           </Link>
+          <Link
+            href="/Portfolio"
+            className={`text-gray-700 flex flex-col items-center ${
+              isActive('/Portfolio') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
+            }`}
+          >
+            <BriefcaseBusiness className={`h-6 w-6 ${isActive('/Portfolio') ? 'text-green-700' : 'text-gray-700'}`} />
+            <span className={`text-xxs text-gray-600 ${isActive('/Portfolio') ? 'block' : 'hidden'}`}>Portfolio</span>
+          </Link>
+
         </div>
       </nav>
     </>
