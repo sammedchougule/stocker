@@ -180,6 +180,7 @@ useEffect(() => {
                         data={sectorData}
                         margin={{ top: 20, right: 5, left: 5, bottom: 20 }}
                         barSize={25}
+                        barGap={10} // Gap between bars
                       >
                         {/* Gradients for 3D Effect */}
                         <defs>
