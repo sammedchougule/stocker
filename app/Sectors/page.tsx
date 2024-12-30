@@ -107,7 +107,7 @@ useEffect(() => {
 
   const IndexTable = ({ sector, stocks }: { sector: string; stocks: Stock[] }) => (
     <Card
-    className={`mt-8 m-2 transition-all duration-300 ${selectedSector === sector ? 'ring-2 ring-blue-500' : ''}`} 
+      className={`mt-8 m-2 transition-all duration-300 ${selectedSector === sector ? 'ring-2 ring-blue-500' : ''}`} 
       ref={(el: HTMLDivElement | null) => {
         sectorRefs.current[sector] = el;
       }}>
@@ -116,15 +116,15 @@ useEffect(() => {
       </CardHeader>
       <CardContent>
         <div className="h-[600px] overflow-hidden">
-          <div className="overflow-x-auto h-full">
-          <Table>
-              <TableHeader>
+          <div className="overflow-auto  max-h-[600px]">
+            <Table>
+              <TableHeader className="sticky top-0 bg-blue-200 z-20">
                 <TableRow>
-                  <TableHead className="sticky left-0 z-20 bg-blue-200 w-1/6">Symbol</TableHead>
-                  <TableHead className="bg-blue-200 w-1/6 text-right">Price</TableHead>
-                  <TableHead className="bg-blue-200 w-1/6 text-right">Change</TableHead>
-                  <TableHead className="bg-blue-200 w-1/6 text-right">Change %</TableHead>
-                  <TableHead className="bg-blue-200 w-1/6 text-right">Vol_Spike</TableHead>
+                  <TableHead className="w-1/6">Symbol</TableHead>
+                  <TableHead className="w-1/6 text-right">Price</TableHead>
+                  <TableHead className="w-1/6 text-right">Change</TableHead>
+                  <TableHead className="w-1/6 text-right">Chg %</TableHead>
+                  <TableHead className="w-1/6 text-right">Vol_Spike</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -149,20 +149,24 @@ useEffect(() => {
         </div>
       </CardContent>
     </Card>
+
   )
 
   return (
     <div className="container mx-auto mt-6">
+      {/* Sector Performance Chart */}
       <Card>
         <CardHeader>
           <h2 className="text-2xl font-bold">Sector Performance</h2>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col lg:flex-row gap-8">
+            {/* Chart Section */}
             <div className="w-full lg:w-2/3">
               <div className="overflow-x-auto pb-4 lg:pb-0">
-                <div className="h-[600px] w-[800px] lg:w-full">
-                  {/* <ChartContainer 
+                {/* Responsive Chart Container */}
+                <div className="w-full h-72 sm:h-96 lg:h-[600px]">
+                  <ChartContainer
                     config={{
                       changepct: {
                         label: "Change %",
@@ -174,74 +178,8 @@ useEffect(() => {
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={sectorData}
-                        margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
-                        barSize={20}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis 
-                          dataKey="name" 
-                          angle={-45} 
-                          textAnchor="end" 
-                          height={80} 
-                          interval={0}
-                          tick={{ fontSize: 12 }}
-                        />
-                        <YAxis 
-                          label={{ 
-                            value: 'Change %', 
-                            angle: -90, 
-                            position: 'insideLeft',
-                            offset: -20
-                          }}
-                          tick={{ fontSize: 12 }}
-                          domain={[minValue, maxValue]}
-                          tickFormatter={(value) => `${value.toFixed(2)}%`}
-                        />
-                        <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
-                        <Tooltip
-                          content={({ active, payload, label }) => {
-                            if (active && payload && payload.length) {
-                              const value = payload[0].value as number;
-                              return (
-                                <div className="bg-white p-2 border border-gray-200 rounded shadow">
-                                  <p className="font-semibold">{label}</p>
-                                  <p className={value >= 0 ? 'font-semibold text-[#22c55e]' : 'font-semibold text-[#ef4444]'}>{Number(value).toFixed(2)}%</p>
-                                </div>
-                              );
-                            }
-                            return null;
-                          }}
-                        />
-                        <Bar 
-                          dataKey="changepct"
-                          cursor="pointer"
-                          onClick={(data) => handleBarClick(data)}
-                        >
-                          {sectorData.map((entry, index) => (
-                            <Cell 
-                              key={`cell-${index}`} 
-                              fill={entry.changepct >= 0 ? "#22c55e" : "#ef4444"} 
-                            />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </ChartContainer> */}
-
-                  <ChartContainer 
-                    config={{
-                      changepct: {
-                        label: "Change %",
-                        color: "currentColor",
-                      },
-                    }}
-                    className="h-full"
-                  >
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
-                        data={sectorData}
-                        margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
-                        barSize={30}
+                        margin={{ top: 20, right: 5, left: 5, bottom: 20 }}
+                        barSize={25}
                       >
                         {/* Gradients for 3D Effect */}
                         <defs>
@@ -259,23 +197,22 @@ useEffect(() => {
 
                         {/* Chart Axes */}
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis 
-                          dataKey="name" 
-                          angle={-45} 
-                          textAnchor="end" 
-                          height={80} 
+                        <XAxis
+                          dataKey="name"
+                          angle={-90}
+                          textAnchor="end"
+                          height={80}
                           interval={0}
                           tick={{ fontSize: 12 }}
                         />
                         <YAxis
-                          label={{ 
-                            value: 'Change %', 
-                            angle: -90, 
-                            position: 'insideLeft',
-                            offset: -20
+                          label={{
+                            angle: -90,
+                            position: "insideLeft",
+                            offset: -20,
                           }}
                           tick={{ fontSize: 12 }}
-                          domain={[minValue, maxValue]}
+                          domain={[minValue-.1, maxValue+.1]}
                           tickFormatter={(value) => `${value.toFixed(2)}%`}
                         />
                         <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
@@ -288,7 +225,15 @@ useEffect(() => {
                               return (
                                 <div className="bg-white p-2 border border-gray-200 rounded shadow">
                                   <p className="font-semibold">{label}</p>
-                                  <p className={value >= 0 ? 'font-semibold text-[#22c55e]' : 'font-semibold text-[#ef4444]'}>{Number(value).toFixed(2)}%</p>
+                                  <p
+                                    className={
+                                      value >= 0
+                                        ? "font-semibold text-[#22c55e]"
+                                        : "font-semibold text-[#ef4444]"
+                                    }
+                                  >
+                                    {Number(value).toFixed(2)}%
+                                  </p>
                                 </div>
                               );
                             }
@@ -297,34 +242,39 @@ useEffect(() => {
                         />
 
                         {/* Bars with 3D Effect */}
-                        <Bar 
+                        <Bar
                           dataKey="changepct"
                           cursor="pointer"
                           onClick={(data) => handleBarClick(data)}
-                          radius={[5, 5, 0, 0]} // Rounded corners for the 3D look
+                          radius={[2.5, 2.5, 0, 0]} // Rounded corners for the 3D look
                         >
                           {sectorData.map((entry, index) => (
-                            <Cell 
-                              key={`cell-${index}`} 
-                              fill={`url(#${entry.changepct >= 0 ? 'positiveGradient3D' : 'negativeGradient3D'})`}
-                              style={{ filter: 'drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2))' }} // Shadow for depth
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={`url(#${
+                                entry.changepct >= 0 ? "positiveGradient3D" : "negativeGradient3D"
+                              })`}
+                              style={{
+                                filter: "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2))", // Shadow for depth
+                              }}
                             />
                           ))}
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>
                   </ChartContainer>
-
                 </div>
               </div>
             </div>
+
+            {/* Sector Table */}
             <div className="w-full lg:w-1/3">
               <div className="h-[600px] overflow-hidden flex flex-col">
                 <div className="flex-none">
                   <Table>
-                    <TableHeader className='bg-blue-200'>
+                    <TableHeader className="bg-blue-200">
                       <TableRow>
-                        <TableHead className="sticky top-0 ">Sector</TableHead>
+                        <TableHead className="sticky top-0">Sector</TableHead>
                         <TableHead className="sticky top-0 z-10 text-right">Change %</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -334,18 +284,19 @@ useEffect(() => {
                   <Table>
                     <TableBody>
                       {sectorData.map((sector) => (
-                        <TableRow 
+                        <TableRow
                           key={sector.sector}
                           className="cursor-pointer hover:bg-gray-100"
                           onClick={() => setSelectedSector(sector.sector)}
                         >
                           <TableCell>{sector.name}</TableCell>
-                          <TableCell 
+                          <TableCell
                             className={`text-right font-medium ${
-                              sector.changepct >= 0 ? 'text-green-600' : 'text-red-600'
+                              sector.changepct >= 0 ? "text-green-600" : "text-red-600"
                             }`}
                           >
-                            {sector.changepct >= 0 ? '+' : ''}{Number(sector.changepct).toFixed(2)}%
+                            {sector.changepct >= 0 ? "+" : ""}
+                            {Number(sector.changepct).toFixed(2)}%
                           </TableCell>
                         </TableRow>
                       ))}
