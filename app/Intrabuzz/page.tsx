@@ -201,7 +201,7 @@ function IntrabuzzContent() {
           value={filterBy}
           onValueChange={(value: FilterOption) => setFilterBy(value)}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Filter by Index" />
           </SelectTrigger>
           <SelectContent>
@@ -218,32 +218,32 @@ function IntrabuzzContent() {
             value={sortBy}
             onValueChange={(value: SortOption) => setSortBy(value)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="changepct_desc">
                 <span className="flex items-center">
                   <ArrowDown className="w-4 h-4 mr-2" />
-                  Change % 
+                  Chg % 
                 </span>
               </SelectItem>
               <SelectItem value="changepct_asc">
                 <span className="flex items-center">
                   <ArrowUp className="w-4 h-4 mr-2" />
-                  Change % 
+                  Chg % 
                 </span>
               </SelectItem>
               <SelectItem value="volumespike_desc">
                 <span className="flex items-center">
                   <ArrowDown className="w-4 h-4 mr-2" />
-                  Volume Spike 
+                  Vol_Spike 
                 </span>
               </SelectItem>
               <SelectItem value="volumespike_asc">
                 <span className="flex items-center">
                   <ArrowUp className="w-4 h-4 mr-2" />
-                  Volume Spike 
+                  Vol_pike 
                 </span>
               </SelectItem>
             </SelectContent>
