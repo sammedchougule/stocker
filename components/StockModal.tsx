@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/buttons"
-import { ArrowUpIcon, ArrowDownIcon, SquareArrowOutUpRight } from 'lucide-react'
+import { ArrowUpIcon, ArrowDownIcon, SquareArrowOutUpRight, ChartCandlestick } from 'lucide-react'
 import Link from 'next/link'
 import { Stock } from '@/types/Stock'
 
@@ -27,6 +27,11 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
               <span className="text-sm font-medium text-gray-700 ">{stock.symbol}</span>
               <span className="text-xs px-2 py-0.5 bg-gray-200/50 rounded-md">{stock.type}</span>
             </div>
+            <Link href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}>
+              <Button size="icon" className="h-10 w-10 hover:border-gray-300">
+                <ChartCandlestick className="h-6 w-6" />
+              </Button>
+            </Link>
             <Link href={`/stockdetail/${stock.symbol}`}>
               <Button size="icon" className="h-10 w-10 bg-white/50 hover:bg-white/70">
                 <SquareArrowOutUpRight className="h-6 w-6" />
