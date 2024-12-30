@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/buttons"
-import { ArrowUpIcon, ArrowDownIcon, SquareArrowOutUpRight, ChartCandlestick } from 'lucide-react'
+import { ArrowUpIcon, ArrowDownIcon, SquareArrowOutUpRight, Scan } from 'lucide-react'
 import Link from 'next/link'
 import { Stock } from '@/types/Stock'
 
@@ -18,27 +18,37 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white/80 backdrop-blur-md border border-gray-200 max-w-md rounded-lg shadow-lg w-[calc(100%-32px)] sm:w-full mx-auto">
-        <DialogHeader className="flex flex-col">
-          <div className="flex justify-between items-start w-full">
-            <DialogTitle className="text-lg font-semibold">{stock.companyname}</DialogTitle>
+      <DialogHeader className="flex flex-col">
+        <div className="flex justify-between items-start w-full">
+          <DialogTitle className="text-lg font-semibold">{stock.companyname}</DialogTitle>
+        </div>
+        <div className="flex items-center justify-between mt-2 border-b">
+          {/* Left Section */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-gray-700">{stock.symbol}</span>
+            <span className="text-xs px-2 py-0.5 bg-gray-200/50 rounded-md">{stock.type}</span>
           </div>
-          <div className="flex items-center justify-between mt-2  border-b">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700 ">{stock.symbol}</span>
-              <span className="text-xs px-2 py-0.5 bg-gray-200/50 rounded-md">{stock.type}</span>
-            </div>
-            <Link href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}>
-              <Button size="icon" className="h-10 w-10 hover:border-gray-300">
-                <ChartCandlestick className="h-6 w-6" />
+
+          {/* Right Section */}
+          <div className="flex items-center gap-2">
+            <Link
+              href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button size="icon" className="h-10 w-10 hover:border-gray-300 group">
+                <Scan className="h-6 w-6 text-gray-700 hover:text-blue-600" />
               </Button>
             </Link>
-            <Link href={`/stockdetail/${stock.symbol}`}>
-              <Button size="icon" className="h-10 w-10 bg-white/50 hover:bg-white/70">
-                <SquareArrowOutUpRight className="h-6 w-6" />
+            <Link href={`/StockDetail/${stock.symbol}`}>
+              <Button size="icon" className="h-10 w-10 bg-white/50 hover:bg-white/70 group">
+                <SquareArrowOutUpRight className="h-6 w-6 text-gray-700 group-hover:text-blue-600" />
               </Button>
             </Link>
           </div>
-        </DialogHeader>
+        </div>
+      </DialogHeader>
+
 
         <div>
           <div className="space-y-2">
