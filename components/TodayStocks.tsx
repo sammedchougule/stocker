@@ -18,29 +18,17 @@ type LargeCapFilter =
 | 'All'
 | 'Nifty Auto'
 | 'Nifty Bank'
-| 'Nifty FMCG'
-| 'Nifty Healthcare'
 | 'Nifty IT'
-| 'Nifty Media'
 | 'Nifty Metal'
 | 'Nifty Pharma'
-| 'Nifty PVT Bank'
-| 'Nifty PSU Bank'
-| 'Nifty Realty';
 
 const largeCapFilters: LargeCapFilter[] = [
   'All',
   'Nifty Auto',
   'Nifty Bank',
-  'Nifty FMCG',
-  'Nifty Healthcare',
   'Nifty IT',
-  'Nifty Media',
   'Nifty Metal',
-  'Nifty Pharma',
-  'Nifty PVT Bank',
-  'Nifty PSU Bank',
-  'Nifty Realty',
+  'Nifty Pharma'
 ];
 
 const TodaysStocks = () => {
