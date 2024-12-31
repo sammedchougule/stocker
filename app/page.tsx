@@ -21,7 +21,7 @@ export const revalidate = 60 // Revalidate every 60 seconds
 
 async function fetchStockData() {
   const res = await fetch(
-    'https://script.google.com/macros/s/AKfycbzK8oDQse4ERT_jddWwlK9iTLz3TNhiVAyb0Jp5L4U3q-XOyplps-HLNY0uLcNiNn0ERg/exec'
+    'https://script.google.com/macros/s/AKfycbwa3ZVL20X9vlqFfpi6KSteUsEecC9QpkY3V45sxVAmEQ5xeBBKSaCUyQejxrRbwE6wGw/exec'
   )
   const stockData = await res.json()
   return {
