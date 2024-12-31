@@ -1,11 +1,21 @@
-'use client'
+"use client";
 
-import React, { useMemo, useState, useRef, useEffect } from 'react'
-import { useStockContext } from '@/context/StockContext'
-import { Card, CardHeader, CardContent } from '@/components/ui/card'
-import { Bar, BarChart, XAxis, YAxis, CartesianGrid, ReferenceLine, Tooltip, Cell, ResponsiveContainer } from "recharts"
-import { ChartContainer } from "@/components/ui/chart"
-import { Stock } from '@/types/Stock'
+import React, { useMemo, useState, useRef, useEffect } from "react";
+import { useStockContext } from "@/context/StockContext";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import {
+  Bar,
+  BarChart,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ReferenceLine,
+  Tooltip,
+  Cell,
+  ResponsiveContainer,
+} from "recharts";
+import { ChartContainer } from "@/components/ui/chart";
+import { Stock } from "@/types/Stock";
 import {
   Table,
   TableBody,
@@ -13,106 +23,115 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
+import Image from 'next/image';
 
 // Define available sectors
 const SECTORS = [
-  'NIFTY_50', 'NIFTY_AUTO', 'NIFTY_BANK', 'NIFTY_ENERGY',
-  'NIFTY_FIN_SERVICE', 'NIFTY_FMCG', 'NIFTY_IT', 'NIFTY_MEDIA', 'NIFTY_METAL',
-  'NIFTY_PHARMA', 'NIFTY_PSU_BANK', 'NIFTY_REALTY', 'NIFTY_PVT_BANK'
-]
-
+  "NIFTY_50",
+  "NIFTY_AUTO",
+  "NIFTY_BANK",
+  "NIFTY_ENERGY",
+  "NIFTY_FIN_SERVICE",
+  "NIFTY_FMCG",
+  "NIFTY_IT",
+  "NIFTY_MEDIA",
+  "NIFTY_METAL",
+  "NIFTY_PHARMA",
+  "NIFTY_PSU_BANK",
+  "NIFTY_REALTY",
+  "NIFTY_PVT_BANK",
+];
 
 export default function Sectors() {
-  const { stocks } = useStockContext()
-  const [selectedSector, setSelectedSector] = useState<string | null>(null)
-  const sectorRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+  const { stocks } = useStockContext();
+  const [selectedSector, setSelectedSector] = useState<string | null>(null);
+  const sectorRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   // Prepare sector data
   const sectorData = useMemo(() => {
-    return SECTORS.map(sector => {
-      const stock = stocks.find(s => s.symbol === sector)
+    return SECTORS.map((sector) => {
+      const stock = stocks.find((s) => s.symbol === sector);
       return {
         sector: sector,
-        name: sector.replace('NIFTY_', '').replace('_', ' '),
-        changepct: stock ? stock.changepct : 0
-      }
-    }).sort((a, b) => b.changepct - a.changepct)
-  }, [stocks])
+        name: sector.replace("NIFTY_", "").replace("_", " "),
+        changepct: stock ? stock.changepct : 0,
+      };
+    }).sort((a, b) => b.changepct - a.changepct);
+  }, [stocks]);
 
   // Calculate min and max values for Y-axis
   const { minValue, maxValue } = useMemo(() => {
-    const values = sectorData.map(d => d.changepct)
+    const values = sectorData.map((d) => d.changepct);
     return {
       minValue: Math.min(...values, 0),
-      maxValue: Math.max(...values, 0)
-    }
-  }, [sectorData])
-
+      maxValue: Math.max(...values, 0),
+    };
+  }, [sectorData]);
 
   // Prepare stocks for each sector
   const sectorStocks = useMemo(() => {
     const indicesMap: { [key: string]: string } = {
-      'NIFTY_50': 'Nifty 50',
-      'NIFTY_AUTO': 'Nifty Auto',
-      'NIFTY_BANK': 'Nifty Bank',
-      'NIFTY_ENERGY': 'Nifty Energy',
-      'NIFTY_FIN_SERVICE': 'Nifty Financial Services',
-      'NIFTY_FMCG': 'Nifty FMCG',
-      'NIFTY_IT': 'Nifty IT',
-      'NIFTY_MEDIA': 'Nifty Media',
-      'NIFTY_METAL': 'Nifty Metal',
-      'NIFTY_PHARMA': 'Nifty Pharma',
-      'NIFTY_PVT_BANK': 'Nifty PVT Bank',
-      'NIFTY_PSU_BANK': 'Nifty PSU Bank',
-      'NIFTY_REALTY': 'Nifty Realty'
-    }
+      NIFTY_50: "Nifty 50",
+      NIFTY_AUTO: "Nifty Auto",
+      NIFTY_BANK: "Nifty Bank",
+      NIFTY_ENERGY: "Nifty Energy",
+      NIFTY_FIN_SERVICE: "Nifty Financial Services",
+      NIFTY_FMCG: "Nifty FMCG",
+      NIFTY_IT: "Nifty IT",
+      NIFTY_MEDIA: "Nifty Media",
+      NIFTY_METAL: "Nifty Metal",
+      NIFTY_PHARMA: "Nifty Pharma",
+      NIFTY_PVT_BANK: "Nifty PVT Bank",
+      NIFTY_PSU_BANK: "Nifty PSU Bank",
+      NIFTY_REALTY: "Nifty Realty",
+    };
 
     return Object.fromEntries(
-      SECTORS.map(sector => {
-        const indicesKey = indicesMap[sector] as keyof typeof stocks[0]['indices']
-        const sectorStocks = stocks.filter(stock => 
-          stock.indices && stock.indices[indicesKey]
-        ).sort((a, b) => b.changepct - a.changepct)
-        return [sector, sectorStocks]
+      SECTORS.map((sector) => {
+        const indicesKey = indicesMap[sector] as keyof typeof stocks[0]['indices'];
+        const sectorStocks = stocks
+          .filter((stock) => stock.indices && stock.indices[indicesKey])
+          .sort((a, b) => b.changepct - a.changepct);
+        return [sector, sectorStocks];
       })
-    )
-  }, [stocks])
+    );
+  }, [stocks]);
 
   interface SectorData {
     sector: string;
   }
 
- // Handle bar click event
- const handleBarClick = (data: SectorData) => {
-  setSelectedSector(data.sector)
-  const element = sectorRefs.current[data.sector]
-  if (element) {
-    const yOffset = -100; // Adjust this value to fine-tune the scroll position
-    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-    window.scrollTo({top: y, behavior: 'smooth'});
-  }
-}
+  // Handle bar click event
+  const handleBarClick = (data: SectorData) => {
+    setSelectedSector(data.sector);
+  };
 
-useEffect(() => {
-  if (selectedSector) {
-    const element = sectorRefs.current[selectedSector]
-    if (element) {
-      const yOffset = -100; // Adjust this value to fine-tune the scroll position
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({top: y, behavior: 'smooth'});
+  useEffect(() => {
+    if (selectedSector) {
+        const element = sectorRefs.current[selectedSector];
+        if (element) {
+            const yOffset = -100;
+            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
     }
-  }
-}, [selectedSector])
+}, [selectedSector]);
+
 
   const IndexTable = ({ sector, stocks }: { sector: string; stocks: Stock[] }) => (
     <Card
-      className={`mt-8 m-2 transition-all duration-300 ${selectedSector === sector ? 'ring-2 ring-blue-500' : ''}`} 
+      className={`mt-8 m-2 transition-all duration-300 ${
+        selectedSector === sector ? "ring-2 ring-blue-500" : ""
+      }`}
       ref={(el: HTMLDivElement | null) => {
         sectorRefs.current[sector] = el;
-      }}>
+      }}
+    >
       <CardHeader>
-        <h3 className="text-xl font-semibold">{sector.replace('NIFTY_', '').replace('_', ' ')} Stocks</h3>
+        <h3 className="text-xl font-semibold">
+          {sector.replace("NIFTY_", "").replace("_", " ")} Stocks
+        </h3>
       </CardHeader>
       <CardContent>
         <div className="h-[600px] overflow-hidden">
@@ -130,16 +149,34 @@ useEffect(() => {
               <TableBody>
                 {stocks.map((stock) => (
                   <TableRow key={stock.symbol}>
-                    <TableCell className="sticky left-0 z-10 bg-white font-medium w-1/6">{stock.symbol}</TableCell>
-                    <TableCell className="text-right w-1/6">₹{Number(stock.price).toFixed(2)}</TableCell>
-                    <TableCell className={`text-right w-1/6 ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <TableCell className="sticky left-0 z-10 bg-white font-medium w-1/6">
+                      <span className="flex items-center gap-2"><Image
+                        className='rounded-full'
+                        width={20}
+                        height={20}
+                        src={`/images/${stock.symbol}.svg`}
+                        alt={stock.companyname}
+                      /> {stock.symbol}</span>
+                    </TableCell>
+                    <TableCell className="text-right w-1/6">
+                      ₹{Number(stock.price).toFixed(2)}
+                    </TableCell>
+                    <TableCell
+                      className={`text-right w-1/6 ${
+                        stock.change >= 0 ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
                       {Number(stock.change).toFixed(2)}
                     </TableCell>
-                    <TableCell className={`text-right w-1/6 ${stock.changepct >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <TableCell
+                      className={`text-right w-1/6 ${
+                        stock.changepct >= 0 ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
                       {Number(stock.changepct).toFixed(2)}%
                     </TableCell>
                     <TableCell className="text-right w-1/6">
-                      {Number(stock.volumespike)?.toLocaleString() ?? 'N/A'}
+                      {Number(stock.volumespike)?.toLocaleString() ?? "N/A"}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -149,8 +186,7 @@ useEffect(() => {
         </div>
       </CardContent>
     </Card>
-
-  )
+  );
 
   return (
     <div className="container mx-auto mt-6">
@@ -184,15 +220,51 @@ useEffect(() => {
                       >
                         {/* Gradients for 3D Effect */}
                         <defs>
-                          <linearGradient id="positiveGradient3D" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#22c55e" stopOpacity={1} />
-                            <stop offset="50%" stopColor="#16a34a" stopOpacity={0.9} />
-                            <stop offset="100%" stopColor="#15803d" stopOpacity={0.8} />
+                          <linearGradient
+                            id="positiveGradient3D"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="0%"
+                              stopColor="#22c55e"
+                              stopOpacity={1}
+                            />
+                            <stop
+                              offset="50%"
+                              stopColor="#16a34a"
+                              stopOpacity={0.9}
+                            />
+                            <stop
+                              offset="100%"
+                              stopColor="#15803d"
+                              stopOpacity={0.8}
+                            />
                           </linearGradient>
-                          <linearGradient id="negativeGradient3D" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#ef4444" stopOpacity={1} />
-                            <stop offset="50%" stopColor="#dc2626" stopOpacity={0.9} />
-                            <stop offset="100%" stopColor="#b91c1c" stopOpacity={0.8} />
+                          <linearGradient
+                            id="negativeGradient3D"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="0%"
+                              stopColor="#ef4444"
+                              stopOpacity={1}
+                            />
+                            <stop
+                              offset="50%"
+                              stopColor="#dc2626"
+                              stopOpacity={0.9}
+                            />
+                            <stop
+                              offset="100%"
+                              stopColor="#b91c1c"
+                              stopOpacity={0.8}
+                            />
                           </linearGradient>
                         </defs>
 
@@ -213,7 +285,7 @@ useEffect(() => {
                             offset: -20,
                           }}
                           tick={{ fontSize: 12 }}
-                          domain={[minValue-.1, maxValue+.1]}
+                          domain={[minValue - 0.1, maxValue + 0.1]}
                           tickFormatter={(value) => `${value.toFixed(2)}%`}
                         />
                         <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
@@ -253,10 +325,13 @@ useEffect(() => {
                             <Cell
                               key={`cell-${index}`}
                               fill={`url(#${
-                                entry.changepct >= 0 ? "positiveGradient3D" : "negativeGradient3D"
+                                entry.changepct >= 0
+                                  ? "positiveGradient3D"
+                                  : "negativeGradient3D"
                               })`}
                               style={{
-                                filter: "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2))", // Shadow for depth
+                                filter:
+                                  "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2))", // Shadow for depth
                               }}
                             />
                           ))}
@@ -270,41 +345,45 @@ useEffect(() => {
 
             {/* Sector Table */}
             <div className="w-full lg:w-1/3">
-              <div className="h-[600px] overflow-hidden flex flex-col">
+                <div className="h-[600px] overflow-hidden flex flex-col">
                 <div className="flex-none">
-                  <Table>
-                    <TableHeader className="bg-blue-200">
-                      <TableRow>
-                        <TableHead className="sticky top-0">Sector</TableHead>
-                        <TableHead className="sticky top-0 z-10 text-right">Change %</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                  </Table>
-                </div>
-                <div className="flex-grow overflow-auto">
-                  <Table>
-                    <TableBody>
-                      {sectorData.map((sector) => (
-                        <TableRow
-                          key={sector.sector}
-                          className="cursor-pointer hover:bg-gray-100"
-                          onClick={() => setSelectedSector(sector.sector)}
-                        >
-                          <TableCell>{sector.name}</TableCell>
-                          <TableCell
-                            className={`text-right font-medium ${
-                              sector.changepct >= 0 ? "text-green-600" : "text-red-600"
-                            }`}
-                          >
-                            {sector.changepct >= 0 ? "+" : ""}
-                            {Number(sector.changepct).toFixed(2)}%
-                          </TableCell>
+                    <Table>
+                        <TableHeader className="bg-blue-200">
+                        <TableRow>
+                            <TableHead className="sticky top-0">Sector</TableHead>
+                            <TableHead className="sticky top-0 z-10 text-right">
+                            Change %
+                            </TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                        </TableHeader>
+                    </Table>
                 </div>
-              </div>
+                  <div className="flex-grow overflow-auto">
+                      <Table>
+                      <TableBody>
+                          {sectorData.map((sector) => (
+                            <TableRow
+                              key={sector.sector}
+                              className={`cursor-pointer hover:bg-gray-100 ${selectedSector === sector.sector ? 'bg-gray-100' : ''}`}
+                                onClick={() => setSelectedSector(sector.sector)}
+                            >
+                              <TableCell>{sector.name}</TableCell>
+                              <TableCell
+                                className={`text-right font-medium ${
+                                  sector.changepct >= 0
+                                    ? "text-green-600"
+                                    : "text-red-600"
+                                }`}
+                              >
+                                {sector.changepct >= 0 ? "+" : ""}
+                                {Number(sector.changepct).toFixed(2)}%
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                  </div>
+                </div>
             </div>
           </div>
         </CardContent>
@@ -312,10 +391,14 @@ useEffect(() => {
 
       {/* Individual Index Tables */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {SECTORS.map(sector => (
-          <IndexTable key={sector} sector={sector} stocks={sectorStocks[sector]} />
+        {SECTORS.map((sector) => (
+          <IndexTable
+            key={sector}
+            sector={sector}
+            stocks={sectorStocks[sector]}
+          />
         ))}
       </div>
     </div>
-  )
+  );
 }
