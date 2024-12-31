@@ -26,6 +26,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
   const [marketMood, setMarketMood] = useState(50)
   const [totalGreen, setTotalGreen] = useState(0)
   const [totalRed, setTotalRed] = useState(0)
+  const [showModal, setShowModal] = useState(false) // State for modal visibility
 
   const nifty50Data = useMemo(() => {
     if (!stocks) return { green: 0, red: 0, total: 0 };
@@ -45,7 +46,6 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
   }, [stocks]);
 
   useEffect(() => {
-    // Calculate market mood based on the percentage of stocks in green
     const { green, total } = nifty50Data;
     const moodPercentage = (green / total) * 100;
     setMarketMood(moodPercentage);
@@ -53,19 +53,16 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
     setTotalRed(nifty50Data.red);
   }, [nifty50Data]);
 
-    // Calculate the angle for the needle based on market mood value
-    const calculateRotation = (value: number) => {
-      // Map 0-100 to -135 to 135 degrees
-      return -135 + (value * 270) / 100;
-    };
+  const calculateRotation = (value: number) => {
+    return -135 + (value * 270) / 100;
+  };
 
-  // Get mood text and color based on value
   const getMoodInfo = (value: number) => {
-    if (value <= 20) return { text: 'Extreme Fear', color: '#22c55e' };
-    if (value <= 40) return { text: 'Fear', color: '#f97316' };
-    if (value <= 60) return { text: 'Neutral', color: '#eab308' };
-    if (value <= 80) return { text: 'Greed', color: '#f97316' };
-    return { text: 'Extreme Greed', color: '#ef4444' };
+    if (value <= 20) return { text: 'Extreme Fear', color: '#22c55e', explanation: 'Extreme fear (<30) suggests a good time to open fresh positions, as markets are likely to be oversold and might turn upwards.' };
+    if (value <= 40) return { text: 'Fear', color: '#f97316', explanation: 'Investors are fearful in the market; action depends on the MMI trajectory.' };
+    if (value <= 60) return { text: 'Neutral', color: '#eab308', explanation: 'Markets are balanced; actions depend on further trends.' };
+    if (value <= 80) return { text: 'Greed', color: '#f97316', explanation: 'Investors are acting greedy; action depends on the MMI trajectory.' };
+    return { text: 'Extreme Greed', color: '#ef4444', explanation: 'Extreme greed (>70) suggests avoiding fresh positions as markets are overbought.' };
   };
 
   const moodInfo = getMoodInfo(marketMood);
@@ -75,11 +72,12 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
       <CardContent className="pt-6 px-2 sm:px-4">
         <div className="text-center">
           <h3 className="text-2xl font-bold mb-2">Market Mood Index</h3>
-          <p className="text-sm text-gray-500 mb-4">
-            Based on Nifty 50 stocks: {totalGreen} advancing, {totalRed} declining
-          </p>
+          {/* <p className="text-sm text-gray-500 mb-4">
+            Based on Nifty 50 Stocks: {totalGreen} advancing, {totalRed} declining
+          </p> */}
+          <p className="text-md text-gray-500 mb-2">Know what’s the sentiment on the street today</p>
           
-          <div className="relative w-full max-w-[350px] mx-auto mb-6">
+          <div className="relative w-full max-w-[400px] mx-auto mb-6">
             <svg viewBox="0 0 300 200" className="w-full">
               {/* Mood labels */}
               <text x="0" y="30" className="text-xs font-medium fill-green-600">Extreme Fear</text>
@@ -98,26 +96,17 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
                 className="opacity-30"
               />
               
-             {/* Colored segments */}
+              {/* Colored segments */}
               <defs>
                 <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#22c55e">
-                    <animate attributeName="stop-color" 
-                      values="#22c55e;#15803d;#22c55e" 
-                      dur="4s" repeatCount="indefinite" />
-                  </stop>
+                  <stop offset="0%" stopColor="#22c55e" />
                   <stop offset="25%" stopColor="#f97316" />
                   <stop offset="50%" stopColor="#eab308" />
                   <stop offset="75%" stopColor="#f97316" />
-                  <stop offset="100%" stopColor="#ef4444">
-                    <animate attributeName="stop-color" 
-                      values="#ef4444;#b91c1c;#ef4444" 
-                      dur="4s" repeatCount="indefinite" />
-                  </stop>
+                  <stop offset="100%" stopColor="#ef4444" />
                 </linearGradient>
               </defs>
 
-              {/* Main colored arc */}
               <path
                 d="M30 170 A120 120 0 0 1 270 170"
                 fill="none"
@@ -126,11 +115,9 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
                 strokeLinecap="round"
               />
 
-              {/* Decorative elements */}
-              <circle cx="150" cy="170" r="130" fill="none" stroke="#e5e7eb" strokeWidth="1" />
-              <circle cx="150" cy="170" r="110" fill="none" stroke="#e5e7eb" strokeWidth="1" />
+              <circle cx="150" cy="170" r="130" fill="none" stroke="#e5e7eb" strokeWidth="5" />
+              <circle cx="150" cy="170" r="110" fill="none" stroke="#e5e7eb" strokeWidth="5" />
 
-               {/* Needle with animation */}
               <g transform={`translate(150, 170) rotate(${calculateRotation(marketMood)})`}
                 className="transition-transform duration-1000">
                 <line
@@ -142,22 +129,14 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
                   strokeWidth="3"
                   className="origin-bottom"
                 />
-                <circle r="8" fill="currentColor">
-                  <animate
-                    attributeName="r"
-                    values="8;9;8"
-                    dur="1s"
-                    repeatCount="indefinite"
-                  />
-                </circle>
+                <circle r="8" fill="currentColor" />
               </g>
 
-              {/* Center value */}
               <text
                 x="150"
-                y="130"
+                y="170"
                 textAnchor="middle"
-                className="text-4xl font-bold"
+                className="text-5xl font-bold"
                 fill="currentColor"
               >
                 {marketMood.toFixed(2)}
@@ -165,19 +144,68 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
             </svg>
           </div>
 
-          {/* Mood text */}
-          <div 
-            className="text-2xl font-bold mb-2"
-            style={{ color: moodInfo.color }}
-          >
-            {moodInfo.text}
-          </div>
-          
-          <p className="text-sm text-gray-500">
-            Updated {new Date().toLocaleTimeString()}
+          <p className="text-md text-gray-500 mx-10">
+            MMI is in the <span 
+              style={{ color: moodInfo.color, fontWeight: 'bold', fontSize: '1.1rem' }}>
+               {moodInfo.text} Zone.
+            </span> {moodInfo.explanation}
           </p>
+
+          <button 
+            className="text-blue-600 mt-4"
+            onClick={() => setShowModal(true)}
+          >
+            See All Zones
+          </button>
         </div>
       </CardContent>
+
+      {/* Modal */}
+      {showModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          onClick={() => setShowModal(false)} // Close modal on clicking the background
+        >
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative"
+            onClick={(event) => event.stopPropagation()} // Prevent click from closing when interacting with modal content
+          >
+            {/* Header with Title and Close Button */}
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold">See How to Read All Zones</h3>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => setShowModal(false)} // Close modal on clicking the close button
+              >
+                ✖
+              </button>
+            </div>
+
+            <ul>
+              <li className="mb-4">
+                <span className="font-bold text-green-600">Extreme Fear (&lt;20):</span>
+                <span className="font-light"> Extreme fear suggests a good time to open fresh positions, as markets are likely to be oversold and might turn upwards.</span>
+              </li>
+              <li className="mb-4">
+                <span className="font-bold text-orange-500">Fear (20-40):</span>
+                <span className="font-light"> It suggests that investors are fearful in the market, but the action to be taken depends on the MMI trajectory.</span>
+              </li>
+              <li className="mb-4">
+                <span className="font-bold text-yellow-500">Neutral (40-60):</span>
+                <span className="font-light"> It suggests that investors are fearful in the market, but the action to be taken depends on the MMI trajectory.</span>
+              </li>
+              <li className="mb-4">
+                <span className="font-bold text-orange-500">Greed (60-80):</span>
+                <span className="font-light"> It suggests that investors are fearful in the market, but the action to be taken depends on the MMI trajectory.</span>
+              </li>
+              <li className="mb-4">
+                <span className="font-bold text-red-500">Extreme Greed ({'>'}80):</span>
+                <span className="font-light"> It suggests that investors are fearful in the market, but the action to be taken depends on the MMI trajectory.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
     </Card>
   )
 }
