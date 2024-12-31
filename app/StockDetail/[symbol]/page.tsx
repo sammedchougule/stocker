@@ -70,58 +70,6 @@ export default function StockDetailPage() {
     }
   }, [stocks, symbol]);
 
-  const relatedStocks = useMemo(() => {
-    return [
-      {
-        symbol: "SBIN",
-        companyname: "State Bank of India",
-        price: 793.3,
-        changepct: -0.79,
-      },
-      {
-        symbol: "INDUSIND",
-        companyname: "Indusind Bank Ltd",
-        price: 961.0,
-        changepct: 0.8,
-      },
-      {
-        symbol: "KOTAKBANK",
-        companyname: "Kotak Mahindra Bank L...",
-        price: 1741.2,
-        changepct: -1.06,
-      },
-      {
-        symbol: "TECHM",
-        companyname: "Tech Mahindra Ltd",
-        price: 1729.35,
-        changepct: 1.03,
-      },
-      {
-        symbol: "SBIN2",
-        companyname: "State Bank of India",
-        price: 793.3,
-        changepct: -0.79,
-      },
-      {
-        symbol: "INDUSIND2",
-        companyname: "Indusind Bank Ltd",
-        price: 961.0,
-        changepct: 0.8,
-      },
-      {
-        symbol: "KOTAKBANK2",
-        companyname: "Kotak Mahindra Bank L...",
-        price: 1741.2,
-        changepct: -1.06,
-      },
-      {
-        symbol: "TECHM2",
-        companyname: "Tech Mahindra Ltd",
-        price: 1729.35,
-        changepct: 1.03,
-      },
-    ];
-  }, []);
 
   if (loading) {
     return (
@@ -250,9 +198,11 @@ export default function StockDetailPage() {
           </CardHeader>
           <ScrollArea className="h-[200px]">
             <div className="flex gap-2 px-4">
-              {relatedStocks.map((stock) => (
-                <StockCard key={stock.symbol} stock={stock} />
-              ))}
+                {stocks
+                .filter((s) => s.indices && Array.isArray(s.indices) && Array.isArray(stockData.indices) && stockData.indices.length > 0 && s.indices.includes(stockData.indices[0]))
+                .map((stock) => (
+                  <StockCard key={stock.symbol} stock={stock} />
+                ))}
             </div>
           </ScrollArea>
         </CardContent>
