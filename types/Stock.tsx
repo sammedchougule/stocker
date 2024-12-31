@@ -44,6 +44,7 @@ export interface Stock {
   eps: number | null;
   pe: number | null;
   shares: number | null;
+  closings: { [date: string]: number };
 }
 
 export interface StockData {
