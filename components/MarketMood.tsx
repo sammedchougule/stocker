@@ -24,8 +24,6 @@ interface MarketMoodProps {
 
 export default function MarketMood({ stocks }: MarketMoodProps) {
   const [marketMood, setMarketMood] = useState(50)
-  const [totalGreen, setTotalGreen] = useState(0)
-  const [totalRed, setTotalRed] = useState(0)
   const [showModal, setShowModal] = useState(false) // State for modal visibility
 
   const nifty50Data = useMemo(() => {
