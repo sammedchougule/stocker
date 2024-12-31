@@ -24,18 +24,15 @@ interface MarketMoodProps {
 
 export default function MarketMood({ stocks }: MarketMoodProps) {
   const [marketMood, setMarketMood] = useState(50)
-  const [showModal, setShowModal] = useState(false) // State for modal visibility
+  const [showModal, setShowModal] = useState(false); // State for modal visibility
 
   const nifty50Data = useMemo(() => {
-    if (!stocks) return { green: 0, red: 0, total: 0 };
-    
+    if (!stocks) return { green: 0, red: 0, total: 0 }; 
     const niftyStocks = stocks.filter(stock => 
       NIFTY50_STOCKS.includes(stock.symbol)
     );
-
     const green = niftyStocks.filter(stock => stock.changepct > 0).length;
     const red = niftyStocks.filter(stock => stock.changepct < 0).length;
-    
     return {
       green,
       red,
@@ -44,11 +41,8 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
   }, [stocks]);
 
   useEffect(() => {
-    const { green, total } = nifty50Data;
-    const moodPercentage = (green / total) * 100;
+    const moodPercentage = (nifty50Data.green / nifty50Data.total) * 100;
     setMarketMood(moodPercentage);
-    setTotalGreen(nifty50Data.green);
-    setTotalRed(nifty50Data.red);
   }, [nifty50Data]);
 
   const calculateRotation = (value: number) => {
