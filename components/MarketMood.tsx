@@ -60,7 +60,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
   const moodInfo = getMoodInfo(marketMood);
 
   return (
-    <Card className="h-full">
+    <Card className="h-full mb-16">
       <CardContent className="pt-6 px-2 sm:px-4">
         <div className="text-center">
           <h3 className="text-2xl font-bold mb-2">Market Mood Index</h3>
@@ -72,11 +72,11 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
           <div className="relative w-full max-w-[400px] mx-auto mb-6">
             <svg viewBox="0 0 300 200" className="w-full">
               {/* Mood labels */}
-              <text x="0" y="30" className="text-xs font-medium fill-green-600">Extreme Fear</text>
+              <text x="5" y="30" className="text-xs font-medium fill-green-600">Extreme Fear</text>
               <text x="90" y="30" className="text-xs font-medium fill-orange-500">Fear</text>
-              <text x="140" y="30" className="text-xs font-medium fill-yellow-500">Neutral</text>
-              <text x="200" y="30" className="text-xs font-medium fill-orange-500">Greed</text>
-              <text x="260" y="30" className="text-xs font-medium fill-red-500">Extreme Greed</text>
+              <text x="120" y="30" className="text-xs font-medium fill-yellow-500">Neutral</text>
+              <text x="170" y="30" className="text-xs font-medium fill-orange-500">Greed</text>
+              <text x="210" y="30" className="text-xs font-medium fill-red-600">Extreme Greed</text>
 
               {/* Background arc */}
               <path
@@ -155,7 +155,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
       {/* Modal */}
       {showModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed p-4 inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
           onClick={() => setShowModal(false)} // Close modal on clicking the background
         >
           <div
