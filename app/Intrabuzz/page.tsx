@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, ArrowUp, ArrowDown, TableIcon, LayoutGrid } from 'lucide-react'
+import { Plus, ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from 'lucide-react'
 
 import { Skeleton, SkeletonText, SkeletonCircle } from '@/components/ui/skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -164,10 +164,16 @@ function IntrabuzzContent() {
           ₹{Number(stock.price).toFixed(2)}
         </div>
         <div className="flex justify-between items-center w-full">
-          <div className={`flex items-center px-2 py-1 rounded-md text-sm font-medium
-            ${(stock.changepct >= 0 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100')}`}>
-            {stock.changepct >= 0 ? '↑' : '↓'} {Number(stock.changepct).toFixed(2)}%
-          </div>
+          {(sortBy === 'changepct_asc' || sortBy === 'changepct_desc') ? (
+            <div className={`flex items-center px-2 py-1 rounded-md text-sm font-medium
+              ${(stock.changepct >= 0 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100')}`}>
+              {stock.changepct >= 0 ? '↑' : '↓'} {Number(stock.changepct).toFixed(2)}%
+            </div>
+          ) : (
+            <div className="flex items-center px-2 py-1 rounded-md text-sm font-medium text-yellow-700 bg-yellow-100">
+              <Flame className="w-4 h-4 mr-1" /> {Number(stock.volumespike).toFixed(2)}X
+            </div>
+          )}
         </div>
       </CardFooter>
     </Card>
@@ -196,12 +202,11 @@ function IntrabuzzContent() {
 
   return (
     <div className="container mx-auto px-4 mt-8">
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+      <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-4 mb-6">
         <Select
           value={filterBy}
-          onValueChange={(value: FilterOption) => setFilterBy(value)}
-        >
-          <SelectTrigger className="w-[140px]">
+          onValueChange={(value: FilterOption) => setFilterBy(value)}>
+          <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="Filter by Index" />
           </SelectTrigger>
           <SelectContent>
@@ -210,44 +215,48 @@ function IntrabuzzContent() {
             <SelectItem value="Nifty Bank">Nifty Bank</SelectItem>
             <SelectItem value="Nifty IT">Nifty IT</SelectItem>
             <SelectItem value="Nifty Auto">Nifty Auto</SelectItem>
+            
           </SelectContent>
         </Select>
 
         <div className="flex items-center gap-2">
-          <Select
-            value={sortBy}
-            onValueChange={(value: SortOption) => setSortBy(value)}
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-1"
+            onClick={() => setSortBy(sortBy === 'changepct_desc' ? 'changepct_asc' : 'changepct_desc')}
           >
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="changepct_desc">
-                <span className="flex items-center">
-                  <ArrowDown className="w-4 h-4 mr-2" />
-                  Chg % 
-                </span>
-              </SelectItem>
-              <SelectItem value="changepct_asc">
-                <span className="flex items-center">
-                  <ArrowUp className="w-4 h-4 mr-2" />
-                  Chg % 
-                </span>
-              </SelectItem>
-              <SelectItem value="volumespike_desc">
-                <span className="flex items-center">
-                  <ArrowDown className="w-4 h-4 mr-2" />
-                  Vol_Spike 
-                </span>
-              </SelectItem>
-              <SelectItem value="volumespike_asc">
-                <span className="flex items-center">
-                  <ArrowUp className="w-4 h-4 mr-2" />
-                  Vol_pike 
-                </span>
-              </SelectItem>
-            </SelectContent>
-          </Select>
+            <Percent className="w-4 h-4" />
+            {sortBy.startsWith('changepct') && (
+              sortBy === 'changepct_desc' ? (
+                <ArrowDown className="w-4 h-4 font-extrabold text-green-500" />
+              ) : (
+                <ArrowUp className="w-4 h-4 font-extrabold text-red-500" />
+              )
+            )}
+            {!sortBy.startsWith('changepct') && (
+              <ArrowDown className="w-4 h-4 text-gray-400" />
+            )}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-1"
+            onClick={() => setSortBy(sortBy === 'volumespike_desc' ? 'volumespike_asc' : 'volumespike_desc')}
+          >
+            <Flame className="w-4 h-4" />
+            {sortBy.startsWith('volumespike') && (
+              sortBy === 'volumespike_desc' ? (
+                <ArrowDown className="w-4 h-4 font-extrabold text-green-500" />
+              ) : (
+                <ArrowUp className="w-4 h-4 font-extrabold text-red-500" />
+              )
+            )}
+            {!sortBy.startsWith('volumespike') && (
+              <ArrowDown className="w-4 h-4  text-gray-400" />
+            )}
+          </Button>
 
           <Button
             variant="outline"
