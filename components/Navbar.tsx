@@ -133,7 +133,7 @@ const Navbar = () => {
       </nav>
 
       {/* Bottom Tab Bar for Mobile */}
-      <nav className="fixed bottom-2 left-4 right-4 z-50 border border-gray-200 shadow-2xl rounded-2xl sm:hidden backdrop-blur-md bg-white/10">
+      <nav className="fixed bottom-2 left-2 right-4 z-50 border border-gray-200 shadow-2xl rounded-xl sm:hidden backdrop-blur-md bg-white/10">
         <div className="flex justify-around items-center py-2">
           <Link
             href="/"
@@ -142,52 +142,52 @@ const Navbar = () => {
             }`}
           >
             <Home className={`h-6 w-6 ${isActive('/') ? 'text-blue-500' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/') ? 'block' : 'hidden'}`}>Home</span>
+            <span className={`text-xs text-gray-600 ${isActive('/') ? 'block' : 'hidden'}`}>Home</span>
           </Link>
           <Link
             href="/Intrabuzz"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Intrabuzz') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
+              isActive('/Intrabuzz') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
             }`}
           >
             <SquareActivity className={`h-6 w-6 ${isActive('/Intrabuzz') ? 'text-blue-500' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/Intrabuzz') ? 'block' : 'hidden'}`}>IntraBuzz</span>
+            <span className={`text-xs text-gray-600 ${isActive('/Intrabuzz') ? 'block' : 'hidden'}`}>IntraBuzz</span>
           </Link>
           <Link
             href="/Sectors"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Sectors') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
+              isActive('/Sectors') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
             }`}
           >
             <Layers className={`h-6 w-6 ${isActive('/Sectors') ? 'text-yellow-500' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/Sectors') ? 'block' : 'hidden'}`}>Sectors</span>
+            <span className={`text-xs text-gray-600 ${isActive('/Sectors') ? 'block' : 'hidden'}`}>Sectors</span>
           </Link>
           <Link
             href="/Heatmap"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Heatmap') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
+              isActive('/Heatmap') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
             }`}
           >
             <LayoutGrid className={`h-6 w-6 ${isActive('/Heatmap') ? 'text-orange-500' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/Heatmap') ? 'block' : 'hidden'}`}>Heatmap</span>
+            <span className={`text-xs text-gray-600 ${isActive('/Heatmap') ? 'block' : 'hidden'}`}>Heatmap</span>
           </Link>
           <Link
             href="/Screener"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Screener') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
+              isActive('/Screener') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
             }`}
           >
-            <Sliders className={`h-6 w-6 ${isActive('/screener') ? 'text-red-500' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/screener') ? 'block' : 'hidden'}`}>Screener</span>
+            <Sliders className={`h-6 w-6 ${isActive('/Screener') ? 'text-red-500' : 'text-gray-700'}`} />
+            <span className={`text-xs text-gray-600 ${isActive('/Screener') ? 'block' : 'hidden'}`}>Screener</span>
           </Link>
           <Link
             href="/Portfolio"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Portfolio') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
+              isActive('/Portfolio') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
             }`}
           >
             <BriefcaseBusiness className={`h-6 w-6 ${isActive('/Portfolio') ? 'text-green-700' : 'text-gray-700'}`} />
-            <span className={`text-xxs text-gray-600 ${isActive('/Portfolio') ? 'block' : 'hidden'}`}>Portfolio</span>
+            <span className={`text-xs text-gray-600 ${isActive('/Portfolio') ? 'block' : 'hidden'}`}>Portfolio</span>
           </Link>
 
         </div>
