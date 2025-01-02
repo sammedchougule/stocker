@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   LineChart,
   Line,
@@ -22,7 +22,7 @@ export function StockChart({ stock }: StockChartProps) {
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('5D');
 
   // Function to filter data based on selected time frame
-  const { filteredData, isPositive } = useMemo(() => {
+  const getFilteredData = useCallback(() => {
     const currentDate = new Date();
     const chartData = Object.entries(stock.closings)
       .map(([date, price]) => ({
@@ -31,26 +31,27 @@ export function StockChart({ stock }: StockChartProps) {
       }))
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   
-    const data = (() => {
-      switch (timeFrame) {
-        case '5D':
-          return chartData.slice(-5);
-        case '15D':
-          return chartData.slice(-15);
-        case '1M':
-          const oneMonthAgo = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
-          return chartData.filter(item => new Date(item.date) >= oneMonthAgo);
-        case '6M':
-          const sixMonthsAgo = new Date(currentDate.setMonth(currentDate.getMonth() - 6));
-          return chartData.filter(item => new Date(item.date) >= sixMonthsAgo);
-        case '1Y':
-          const oneYearAgo = new Date(currentDate.setFullYear(currentDate.getFullYear() - 1));
-          return chartData.filter(item => new Date(item.date) >= oneYearAgo);
-        default:
-          return chartData;
-      }
-    })();
+    switch (timeFrame) {
+      case '5D':
+        return chartData.slice(-5);
+      case '15D':
+        return chartData.slice(-15);
+      case '1M':
+        const oneMonthAgo = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+        return chartData.filter(item => new Date(item.date) >= oneMonthAgo);
+      case '6M':
+        const sixMonthsAgo = new Date(currentDate.setMonth(currentDate.getMonth() - 6));
+        return chartData.filter(item => new Date(item.date) >= sixMonthsAgo);
+      case '1Y':
+        const oneYearAgo = new Date(currentDate.setFullYear(currentDate.getFullYear() - 1));
+        return chartData.filter(item => new Date(item.date) >= oneYearAgo);
+      default:
+        return chartData;
+    }
+  }, [timeFrame, stock.closings]);
   
+  const { filteredData, isPositive } = useMemo(() => {
+    const data = getFilteredData();
     if (data.length < 2) return { filteredData: data, isPositive: true };
   
     const startPrice = data[0].closingPrice;
@@ -60,8 +61,7 @@ export function StockChart({ stock }: StockChartProps) {
       filteredData: data,
       isPositive: endPrice >= startPrice
     };
-  }, [timeFrame, stock.closings]);
-  
+  }, [getFilteredData]);
   
 
   // Calculate Y-axis domain based on filtered data
