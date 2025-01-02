@@ -47,6 +47,9 @@ export default function Heatmap() {
     return minSize + (maxSize - minSize) * sizePercentage;
   };
 
+  // Sort heatmapData by changepct in descending order
+  heatmapData.sort((a, b) => b.changepct - a.changepct);
+
   return (
     <div className="container mx-auto px-4">
       <Card>
@@ -58,15 +61,15 @@ export default function Heatmap() {
             {Object.entries(NIFTY50_SECTORS).map(([sector, symbols]) => (
               <div key={sector} className="bg-gray-50 p-3 rounded-lg hover:shadow-lg transition-all duration-300 border border-gray-200">
                 <h3 className="font-semibold text-sm mb-3 text-gray-800">{sector}</h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1">
                   {heatmapData
                     .filter(stock => symbols.includes(stock.symbol))
                     .map((stock) => {
-                      const size = 65;
+                      const size = getCellSize(stock.changepct);
                       return (
                         <div
                           key={stock.symbol}
-                          className="group relative flex flex-col items-center justify-center rounded-md hover:scale-105 transition-transform duration-200 cursor-pointer p-2"
+                          className="group relative flex flex-col items-center justify-center hover:scale-105 transition-transform duration-200 cursor-pointer p-2"
                           style={{
                             background: `linear-gradient(145deg, ${stock.changepct > 0 ? "#22c55e" : stock.changepct < 0 ? "#ef4444" : "#E5E7EB"}, ${stock.changepct > 0 ? "#16a34a" : stock.changepct < 0 ? "#dc2626" : "#D1D5DB"})`,
                             width: `${size}px`,
