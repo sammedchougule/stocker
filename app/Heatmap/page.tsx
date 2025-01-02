@@ -12,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/buttons";
 
 const PERCENTAGE_FILTERS = [-3, -2, -1, 1, 2, 3];
 
@@ -33,9 +32,6 @@ type FilterOption =
   | "Nifty PSU Bank"
   | "Nifty Realty";
 
-
-type ViewMode = "index" | "sector";
-
 export default function Heatmap() {
   const { stocks } = useStockContext();
   const [heatmapData, setHeatmapData] = useState<Stock[]>([]);
@@ -43,41 +39,20 @@ export default function Heatmap() {
   const [minChange, setMinChange] = useState(0);
   const [activeFilters, setActiveFilters] = useState<number[]>([]);
   const [filterBy, setFilterBy] = useState<FilterOption>("Nifty FnO");
-  const [viewMode, setViewMode] = useState<ViewMode>("index");
 
   useEffect(() => {
     let filtered = stocks.filter((stock) => stock.type === "EQ");
 
-    if (filterBy === "all") {
+     if (filterBy === "all") {
       filtered = filtered.filter(
-        (stock) => stock.indices && stock.indices["Nifty FnO"]
+          (stock) => stock.indices && stock.indices["Nifty FnO"]
       );
-    } else {
+    }else  {
       filtered = filtered.filter(
-        (stock) =>
-          stock.indices && stock.indices[filterBy as keyof typeof stock.indices]
-      );
-    }
+           (stock) => stock.indices && stock.indices[filterBy as keyof typeof stock.indices]
+       );
+   }
 
-        if(viewMode === "sector"){
-            const groupedBySector : {[key: string]: Stock[]} = {};
-
-            filtered.forEach(stock => {
-                if (stock.sector) {
-                  if (!groupedBySector[stock.sector]) {
-                    groupedBySector[stock.sector] = [];
-                  }
-                  groupedBySector[stock.sector].push(stock)
-                }
-              });
-
-              const allStocks: Stock[] = [];
-               for(const sector in groupedBySector){
-                 allStocks.push(...groupedBySector[sector])
-              }
-                filtered = allStocks;
-
-        }
 
     if (filtered.length > 0) {
       const max = Math.max(...filtered.map((s) => s.changepct));
@@ -88,7 +63,7 @@ export default function Heatmap() {
       const sortedStocks = [...filtered].sort((a, b) => b.changepct - a.changepct);
       setHeatmapData(sortedStocks);
     }
-  }, [stocks, filterBy, viewMode]);
+  }, [stocks, filterBy]);
 
   const getColor = (changepct: number) => {
     const maxAbsChange = Math.max(Math.abs(maxChange), Math.abs(minChange));
@@ -96,10 +71,10 @@ export default function Heatmap() {
 
     const normalizedChange = changepct / maxAbsChange;
 
-    const greenStart = [88, 214, 141];
-    const greenEnd = [29, 131, 72];
-    const redStart = [236, 112, 99];
-    const redEnd = [148, 49, 38];
+    const greenStart = [88, 214, 141]; // #a7f3d0
+    const greenEnd = [29, 131, 72]; // #34d399
+    const redStart = [236, 112, 99]; // #fca5a5
+    const redEnd = [148, 49, 38]; // #f87171
 
     let startColor, endColor;
     if (normalizedChange > 0) {
@@ -155,11 +130,6 @@ export default function Heatmap() {
     });
   };
 
-    const handleViewModeChange = () => {
-        setViewMode(prevMode => prevMode === "index" ? "sector" : "index")
-    }
-    
-
   return (
     <div className="container mx-auto px-4">
       <Card>
@@ -167,57 +137,47 @@ export default function Heatmap() {
           <CardTitle className="flex justify-center">Stock Heatmap</CardTitle>
         </CardHeader>
         <CardContent className="p-4">
-          <div className="flex justify-between mb-4 items-center">
-            <div className="flex items-center gap-2">
-                 <Select
-                    value={filterBy}
-                    onValueChange={(value: FilterOption) => setFilterBy(value)}
-                 >
-                   <SelectTrigger className="w-[220px]">
-                     <SelectValue placeholder="Filter by Index" />
-                   </SelectTrigger>
-                   <SelectContent>
-                     <SelectItem value="Nifty FnO">All</SelectItem>
-                     <SelectItem value="Nifty 50">Nifty 50</SelectItem>
-                    <SelectItem value="Nifty Auto">Nifty Auto</SelectItem>
-                    <SelectItem value="Nifty Bank">Nifty Bank</SelectItem>
-                      <SelectItem value="Nifty Financial Services">
-                        Nifty Financial Services
-                      </SelectItem>
-                      <SelectItem value="Nifty FMCG">Nifty FMCG</SelectItem>
-                      <SelectItem value="Nifty Healthcare">
-                        Nifty Healthcare
-                      </SelectItem>
-                      <SelectItem value="Nifty IT">Nifty IT</SelectItem>
-                      <SelectItem value="Nifty Media">Nifty Media</SelectItem>
-                      <SelectItem value="Nifty Metal">Nifty Metal</SelectItem>
-                      <SelectItem value="Nifty Pharma">Nifty Pharma</SelectItem>
-                      <SelectItem value="Nifty PVT Bank">Nifty PVT Bank</SelectItem>
-                      <SelectItem value="Nifty PSU Bank">Nifty PSU Bank</SelectItem>
-                      <SelectItem value="Nifty Realty">Nifty Realty</SelectItem>
-                    </SelectContent>
-                </Select>
-                    <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleViewModeChange}
-                  >
-                   Sector
-                   </Button>
-                </div>
-                
-                <div className="flex justify-center">
-                  {PERCENTAGE_FILTERS.map((filter) => (
-                    <button
-                      key={filter}
-                      className={`rounded-md px-3 py-1 mx-1 text-white hover:opacity-80`}
-                      style={{ backgroundColor: getButtonColor(filter) }}
-                      onClick={() => handleFilterClick(filter)}
-                    >
-                      {filter}%
-                    </button>
-                  ))}
-                </div>
+          <div className="flex justify-evenly mb-4">
+            <Select
+              value={filterBy}
+              onValueChange={(value: FilterOption) => setFilterBy(value)}
+            >
+              <SelectTrigger className="w-[220px]">
+                <SelectValue placeholder="Filter by Index" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Nifty FnO">All</SelectItem>
+                  <SelectItem value="Nifty 50">Nifty 50</SelectItem>
+                <SelectItem value="Nifty Auto">Nifty Auto</SelectItem>
+                <SelectItem value="Nifty Bank">Nifty Bank</SelectItem>
+                  <SelectItem value="Nifty Financial Services">
+                    Nifty Financial Services
+                  </SelectItem>
+                  <SelectItem value="Nifty FMCG">Nifty FMCG</SelectItem>
+                  <SelectItem value="Nifty Healthcare">
+                    Nifty Healthcare
+                  </SelectItem>
+                  <SelectItem value="Nifty IT">Nifty IT</SelectItem>
+                  <SelectItem value="Nifty Media">Nifty Media</SelectItem>
+                  <SelectItem value="Nifty Metal">Nifty Metal</SelectItem>
+                  <SelectItem value="Nifty Pharma">Nifty Pharma</SelectItem>
+                  <SelectItem value="Nifty PVT Bank">Nifty PVT Bank</SelectItem>
+                  <SelectItem value="Nifty PSU Bank">Nifty PSU Bank</SelectItem>
+                  <SelectItem value="Nifty Realty">Nifty Realty</SelectItem>
+              </SelectContent>
+            </Select>
+            <div className="flex justify-center">
+              {PERCENTAGE_FILTERS.map((filter) => (
+                <button
+                  key={filter}
+                  className={`rounded-md px-3 py-1 mx-1 text-white hover:opacity-80`}
+                  style={{ backgroundColor: getButtonColor(filter) }}
+                  onClick={() => handleFilterClick(filter)}
+                >
+                  {filter}%
+                </button>
+              ))}
+            </div>
           </div>
           <div
             className="grid gap-1"
