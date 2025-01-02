@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from 'lucide-react'
+import { ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from 'lucide-react'
 
 import { Skeleton, SkeletonText, SkeletonCircle } from '@/components/ui/skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -117,34 +117,6 @@ function IntrabuzzContent() {
 
     return filtered
   }, [stocks, sortBy, filterBy])
-  
-  //TODO Generating Random BG Color For symbols
-
-  const getRandomColor = (symbol: string): string => {
-    if (typeof window !== "undefined") {
-      // Check if the color for the symbol is already stored in localStorage
-      const cachedColor = localStorage.getItem(symbol);
-      if (cachedColor) {
-        return cachedColor; // Return the cached color from localStorage
-      }
-  
-      // Generate a new random color (excluding black) and store it
-      let newColor;
-      do {
-        newColor = generateRandomColor();
-      } while (newColor === "#000000"); // Ensure it's not black
-
-      localStorage.setItem(symbol, newColor); // Store the generated color in localStorage
-      return newColor; // Return the new color
-    }
-    return "#ffffff"; // Default color if window is not available
-  };
-  
-  // Function to generate a random hex color
-  const generateRandomColor = (): string => {
-    const randomHex = Math.floor(Math.random() * 16777215).toString(16); // Generate a random hex value
-    return `#${randomHex.padStart(6, "0")}`; // Ensure 6 characters with padding
-  };
   
   const handleStockClick = (stock: Stock) => {
     setSelectedStock(stock);
