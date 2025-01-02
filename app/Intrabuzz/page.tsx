@@ -27,7 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
+import { StockCard } from '@/components/StockCard'
 
 type SortOption = 
   | 'changepct_desc' 
@@ -35,7 +35,22 @@ type SortOption =
   | 'volumespike_desc' 
   | 'volumespike_asc' 
 
-type FilterOption = 'all' | 'Nifty 50' | 'Nifty Bank' | 'Nifty IT' | 'Nifty Auto' | 'Nifty FnO'
+type FilterOption = 
+| "all"
+| "Nifty 50"
+| "Nifty Bank"
+| "Nifty IT"
+| "Nifty Auto"
+| "Nifty FnO"
+| "Nifty Financial Services"
+| "Nifty FMCG"
+| "Nifty Healthcare"
+| "Nifty Media"
+| "Nifty Metal"
+| "Nifty Pharma"
+| "Nifty PVT Bank"
+| "Nifty PSU Bank"
+| "Nifty Realty";
 
 function IntrabuzzContent() {
   const { stocks, loading } = useStockContext()
@@ -118,11 +133,10 @@ function IntrabuzzContent() {
       do {
         newColor = generateRandomColor();
       } while (newColor === "#000000"); // Ensure it's not black
-  
+
       localStorage.setItem(symbol, newColor); // Store the generated color in localStorage
       return newColor; // Return the new color
     }
-  
     return "#ffffff"; // Default color if window is not available
   };
   
@@ -132,52 +146,10 @@ function IntrabuzzContent() {
     return `#${randomHex.padStart(6, "0")}`; // Ensure 6 characters with padding
   };
   
-  
   const handleStockClick = (stock: Stock) => {
     setSelectedStock(stock);
     setIsModalOpen(true);
   };
-
-  const StockCard = ({ stock }: { stock: Stock }) => (
-    <Card className="relative flex flex-col cursor-pointer" onClick={() => handleStockClick(stock)}>
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-center" >
-          <div className="w-28 px-3 py-1 rounded-md text-white font-medium text-sm flex items-center justify-center"
-            style={{ backgroundColor: getRandomColor(stock.symbol) }}
-          >
-            <span className="text-center whitespace-nowrap text-[13px] leading-none">
-              {stock.symbol}
-            </span>
-          </div>
-          <button className="rounded-full p-2 hover:bg-gray-100 transition-colors">
-            <Plus className="w-5 h-5 text-gray-400" />
-          </button>
-        </div>
-      </CardHeader>
-      <CardContent className="pb-2 flex-grow">
-        <h3 className="text-md font-medium text-gray-900 leading-tight line-clamp-2">
-          {stock.companyname}
-        </h3>
-      </CardContent>
-      <CardFooter className="flex flex-col items-start pt-2">
-        <div className="text-xl font-semibold mb-2 w-full">
-          ₹{Number(stock.price).toFixed(2)}
-        </div>
-        <div className="flex justify-between items-center w-full">
-          {(sortBy === 'changepct_asc' || sortBy === 'changepct_desc') ? (
-            <div className={`flex items-center px-2 py-1 rounded-md text-sm font-medium
-              ${(stock.changepct >= 0 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100')}`}>
-              {stock.changepct >= 0 ? '↑' : '↓'} {Number(stock.changepct).toFixed(2)}%
-            </div>
-          ) : (
-            <div className="flex items-center px-2 py-1 rounded-md text-sm font-medium text-yellow-700 bg-yellow-100">
-              <Flame className="w-4 h-4 mr-1" /> {Number(stock.volumespike).toFixed(2)}X
-            </div>
-          )}
-        </div>
-      </CardFooter>
-    </Card>
-  )
 
   const SkeletonCard = () => (
     <Card className="relative flex flex-col">
@@ -210,13 +182,25 @@ function IntrabuzzContent() {
             <SelectValue placeholder="Filter by Index" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Nifty FnO">All</SelectItem>
-            <SelectItem value="Nifty 50">Nifty 50</SelectItem>
-            <SelectItem value="Nifty Bank">Nifty Bank</SelectItem>
-            <SelectItem value="Nifty IT">Nifty IT</SelectItem>
-            <SelectItem value="Nifty Auto">Nifty Auto</SelectItem>
-            
-          </SelectContent>
+                <SelectItem value="Nifty FnO">All</SelectItem>
+                  <SelectItem value="Nifty 50">Nifty 50</SelectItem>
+                <SelectItem value="Nifty Auto">Nifty Auto</SelectItem>
+                <SelectItem value="Nifty Bank">Nifty Bank</SelectItem>
+                  <SelectItem value="Nifty Financial Services">
+                    Nifty Financial Services
+                  </SelectItem>
+                  <SelectItem value="Nifty FMCG">Nifty FMCG</SelectItem>
+                  <SelectItem value="Nifty Healthcare">
+                    Nifty Healthcare
+                  </SelectItem>
+                  <SelectItem value="Nifty IT">Nifty IT</SelectItem>
+                  <SelectItem value="Nifty Media">Nifty Media</SelectItem>
+                  <SelectItem value="Nifty Metal">Nifty Metal</SelectItem>
+                  <SelectItem value="Nifty Pharma">Nifty Pharma</SelectItem>
+                  <SelectItem value="Nifty PVT Bank">Nifty PVT Bank</SelectItem>
+                  <SelectItem value="Nifty PSU Bank">Nifty PSU Bank</SelectItem>
+                  <SelectItem value="Nifty Realty">Nifty Realty</SelectItem>
+              </SelectContent>
         </Select>
 
         <div className="flex items-center gap-2">

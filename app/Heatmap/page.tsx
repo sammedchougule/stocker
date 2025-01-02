@@ -1,54 +1,164 @@
-'use client'
+"use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useStockContext } from "@/context/StockContext";
 import { Stock } from "@/types/Stock";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/buttons";
 
-const NIFTY50_SECTORS = {
-  'Financial': ['HDFCBANK', 'ICICIBANK', 'SBIN', 'AXISBANK', 'KOTAKBANK', 'BAJFINANCE', 'BAJAJFINSV', 'SBILIFE', 'HDFCLIFE', 'INDUSINDBK'],
-  'IT': ['TCS', 'INFY', 'HCLTECH', 'TECHM', 'WIPRO'],
-  'Consumer': ['HINDUNILVR', 'ITC', 'BRITANNIA', 'NESTLEIND', 'TATACONSUM'],
-  'Oil & Gas': ['RELIANCE', 'ONGC', 'BPCL', 'COALINDIA'],
-  'Metals': ['HINDALCO', 'JSWSTEEL', 'TATASTEEL'],
-  'Auto': ['TATAMOTORS', 'M&M', 'MARUTI', 'BAJAJ-AUTO', 'EICHERMOT', 'HEROMOTOCO'],
-  'Health Services': ['DIVISLAB', 'APOLLOHOSP'],
-  'Health Technology':['CIPLA', 'DRREDDY', 'SUNPHARMA'],
-  'Infra': ['LT', 'ULTRACEMCO', 'ADANIENT', 'ADANIPORTS'],
-  'Communication': [ 'BHARTIARTL'],
-  'Retail Trade': [ 'TRENT'],
-  'Electronic Technology': ['BEL'],
-  'Utilities': ['NTPC', 'POWERGRID'],
-  'Process Industries': ['ASIANPAINT'],
-  'Non-Energy Materials': ['ULTRACEMCO', 'GRASIM']
-};
+const PERCENTAGE_FILTERS = [-3, -2, -1, 1, 2, 3];
 
-const NIFTY50_SYMBOLS = Object.values(NIFTY50_SECTORS).flat();
+type FilterOption =
+  | "all"
+  | "Nifty 50"
+  | "Nifty Bank"
+  | "Nifty IT"
+  | "Nifty Auto"
+  | "Nifty FnO"
+  | "Nifty Financial Services"
+  | "Nifty FMCG"
+  | "Nifty Healthcare"
+  | "Nifty Media"
+  | "Nifty Metal"
+  | "Nifty Pharma"
+  | "Nifty PVT Bank"
+  | "Nifty PSU Bank"
+  | "Nifty Realty";
+
+
+type ViewMode = "index" | "sector";
 
 export default function Heatmap() {
   const { stocks } = useStockContext();
   const [heatmapData, setHeatmapData] = useState<Stock[]>([]);
   const [maxChange, setMaxChange] = useState(0);
+  const [minChange, setMinChange] = useState(0);
+  const [activeFilters, setActiveFilters] = useState<number[]>([]);
+  const [filterBy, setFilterBy] = useState<FilterOption>("Nifty FnO");
+  const [viewMode, setViewMode] = useState<ViewMode>("index");
 
   useEffect(() => {
-    const nifty50Stocks = stocks.filter(
-      (stock) => stock.type === "EQ" && NIFTY50_SYMBOLS.includes(stock.symbol)
-    );
-    const maxAbsChange = Math.max(...nifty50Stocks.map((s) => Math.abs(s.changepct)));
-    setMaxChange(maxAbsChange);
-    setHeatmapData(nifty50Stocks);
-  }, [stocks]);
+    let filtered = stocks.filter((stock) => stock.type === "EQ");
 
-  const getCellSize = (changepct: number) => {
-    const minSize = 70; // Reduced size to prevent overlapping
-    const maxSize = 100; // Reduced max size
-    const sizePercentage = Math.abs(changepct) / maxChange;
-    return minSize + (maxSize - minSize) * sizePercentage;
+    if (filterBy === "all") {
+      filtered = filtered.filter(
+        (stock) => stock.indices && stock.indices["Nifty FnO"]
+      );
+    } else {
+      filtered = filtered.filter(
+        (stock) =>
+          stock.indices && stock.indices[filterBy as keyof typeof stock.indices]
+      );
+    }
+
+        if(viewMode === "sector"){
+            const groupedBySector : {[key: string]: Stock[]} = {};
+
+            filtered.forEach(stock => {
+                if (stock.sector) {
+                  if (!groupedBySector[stock.sector]) {
+                    groupedBySector[stock.sector] = [];
+                  }
+                  groupedBySector[stock.sector].push(stock)
+                }
+              });
+
+              const allStocks: Stock[] = [];
+               for(const sector in groupedBySector){
+                 allStocks.push(...groupedBySector[sector])
+              }
+                filtered = allStocks;
+
+        }
+
+    if (filtered.length > 0) {
+      const max = Math.max(...filtered.map((s) => s.changepct));
+      const min = Math.min(...filtered.map((s) => s.changepct));
+      setMaxChange(max);
+      setMinChange(min);
+
+      const sortedStocks = [...filtered].sort((a, b) => b.changepct - a.changepct);
+      setHeatmapData(sortedStocks);
+    }
+  }, [stocks, filterBy, viewMode]);
+
+  const getColor = (changepct: number) => {
+    const maxAbsChange = Math.max(Math.abs(maxChange), Math.abs(minChange));
+    if (changepct === 0) return "#E5E7EB";
+
+    const normalizedChange = changepct / maxAbsChange;
+
+    const greenStart = [88, 214, 141];
+    const greenEnd = [29, 131, 72];
+    const redStart = [236, 112, 99];
+    const redEnd = [148, 49, 38];
+
+    let startColor, endColor;
+    if (normalizedChange > 0) {
+      startColor = greenStart;
+      endColor = greenEnd;
+    } else {
+      startColor = redStart;
+      endColor = redEnd;
+    }
+
+    const color = startColor.map((start, i) => {
+      const end = endColor[i];
+      return Math.round(start + (end - start) * Math.abs(normalizedChange));
+    });
+
+    return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
   };
 
-  // Sort heatmapData by changepct in descending order
-  heatmapData.sort((a, b) => b.changepct - a.changepct);
+  const getButtonColor = (filterValue: number) => {
+    if (activeFilters.includes(filterValue)) {
+      return "#4a5568";
+    }
+    if (filterValue > 0) {
+      return "#166534";
+    } else {
+      return "#7f1d1d";
+    }
+  };
+
+  const handleFilterClick = (filterValue: number) => {
+    if (activeFilters.includes(filterValue)) {
+      setActiveFilters(activeFilters.filter((f) => f !== filterValue));
+    } else {
+      setActiveFilters([...activeFilters, filterValue]);
+    }
+  };
+
+  const isStockVisible = (stock: Stock) => {
+    if (activeFilters.length === 0) return true;
+
+    return !activeFilters.some((filter) => {
+      const filterIndex = PERCENTAGE_FILTERS.indexOf(filter);
+      const nextFilter = PERCENTAGE_FILTERS[filterIndex + 1];
+      if (nextFilter === undefined) {
+        return false;
+      }
+
+      if (filter > 0) {
+        return stock.changepct > filter && stock.changepct <= nextFilter;
+      } else {
+        return stock.changepct < filter && stock.changepct >= nextFilter;
+      }
+    });
+  };
+
+    const handleViewModeChange = () => {
+        setViewMode(prevMode => prevMode === "index" ? "sector" : "index")
+    }
+    
 
   return (
     <div className="container mx-auto px-4">
@@ -56,69 +166,89 @@ export default function Heatmap() {
         <CardHeader>
           <CardTitle className="flex justify-center">Stock Heatmap</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {Object.entries(NIFTY50_SECTORS).map(([sector, symbols]) => (
-              <div key={sector} className="bg-gray-50 p-3 rounded-lg hover:shadow-lg transition-all duration-300 border border-gray-200">
-                <h3 className="font-semibold text-sm mb-3 text-gray-800">{sector}</h3>
-                <div className="flex flex-wrap gap-1">
-                  {heatmapData
-                    .filter(stock => symbols.includes(stock.symbol))
-                    .map((stock) => {
-                      const size = getCellSize(stock.changepct);
-                      return (
-                        <div
-                          key={stock.symbol}
-                          className="group relative flex flex-col items-center justify-center hover:scale-105 transition-transform duration-200 cursor-pointer p-2"
-                          style={{
-                            background: `linear-gradient(145deg, ${stock.changepct > 0 ? "#22c55e" : stock.changepct < 0 ? "#ef4444" : "#E5E7EB"}, ${stock.changepct > 0 ? "#16a34a" : stock.changepct < 0 ? "#dc2626" : "#D1D5DB"})`,
-                            width: `${size}px`,
-                            height: `${size}px`,
-                            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                          }}
-                        >
-                          <Image
-                            src={`/images/${stock.symbol}.svg`}
-                            alt={stock.symbol}
-                            width={20}
-                            height={20}
-                            className="rounded-full bg-white p-1"
-                          />
-                          <div className="text-white font-medium text-[10px] truncate w-full text-center mt-1">
-                            {stock.symbol}
-                          </div>
-                          <div className="text-white text-[10px] font-bold truncate w-full text-center">
-                            {stock.changepct >= 0 ? "+" : ""}{Number(stock.changepct).toFixed(1)}%
-                          </div>
-
-                          {/* Tooltip */}
-                          <div className="absolute invisible group-hover:visible bg-white text-gray-900 p-2 rounded-sm shadow-lg z-50 w-48 left-1/2 transform -translate-x-1/2 border border-gray-200"
-                            style={{
-                              top: 'auto',
-                              bottom: '100%',
-                              marginBottom: '10px'
-                            }}>
-                            <div className="text-sm font-semibold mb-1">{stock.companyname}</div>
-                            <div className="text-xs space-y-1">
-                              <div className="flex justify-between">
-                                <span>Price:</span>
-                                <span>₹{Number(stock.price).toFixed(2)}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span>Change:</span>
-                                <span className={stock.changepct >= 0 ? "text-green-600" : "text-red-600"}>
-                                  {stock.changepct >= 0 ? "+" : ""}{Number(stock.changepct).toFixed(2)}%
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span>Volume:</span>
-                                <span>{Number(stock.volumespike).toFixed(2)}X</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+        <CardContent className="p-4">
+          <div className="flex justify-between mb-4 items-center">
+            <div className="flex items-center gap-2">
+                 <Select
+                    value={filterBy}
+                    onValueChange={(value: FilterOption) => setFilterBy(value)}
+                 >
+                   <SelectTrigger className="w-[220px]">
+                     <SelectValue placeholder="Filter by Index" />
+                   </SelectTrigger>
+                   <SelectContent>
+                     <SelectItem value="Nifty FnO">All</SelectItem>
+                     <SelectItem value="Nifty 50">Nifty 50</SelectItem>
+                    <SelectItem value="Nifty Auto">Nifty Auto</SelectItem>
+                    <SelectItem value="Nifty Bank">Nifty Bank</SelectItem>
+                      <SelectItem value="Nifty Financial Services">
+                        Nifty Financial Services
+                      </SelectItem>
+                      <SelectItem value="Nifty FMCG">Nifty FMCG</SelectItem>
+                      <SelectItem value="Nifty Healthcare">
+                        Nifty Healthcare
+                      </SelectItem>
+                      <SelectItem value="Nifty IT">Nifty IT</SelectItem>
+                      <SelectItem value="Nifty Media">Nifty Media</SelectItem>
+                      <SelectItem value="Nifty Metal">Nifty Metal</SelectItem>
+                      <SelectItem value="Nifty Pharma">Nifty Pharma</SelectItem>
+                      <SelectItem value="Nifty PVT Bank">Nifty PVT Bank</SelectItem>
+                      <SelectItem value="Nifty PSU Bank">Nifty PSU Bank</SelectItem>
+                      <SelectItem value="Nifty Realty">Nifty Realty</SelectItem>
+                    </SelectContent>
+                </Select>
+                    <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleViewModeChange}
+                  >
+                   Sector
+                   </Button>
+                </div>
+                
+                <div className="flex justify-center">
+                  {PERCENTAGE_FILTERS.map((filter) => (
+                    <button
+                      key={filter}
+                      className={`rounded-md px-3 py-1 mx-1 text-white hover:opacity-80`}
+                      style={{ backgroundColor: getButtonColor(filter) }}
+                      onClick={() => handleFilterClick(filter)}
+                    >
+                      {filter}%
+                    </button>
+                  ))}
+                </div>
+          </div>
+          <div
+            className="grid gap-1"
+            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))" }}
+          >
+            {heatmapData.filter(isStockVisible).map((stock) => (
+              <div
+                key={stock.symbol}
+                className="group rounded-sm relative flex flex-col items-center justify-center hover:scale-105 transition-transform duration-200 cursor-pointer p-2"
+                style={{
+                  background: getColor(stock.changepct),
+                  minWidth: "140px",
+                  minHeight: "140px",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                <Image
+                  src={`/images/${stock.symbol}.svg`}
+                  alt={stock.symbol}
+                  width={30}
+                  height={30}
+                  className="rounded-full bg-white"
+                />
+                <div className="text-white font-medium text-lg truncate w-full text-center mt-1">
+                  {stock.symbol}
+                </div>
+                <div className="text-white font-medium text-md truncate w-full text-center">
+                  {stock.price}
+                </div>
+                <div className="text-white text-md font-medium truncate w-full text-center">
+                  {stock.changepct >= 0 ? "+" : ""}{Number(stock.changepct).toFixed(1)}%
                 </div>
               </div>
             ))}
