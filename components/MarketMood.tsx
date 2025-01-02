@@ -64,7 +64,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
       <CardContent className="pt-6 px-2 sm:px-4">
         <div className="text-center">
           <h3 className="text-2xl font-bold">Market Mood Index</h3>
-          <p className="text-md text-gray-500">Know what's the sentiment on the street today</p>
+          <p className="text-md text-gray-500">Know what&apos;s the sentiment on the street today</p>
           
           <div className="relative w-full max-w-[400px] mx-auto mb-4">
             <div className="flex justify-between text-md font-medium mt-4">
