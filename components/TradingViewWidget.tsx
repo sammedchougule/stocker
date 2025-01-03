@@ -12,6 +12,9 @@ export default function TradingViewWidget({ symbol }: TradingViewWidgetProps) {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // Clear previous widget if any
+    containerRef.current.innerHTML = '';
+
     const script = document.createElement('script');
     script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
     script.async = true;
@@ -29,9 +32,10 @@ export default function TradingViewWidget({ symbol }: TradingViewWidgetProps) {
       calendar: false,
       studies: ['Volume@tv-basicstudies'],
     });
-    containerRef.current.innerHTML = '';
+
     containerRef.current.appendChild(script);
 
+    // Cleanup previous script on unmount or symbol change
     return () => {
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
@@ -39,5 +43,11 @@ export default function TradingViewWidget({ symbol }: TradingViewWidgetProps) {
     };
   }, [symbol]);
 
-  return <div className="tradingview-widget-container" ref={containerRef} style={{ height: '100%', width: '100%' }} />;
+  return (
+    <div
+      className="tradingview-widget-container"
+      ref={containerRef}
+      style={{ height: '100%', width: '100%' }}
+    />
+  );
 }
