@@ -63,7 +63,7 @@ export default async function RootLayout({
           <div className="min-h-screen pt-20">
             <Marquee />
             <Navbar />
-            <div className="content-container">
+            <div className="content-container mb-20">
               {children}
             </div>
           </div>
