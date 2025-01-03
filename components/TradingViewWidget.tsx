@@ -21,7 +21,7 @@ export default function TradingViewWidget({ symbol }: TradingViewWidgetProps) {
     script.type = 'text/javascript';
     script.innerHTML = JSON.stringify({
       autosize: true,
-      symbol,
+      symbol: "NSE:SBIN",
       interval: '5',
       timezone: 'Asia/Kolkata',
       theme: 'dark',
