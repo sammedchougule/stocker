@@ -34,12 +34,12 @@ type FilterOption =
 
 const filterOptionLabels: { [key in FilterOption]: string } = {
     all: "All",
+    "Nifty FnO": "F&O",
     "Nifty 50": "50",
     "Nifty Bank": "Bank",
     "Nifty IT": "IT",
     "Nifty Auto": "Auto",
-    "Nifty FnO": "FnO",
-    "Nifty Financial Services": "Financial Services",
+    "Nifty Financial Services": "Financial",
     "Nifty FMCG": "FMCG",
     "Nifty Healthcare": "Healthcare",
     "Nifty Media": "Media",
@@ -61,8 +61,9 @@ export default function Heatmap() {
 
     useEffect(() => {
         let filtered = stocks.filter((stock) => stock.type === "EQ");
-
-        if (filterBy === "all") {
+    
+        if (filterBy === "all" || filterBy === "Nifty FnO") {
+            // Default to Nifty FnO stocks for "All"
             filtered = filtered.filter(
                 (stock) => stock.indices && stock.indices["Nifty FnO"]
             );
@@ -71,46 +72,53 @@ export default function Heatmap() {
                 (stock) => stock.indices && stock.indices[filterBy as keyof typeof stock.indices]
             );
         }
-
-
+    
         if (filtered.length > 0) {
             const max = Math.max(...filtered.map((s) => s.changepct));
             const min = Math.min(...filtered.map((s) => s.changepct));
             setMaxChange(max);
             setMinChange(min);
-
+    
             const sortedStocks = [...filtered].sort((a, b) => b.changepct - a.changepct);
             setHeatmapData(sortedStocks);
         }
-    }, [stocks, filterBy]);
+    }, [stocks, filterBy]);    
 
-    const getColor = (changepct: number) => {
-        const maxAbsChange = Math.max(Math.abs(maxChange), Math.abs(minChange));
-        if (changepct === 0) return "#E5E7EB";
 
-        const normalizedChange = changepct / maxAbsChange;
-
-        const greenStart = [88, 214, 141];
-        const greenEnd = [29, 131, 72];
-        const redStart = [236, 112, 99];
-        const redEnd = [148, 49, 38];
-
-        let startColor, endColor;
+    const getColor = (changepct: number, maxChange: number = 10) => {
+        // Clamp changepct to the range [-maxChange, maxChange]
+        const clampedChange = Math.max(-maxChange, Math.min(changepct, maxChange));
+    
+        // Normalize the changepct to the range [-1, 1]
+        const normalizedChange = clampedChange / maxChange;
+    
+        // Define RGB values for green, yellow, and red
+        const green = [20, 180, 20];    // Softer green
+        const yellow = [220, 230, 100]; // Softer yellow
+        const red = [220, 10, 10];      // Softer red
+    
+        let startColor, endColor, t;
+    
         if (normalizedChange > 0) {
-            startColor = greenStart;
-            endColor = greenEnd;
+            // Transition from yellow to green for positive changes
+            startColor = yellow;
+            endColor = green;
+            t = Math.sqrt(normalizedChange); // Smooth scale
         } else {
-            startColor = redStart;
-            endColor = redEnd;
+            // Transition from yellow to red for negative changes
+            startColor = yellow;
+            endColor = red;
+            t = Math.sqrt(Math.abs(normalizedChange)); // Smooth scale
         }
-
-        const color = startColor.map((start, i) => {
-            const end = endColor[i];
-            return Math.round(start + (end - start) * Math.abs(normalizedChange));
-        });
-
-        return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+    
+        // Interpolate each color channel
+        const interpolatedColor = startColor.map((start, i) =>
+            Math.round(start + (endColor[i] - start) * t)
+        );
+    
+        return `rgb(${interpolatedColor[0]}, ${interpolatedColor[1]}, ${interpolatedColor[2]})`;
     };
+    
 
     const getButtonColor = (filterValue: number) => {
         if (activeFilters.includes(filterValue)) {
@@ -153,24 +161,31 @@ export default function Heatmap() {
         <div className="container mx-auto mb-16">
             <Card>
             {/* removed cardHeader to get rid off the scroll issue */}
-                 <CardContent className="relative flex flex-col" style={{ maxHeight: "calc(100vh - 150px)", overflowY: "auto", scrollbarWidth: "none" }}>
+                 <CardContent className="relative flex flex-col" style={{ maxHeight: "calc(110vh - 150px)", overflowY: "auto", scrollbarWidth: "none" }}>
                 <div className="sticky top-0 bg-white z-10">
                     <div className=" flex flex-col sm:flex-row justify-evenly my-6">
-                        <Select
-                            value={filterBy}
-                            onValueChange={(value: FilterOption) => setFilterBy(value)}
-                        >
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Filter by Index" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {Object.entries(filterOptionLabels).map(([key, label]) => (
+                    <Select
+                        value={filterBy}
+                        onValueChange={(value: FilterOption) => setFilterBy(value)}
+                    >
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue>
+                                {filterBy === "Nifty FnO" ? "All" : filterOptionLabels[filterBy]} {/* Show "All" when filterBy is "Nifty FnO" */}
+                            </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            {Object.entries(filterOptionLabels)
+                                .filter(([key]) => key !== "Nifty FnO") // Exclude "Nifty FnO" from the dropdown
+                                .map(([key, label]) => (
                                     <SelectItem key={key} value={key as FilterOption}>
                                         {label}
                                     </SelectItem>
                                 ))}
-                            </SelectContent>
-                        </Select>
+                        </SelectContent>
+                    </Select>
+
+
+
                         <div className="flex justify-center sm:mt-0 mt-4">
                             {PERCENTAGE_FILTERS.map((filter) => (
                                 <button
