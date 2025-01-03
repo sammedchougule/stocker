@@ -198,7 +198,7 @@ export default function Sectors() {
                           <span className="text-sm font-md">
                             {stock.changepct}%
                           </span>
-                        </span>{/* {Number(stock.volumespike)?.toLocaleString() ?? "N/A"} */}
+                        </span>
                     </TableCell>
                     <TableCell
                       className="text-right w-1/6">
