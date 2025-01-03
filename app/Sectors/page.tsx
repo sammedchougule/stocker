@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
 import { Stock } from "@/types/Stock";
+import { ArrowUp, ArrowDown, Flame } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -162,21 +163,56 @@ export default function Sectors() {
                       ₹{Number(stock.price).toFixed(2)}
                     </TableCell>
                     <TableCell
-                      className={`text-right w-1/6 ${
-                        stock.change >= 0 ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
-                      {Number(stock.change).toFixed(2)}
+                      className="text-right w-1/6">
+                      <span
+                          className={`inline-flex items-center rounded px-1 py-1 ${
+                            stock.change >= 0
+                              ? 'text-green-500 bg-green-50 rounded-lg'
+                              : 'text-red-500 bg-red-50 rounded-lg'
+                          }`}
+                        >
+                          {stock.change >= 0 ? (
+                            <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
+                          ) : (
+                            <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
+                          )}
+                          <span className="text-sm font-md">
+                            {stock.change}
+                          </span>
+                        </span>
                     </TableCell>
                     <TableCell
-                      className={`text-right w-1/6 ${
-                        stock.changepct >= 0 ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
-                      {Number(stock.changepct).toFixed(2)}%
+                      className="text-right w-1/6">
+                      <span
+                          className={`inline-flex items-center rounded px-1 py-1 ${
+                            stock.changepct >= 0
+                              ? 'text-green-500 bg-green-50 rounded-lg'
+                              : 'text-red-500 bg-red-50 rounded-lg'
+                          }`}
+                        >
+                          {stock.changepct >= 0 ? (
+                            <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
+                          ) : (
+                            <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
+                          )}
+                          <span className="text-sm font-md">
+                            {stock.changepct}%
+                          </span>
+                        </span>{/* {Number(stock.volumespike)?.toLocaleString() ?? "N/A"} */}
                     </TableCell>
-                    <TableCell className="text-right w-1/6">
-                      {Number(stock.volumespike)?.toLocaleString() ?? "N/A"}
+                    <TableCell
+                      className="text-right w-1/6">
+                      <span
+                          className={`inline-flex items-center rounded px-1 py-1 ${
+                            stock.changepct >= 0
+                              ? 'text-orange-600 bg-orange-100 rounded-lg'
+                              : 'text-yellow-600 bg-yellow-100 rounded-lg'
+                          }`}
+                        ><Flame className="w-3.5 h-3.5 mr-0.5" />
+                          <span className="text-sm font-md">
+                          {Number(stock.volumespike)?.toLocaleString() ?? "N/A"}
+                          </span>
+                        </span>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -214,9 +250,9 @@ export default function Sectors() {
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={sectorData}
-                        margin={{ top: 20, right: 5, left: 5, bottom: 20 }}
-                        barSize={25}
-                        barGap={10} // Gap between bars
+                        margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
+                        barSize={30}
+                        barGap={0} // Gap between bars
                       >
                         {/* Gradients for 3D Effect */}
                         <defs>
@@ -297,15 +333,14 @@ export default function Sectors() {
                               const value = payload[0].value as number;
                               return (
                                 <div className="bg-white p-2 border border-gray-200 rounded shadow">
-                                  <p className="font-semibold">{label}</p>
-                                  <p
+                                  <p className="font-semibold">Nifty {label}</p>
+                                  <p> Change <span
                                     className={
                                       value >= 0
                                         ? "font-semibold text-[#22c55e]"
                                         : "font-semibold text-[#ef4444]"
-                                    }
-                                  >
-                                    {Number(value).toFixed(2)}%
+                                    }>{Number(value).toFixed(2)}%
+                                    </span>
                                   </p>
                                 </div>
                               );
@@ -369,14 +404,23 @@ export default function Sectors() {
                             >
                               <TableCell>{sector.name}</TableCell>
                               <TableCell
-                                className={`text-right font-medium ${
-                                  sector.changepct >= 0
-                                    ? "text-green-600"
-                                    : "text-red-600"
-                                }`}
-                              >
-                                {sector.changepct >= 0 ? "+" : ""}
-                                {Number(sector.changepct).toFixed(2)}%
+                                className="text-right font-medium">
+                                <span
+                                  className={`inline-flex items-center rounded px-1 py-1 ${
+                                    sector.changepct >= 0
+                                      ? 'text-green-500 bg-green-50 rounded-lg'
+                                      : 'text-red-500 bg-red-50 rounded-lg'
+                                  }`}
+                                >
+                                  {sector.changepct >= 0 ? (
+                                    <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
+                                  ) : (
+                                    <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
+                                  )}
+                                  <span className="text-sm font-md">
+                                    {sector.changepct}%
+                                  </span>
+                                </span>
                               </TableCell>
                             </TableRow>
                           ))}
