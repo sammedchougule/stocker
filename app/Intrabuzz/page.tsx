@@ -15,7 +15,7 @@ import { ChartCandlestick , ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Pe
 
 import { Skeleton, SkeletonText, SkeletonCircle } from '@/components/ui/skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { StockModal } from '@/components/StockModal';
+//import { StockModal } from '@/components/StockModal';
 import { Button } from '@/components/ui/buttons'
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation'
@@ -153,7 +153,7 @@ function IntrabuzzContent() {
   //   setIsModalOpen(true);
   // };
 
-  
+
   // TradingViewChart Modal
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
