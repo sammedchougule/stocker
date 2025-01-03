@@ -66,7 +66,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
           <h3 className="text-2xl font-bold">Market Mood Index</h3>
           <p className="text-md text-gray-500">Know what&apos;s the sentiment on the street today</p>
           
-          <div className="relative w-full max-w-[400px] mx-auto mb-4">
+          <div className="relative w-full max-w-[400px] mx-auto">
             <div className="flex justify-between text-md font-medium mt-4">
               <span className="text-green-600">Extreme Fear</span>
               <span className="text-yellow-500">Fear</span>
@@ -74,43 +74,56 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
               <span className="text-red-600">Extreme Greed</span>
             </div>
             <svg viewBox="0 20 300 200" className="w-full">
-              {/* Background arc */}
-              <path
-                d="M30 170 A120 120 0 0 1 270 170"
-                fill="none"
-                stroke="#e5e7eb"
-                strokeWidth="12"
-                strokeLinecap="round"
-                className="opacity-30"
-              />
-              
-              {/* Colored segments */}
-              <defs>
-                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#22c55e" /> {/* Extreme Fear - Green */}
-                  <stop offset="20%" stopColor="#22c55e" />
-                  <stop offset="23%" stopColor="#eab308" /> {/* Fear - Yellow */}
-                  <stop offset="25%" stopColor="#eab308" />
-                  <stop offset="45%" stopColor="#eab308" />
-                  <stop offset="48%" stopColor="#f97316" /> {/* Greed - Orange */}
-                  <stop offset="50%" stopColor="#f97316" />
-                  <stop offset="70%" stopColor="#f97316" />
-                  <stop offset="73%" stopColor="#dc2626" /> {/* Extreme Greed - Red */}
-                  <stop offset="75%" stopColor="#dc2626" />
-                  <stop offset="100%" stopColor="#dc2626" />
-                </linearGradient>
-              </defs>
 
+              {/* Background arc */}
               <path
                 d="M30 170 A120 120 0 0 1 270 170"
                 fill="none"
                 stroke="url(#gaugeGradient)"
                 strokeWidth="18"
-                strokeLinecap="round"
               />
+              
+              {/* Colored segments */}
+              <defs>
+                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="green" /> {/* Extreme Fear - Green */}
+                  <stop offset="10%" stopColor="#22c55e" />
+                  <stop offset="20%" stopColor="#eab308" /> {/* Fear - Yellow */}
+                  <stop offset="30%" stopColor="#eab308" />
+                  <stop offset="40%" stopColor="#eab308" />
+                  <stop offset="50%" stopColor="#f97316" /> {/* Greed - Orange */}
+                  <stop offset="60%" stopColor="#f97316" />
+                  <stop offset="75%" stopColor="#f97316" />
+                  <stop offset="85%" stopColor="#dc2626" /> {/* Extreme Greed - Red */}
+                  <stop offset="90%" stopColor="#dc2626" />
+                  <stop offset="100%" stopColor="#dc2626" />
+                </linearGradient>
+              </defs>
 
-              <circle cx="150" cy="170" r="130" fill="none" stroke="#e5e7eb" strokeWidth="4" />
-              <circle cx="150" cy="170" r="110" fill="none" stroke="#e5e7eb" strokeWidth="4" />
+              {/* Outer Gray circles */}
+                <circle
+                  cx="150"
+                  cy="170"
+                  r="130"
+                  fill="none"
+                  stroke="#e5e7eb"
+                  strokeWidth="4"
+                  strokeDasharray={`${Math.PI * 130}`}
+                  strokeDashoffset={`${Math.PI * 260 / 2}`}
+                />
+
+                {/* Inner Gray circles */}
+                <circle
+                  cx="150"
+                  cy="170"
+                  r="110"
+                  fill="none"
+                  stroke="#e5e7eb"
+                  strokeWidth="4"
+                  strokeDasharray={`${Math.PI * 110}`}
+                  strokeDashoffset={`${Math.PI * 220 / 2}`}
+                />
+
 
               <g transform={`translate(150, 170) rotate(${calculateRotation(marketMood)})`}
                 className="transition-transform duration-1000">
@@ -120,7 +133,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
                   x2="0"
                   y2="-95"
                   stroke="currentColor"
-                  strokeWidth="3"
+                  strokeWidth="4"
                   className="origin-bottom"
                 />
                 <circle r="8" fill="currentColor" />
