@@ -54,8 +54,6 @@ const filterOptionLabels: { [key in FilterOption]: string } = {
 export default function Heatmap() {
     const { stocks } = useStockContext();
     const [heatmapData, setHeatmapData] = useState<Stock[]>([]);
-    const [maxChange, setMaxChange] = useState(0);
-    const [minChange, setMinChange] = useState(0);
     const [activeFilters, setActiveFilters] = useState<number[]>([]);
     const [filterBy, setFilterBy] = useState<FilterOption>("Nifty FnO");
 
@@ -63,7 +61,6 @@ export default function Heatmap() {
         let filtered = stocks.filter((stock) => stock.type === "EQ");
     
         if (filterBy === "all" || filterBy === "Nifty FnO") {
-            // Default to Nifty FnO stocks for "All"
             filtered = filtered.filter(
                 (stock) => stock.indices && stock.indices["Nifty FnO"]
             );
@@ -74,15 +71,10 @@ export default function Heatmap() {
         }
     
         if (filtered.length > 0) {
-            const max = Math.max(...filtered.map((s) => s.changepct));
-            const min = Math.min(...filtered.map((s) => s.changepct));
-            setMaxChange(max);
-            setMinChange(min);
-    
             const sortedStocks = [...filtered].sort((a, b) => b.changepct - a.changepct);
             setHeatmapData(sortedStocks);
         }
-    }, [stocks, filterBy]);    
+    }, [stocks, filterBy]);     
 
 
     const getColor = (changepct: number, maxChange: number = 10) => {
