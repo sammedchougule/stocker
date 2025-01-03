@@ -15,7 +15,7 @@ import { ChartCandlestick , ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Pe
 
 import { Skeleton, SkeletonText, SkeletonCircle } from '@/components/ui/skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-//import { StockModal } from '@/components/StockModal';
+import { StockModal } from '@/components/StockModal';
 import { Button } from '@/components/ui/buttons'
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation'
@@ -27,7 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { TradingViewModal } from '@/components/TradingViewModal'
+//import { TradingViewModal } from '@/components/TradingViewModal'
 
 
 type SortOption = 
@@ -74,8 +74,8 @@ function IntrabuzzContent() {
   })
 
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
-  // const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -148,23 +148,23 @@ function IntrabuzzContent() {
   };
   
   // Stock Details Modal
-  // const handleStockClick = (stock: Stock) => {
-  //   setSelectedStock(stock);
-  //   setIsModalOpen(true);
-  // };
+  const handleStockClick = (stock: Stock) => {
+    setSelectedStock(stock);
+    setIsModalOpen(true);
+  };
 
 
   // TradingViewChart Modal
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
+  // const [isModalOpen, setModalOpen] = useState(false);
+  // const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
 
-  const handleChartClick = (symbol: string) => {
-    setSelectedSymbol(symbol);
-    setModalOpen(true);
-  };
+  // const handleChartClick = (symbol: string) => {
+  //   setSelectedSymbol(symbol);
+  //   setModalOpen(true);
+  // };
 
   const StockCard = ({ stock }: { stock: Stock }) => (
-    <Card className="relative flex flex-col cursor-pointer" > {/* onClick={() => handleStockClick(stock)} */}
+    <Card className="relative flex flex-col cursor-pointer" onClick={() => handleStockClick(stock)}> 
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center" >
           <div className="w-28 px-3 py-1 rounded-md text-white font-medium text-sm flex items-center justify-center"
@@ -176,8 +176,7 @@ function IntrabuzzContent() {
           </div>
           <button
               className="rounded-full p-2 hover:bg-gray-100 transition-colors"
-              onClick={() => handleChartClick(stock.symbol)}
-            >
+              > {/* onClick={() => handleChartClick(stock.symbol)} */}
             <ChartCandlestick  className="w-5 h-5 text-gray-400" />
           </button>
         </div>
@@ -366,20 +365,20 @@ function IntrabuzzContent() {
         </Table>
       )}
 
-      {/* <StockModal
+      <StockModal
         stock={selectedStock}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-      /> */}
+      />
 
       {/* TradingView Modal */}
-      {isModalOpen && selectedSymbol && (
+      {/* {isModalOpen && selectedSymbol && (
         <TradingViewModal
           symbol={`NSE:${selectedSymbol}`}
           isOpen={isModalOpen}
           onClose={() => setModalOpen(false)}
         />
-      )}
+      )} */}
     </div> 
   )
 }
