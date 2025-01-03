@@ -50,6 +50,7 @@ export function StockChart({ stock }: StockChartProps) {
     }
   }, [timeFrame, stock.closings]);
   
+  
   const { filteredData, isPositive } = useMemo(() => {
     const data = getFilteredData();
     if (data.length < 2) return { filteredData: data, isPositive: true };
@@ -59,9 +60,9 @@ export function StockChart({ stock }: StockChartProps) {
   
     return {
       filteredData: data,
-      isPositive: endPrice >= startPrice
+      isPositive: endPrice >= startPrice,
     };
-  }, [getFilteredData]);
+  }, [getFilteredData]);  
   
 
   // Calculate Y-axis domain based on filtered data
