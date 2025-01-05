@@ -3,7 +3,8 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { useEffect, useState, useMemo } from 'react'
 import { Stock } from '@/types/Stock'
-import { AlertTriangle, ArrowDown, ArrowUp, Skull } from "lucide-react"
+import { CircleArrowOutDownLeft, CircleArrowOutUpLeft, CircleArrowOutUpRight, CircleArrowOutDownRight  } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 // Nifty 50 stocks array
 const NIFTY50_STOCKS = [
@@ -168,58 +169,56 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
       </CardContent>
 
       {/* Modal */}
-      {showModal && (
-        <div
-          className="fixed p-4 inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
-          onClick={() => setShowModal(false)}
-        >
-          <div
-            className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold">See How to Read All Zones</h3>
-              <button
-                className="text-gray-500 hover:text-gray-700"
-                onClick={() => setShowModal(false)}
-              >
-                ✖
-              </button>
+      <Dialog open={showModal} onOpenChange={() => setShowModal(false)}>
+        <DialogContent className="bg-white/80 backdrop-blur-md border border-gray-200 max-w-xl w-[60%] min-h-[450px] rounded-lg shadow-lg mx-auto">
+          <DialogHeader className="flex flex-col">
+            <div className="flex justify-between items-start w-full border-b">
+              <DialogTitle className="text-xl font-semibold">See How to Read All Zones</DialogTitle>
             </div>
-
-            <ul>
-              <li className="mb-4">
-                <div className="flex items-center gap-2">
-                  <Skull className="text-green-600" size={20} />
+          </DialogHeader>
+          <div>
+            <ul className="space-y-4">
+              <li className="mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <CircleArrowOutDownLeft  className="text-green-600" size={20} />
                   <span className="font-bold text-green-600">Extreme Fear (&lt;30):</span>
                 </div>
-                <span className="font-light">Extreme fear suggests a good time to open fresh positions, as markets are likely to be oversold and might turn upwards.</span>
+                <span className="font-normal">
+                  Extreme fear suggests a good time to open fresh positions, as markets are likely to be oversold and might turn upwards.
+                </span>
               </li>
-              <li className="mb-4">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="text-yellow-500" size={20} />
+              <li className="mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <CircleArrowOutUpLeft  className="text-yellow-500" size={20} />
                   <span className="font-bold text-yellow-500">Fear (30-50):</span>
                 </div>
-                <span className="font-light">If dropping from Greed to Fear, wait till Extreme Fear. If rising from Extreme Fear, consider opening positions.</span>
+                <span className="font-normal">
+                  If dropping from Greed to Fear, wait till Extreme Fear. If rising from Extreme Fear, consider opening positions.
+                </span>
               </li>
-              <li className="mb-4">
-                <div className="flex items-center gap-2">
-                  <ArrowUp className="text-orange-500" size={20} />
+              <li className="mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <CircleArrowOutUpRight  className="text-orange-500" size={20} />
                   <span className="font-bold text-orange-500">Greed (50-70):</span>
                 </div>
-                <span className="font-light">If rising towards Greed, be cautious with new positions. If dropping from Extreme Greed, wait for better opportunities.</span>
+                <span className="font-normal">
+                  If rising towards Greed, be cautious with new positions. If dropping from Extreme Greed, wait for better opportunities.
+                </span>
               </li>
-              <li className="mb-4">
-                <div className="flex items-center gap-2">
-                  <ArrowDown className="text-red-500" size={20} />
+              <li className="mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <CircleArrowOutDownRight  className="text-red-500" size={20} />
                   <span className="font-bold text-red-500">Extreme Greed ({'>'}70):</span>
                 </div>
-                <span className="font-light">Avoid opening fresh positions as markets are overbought and likely to turn downwards.</span>
+                <span className="font-normal">
+                  Avoid opening fresh positions as markets are overbought and likely to turn downwards.
+                </span>
               </li>
             </ul>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
+
     </Card>
   )
 }

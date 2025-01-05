@@ -50,7 +50,7 @@ type FilterOption =
 | "Nifty Realty";
 
 function IntrabuzzContent() {
-  const { stocks, loading } = useStockContext()
+  const { stocks } = useStockContext()
   const searchParams = useSearchParams()
 
   const [sortBy, setSortBy] = useState<SortOption>(() => {
