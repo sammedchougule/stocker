@@ -12,9 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ChartCandlestick , ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from 'lucide-react'
-
-import { Skeleton, SkeletonText, SkeletonCircle } from '@/components/ui/skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
 import { StockModal } from '@/components/StockModal';
 import { Button } from '@/components/ui/buttons'
 import Image from 'next/image';
@@ -27,8 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-//import { TradingViewModal } from '@/components/TradingViewModal'
-
+import Link from 'next/link'
 
 type SortOption = 
   | 'changepct_desc' 
@@ -135,16 +131,16 @@ function IntrabuzzContent() {
       } while (newColor === "#000000"); // Ensure it's not black
   
       localStorage.setItem(symbol, newColor); // Store the generated color in localStorage
-      return newColor; // Return the new color
+      return newColor; 
     }
   
-    return "#ffffff"; // Default color if window is not available
+    return "#ffffff"; 
   };
   
   // Function to generate a random hex color
   const generateRandomColor = (): string => {
-    const randomHex = Math.floor(Math.random() * 16777215).toString(16); // Generate a random hex value
-    return `#${randomHex.padStart(6, "0")}`; // Ensure 6 characters with padding
+    const randomHex = Math.floor(Math.random() * 16777215).toString(16); 
+    return `#${randomHex.padStart(6, "0")}`; 
   };
   
   // Stock Details Modal
@@ -153,15 +149,32 @@ function IntrabuzzContent() {
     setIsModalOpen(true);
   };
 
+  //Pagination for table
+  const ITEMS_PER_PAGE = 10; // Number of rows per page
 
-  // TradingViewChart Modal
-  // const [isModalOpen, setModalOpen] = useState(false);
-  // const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // const handleChartClick = (symbol: string) => {
-  //   setSelectedSymbol(symbol);
-  //   setModalOpen(true);
-  // };
+  // Calculate the indices for slicing the data
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+
+  // Get the current page's data
+  const currentTableData = filteredAndSortedStocks.slice(startIndex, endIndex);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredAndSortedStocks.length / ITEMS_PER_PAGE);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
 
   const StockCard = ({ stock }: { stock: Stock }) => (
     <Card className="relative flex flex-col cursor-pointer" onClick={() => handleStockClick(stock)}> 
@@ -174,11 +187,15 @@ function IntrabuzzContent() {
               {stock.symbol}
             </span>
           </div>
-          <button
-              className="rounded-full p-2 hover:bg-gray-100 transition-colors"
-              > {/* onClick={() => handleChartClick(stock.symbol)} */}
-            <ChartCandlestick  className="w-5 h-5 text-gray-400" />
-          </button>
+          <Link
+              href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button size="icon" className="hover:bg-gray-200">
+                <ChartCandlestick className="h-6 w-6 text-gray-700 hover:text-blue-500" />
+              </Button>
+            </Link>
         </div>
       </CardHeader>
       <CardContent className="pb-2 flex-grow">
@@ -206,27 +223,6 @@ function IntrabuzzContent() {
     </Card>
   )
 
-  const SkeletonCard = () => (
-    <Card className="relative flex flex-col">
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-center">
-          <Skeleton className="w-28 h-7 rounded-md" />
-          <SkeletonCircle className="w-9 h-9" />
-        </div>
-      </CardHeader>
-      <CardContent className="pb-2 flex-grow">
-        <SkeletonText className="w-full h-10" />
-      </CardContent>
-      <CardFooter className="flex flex-col items-start pt-2">
-        <SkeletonText className="w-20 h-6 mb-2" />
-        <div className="flex justify-between items-center w-full">
-          <Skeleton className="w-16 h-6 rounded-md" />
-          <Skeleton className="w-20 h-6 rounded-md" />
-        </div>
-      </CardFooter>
-    </Card>
-  )
-
   return (
     <div className="container mx-auto px-4 mt-8">
       <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-4 mb-6">
@@ -239,22 +235,18 @@ function IntrabuzzContent() {
           <SelectContent>
                 <SelectItem value="Nifty FnO">All</SelectItem>
                   <SelectItem value="Nifty 50">Nifty 50</SelectItem>
-                <SelectItem value="Nifty Auto">Nifty Auto</SelectItem>
-                <SelectItem value="Nifty Bank">Nifty Bank</SelectItem>
-                  <SelectItem value="Nifty Financial Services">
-                    Nifty Financial Services
-                  </SelectItem>
-                  <SelectItem value="Nifty FMCG">Nifty FMCG</SelectItem>
-                  <SelectItem value="Nifty Healthcare">
-                    Nifty Healthcare
-                  </SelectItem>
-                  <SelectItem value="Nifty IT">Nifty IT</SelectItem>
-                  <SelectItem value="Nifty Media">Nifty Media</SelectItem>
-                  <SelectItem value="Nifty Metal">Nifty Metal</SelectItem>
-                  <SelectItem value="Nifty Pharma">Nifty Pharma</SelectItem>
-                  <SelectItem value="Nifty PVT Bank">Nifty PVT Bank</SelectItem>
-                  <SelectItem value="Nifty PSU Bank">Nifty PSU Bank</SelectItem>
-                  <SelectItem value="Nifty Realty">Nifty Realty</SelectItem>
+                <SelectItem value="Nifty Auto">Auto</SelectItem>
+                <SelectItem value="Nifty Bank">Bank</SelectItem>
+                  <SelectItem value="Nifty Financial Services">Financials</SelectItem>
+                  <SelectItem value="Nifty FMCG">FMCG</SelectItem>
+                  <SelectItem value="Nifty Healthcare">Healthcare</SelectItem>
+                  <SelectItem value="Nifty IT">IT</SelectItem>
+                  <SelectItem value="Nifty Media">Media</SelectItem>
+                  <SelectItem value="Nifty Metal">Metal</SelectItem>
+                  <SelectItem value="Nifty Pharma">Pharma</SelectItem>
+                  <SelectItem value="Nifty PVT Bank">PVT Bank</SelectItem>
+                  <SelectItem value="Nifty PSU Bank">PSU Bank</SelectItem>
+                  <SelectItem value="Nifty Realty">Realty</SelectItem>
               </SelectContent>
         </Select>
 
@@ -307,63 +299,119 @@ function IntrabuzzContent() {
         </div>
       </div>
 
+      <>
       {viewMode === 'card' ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {loading
-            ? Array(10).fill(0).map((_, index) => <SkeletonCard key={index} />)
-            : filteredAndSortedStocks.map((stock) => (
+          {filteredAndSortedStocks.map((stock) => (
                 <StockCard key={stock.symbol} stock={stock} />
-              ))
-          }
+              ))}
         </div>
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Image</TableHead>
-              <TableHead>Symbol</TableHead>
-              <TableHead>Company Name</TableHead>
-              <TableHead className="text-right">Price</TableHead>
-              <TableHead className="text-right">Change %</TableHead>
-              <TableHead className="text-right">Volume Spike</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading
-              ? Array(10).fill(0).map((_, index) => (
-                <TableRow key={index}>
-                  <TableCell><SkeletonCircle className="w-8 h-8" /></TableCell>
-                  <TableCell><SkeletonText className="w-16 h-4" /></TableCell>
-                  <TableCell><SkeletonText className="w-40 h-4" /></TableCell>
-                  <TableCell className="text-right"><SkeletonText className="w-20 h-4 ml-auto" /></TableCell>
-                  <TableCell className="text-right"><SkeletonText className="w-16 h-4 ml-auto" /></TableCell>
-                  <TableCell className="text-right"><SkeletonText className="w-20 h-4 ml-auto" /></TableCell>
+        <>
+          <Table className='border'>
+            <TableHeader className='bg-blue-200'>
+              <TableRow>
+                <TableHead>Symbol</TableHead>
+                <TableHead>Company Name</TableHead>
+                <TableHead className="text-right">Previous Close</TableHead>
+                <TableHead className="text-right">Price</TableHead>
+                <TableHead className="text-right">Change</TableHead>
+                <TableHead className="text-right">Change %</TableHead>
+                <TableHead className="text-right">Vol_Spike</TableHead>
               </TableRow>
-                ))
-              : filteredAndSortedStocks.map((stock) => (
-                  <TableRow className='cursor-pointer' key={stock.symbol} >  {/* onClick={() => handleStockClick(stock)} */}
-                    <TableCell className="font-medium">
+            </TableHeader>
+            <TableBody>
+              {currentTableData.map((stock) => (
+                    <TableRow className="cursor-pointer" key={stock.symbol}>
+                      <TableCell className="font-medium flex items-center gap-2">
                       <Image
-                        className='w-8 h-8 rounded-full'
-                        src={`/images/${stock.symbol}.svg`}
-                        alt={stock.companyname}
-                        width={32}
-                        height={32}
-                      />
-                    </TableCell>
-                    <TableCell className="font-medium">{stock.symbol}</TableCell>
-                    <TableCell>{stock.companyname}</TableCell>
-                    <TableCell className="text-right">₹{Number(stock.price).toFixed(2)}</TableCell>
-                    <TableCell className={`text-right ${stock.changepct >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {Number(stock.changepct).toFixed(2)}%
-                    </TableCell>
-                    <TableCell className="text-right">{((stock.volumespike ?? 0 ) * 100).toFixed(2)}</TableCell>
-                  </TableRow>
-                ))
-            }
-          </TableBody>
-        </Table>
+                          className="w-6 h-6 rounded-full"
+                          src={`/images/${stock.symbol}.svg`}
+                          alt={stock.companyname}
+                          width={20}
+                          height={20}
+                        />
+                        {stock.symbol}
+                      </TableCell>
+                      <TableCell className='truncate max-w-[100px]'>{stock.companyname}</TableCell>
+                      <TableCell className="text-right">₹{Number(stock.closeyest).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">₹{Number(stock.price).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">
+                        <span
+                          className={`inline-flex items-center rounded px-1 py-1 ${
+                            stock.change >= 0
+                              ? 'text-green-500 bg-green-50 rounded-lg'
+                              : 'text-red-500 bg-red-50 rounded-lg'
+                          }`}
+                        >
+                          {stock.change >= 0 ? (
+                            <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
+                          ) : (
+                            <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
+                          )}
+                          <span className="text-sm font-md">
+                            {stock.change}
+                          </span>
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <span
+                          className={`inline-flex items-center rounded px-1 py-1 ${
+                            stock.changepct >= 0
+                              ? 'text-green-500 bg-green-50 rounded-lg'
+                              : 'text-red-500 bg-red-50 rounded-lg'
+                          }`}
+                        >
+                          {stock.changepct >= 0 ? (
+                            <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
+                          ) : (
+                            <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
+                          )}
+                          <span className="text-sm font-md">
+                            {stock.changepct}%
+                          </span>
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <span
+                          className={`inline-flex items-center rounded px-1 py-1 ${
+                            (stock.volumespike ?? 0) >= 0
+                              ? 'text-orange-600 bg-orange-100 rounded-lg'
+                              : 'text-yellow-600 bg-yellow-100 rounded-lg'
+                          }`}
+                        ><Flame className="w-3.5 h-3.5 mr-0.5" />
+                          <span className="text-sm font-md">
+                          {Number(stock.volumespike).toFixed(2)}X
+                          </span>
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+            </TableBody>
+          </Table>
+          {/* Pagination Controls */}
+          <div className="flex justify-center items-center gap-4 mt-4">
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-gray-700">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </>
       )}
+    </>
 
       <StockModal
         stock={selectedStock}
@@ -371,57 +419,14 @@ function IntrabuzzContent() {
         onClose={() => setIsModalOpen(false)}
       />
 
-      {/* TradingView Modal */}
-      {/* {isModalOpen && selectedSymbol && (
-        <TradingViewModal
-          symbol={`NSE:${selectedSymbol}`}
-          isOpen={isModalOpen}
-          onClose={() => setModalOpen(false)}
-        />
-      )} */}
     </div> 
   )
 }
 
-function IntrabuzzSkeleton() {
-  return (
-    <div className="container mx-auto px-4 mt-24">
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <Skeleton className="w-[180px] h-10" />
-        <div className="flex items-center gap-2">
-          <Skeleton className="w-[180px] h-10" />
-          <Skeleton className="w-10 h-10" />
-        </div>
-      </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        {Array(10).fill(0).map((_, index) => (
-          <Card key={index} className="relative flex flex-col">
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-center">
-                <Skeleton className="w-28 h-7 rounded-md" />
-                <SkeletonCircle className="w-9 h-9" />
-              </div>
-            </CardHeader>
-            <CardContent className="pb-2 flex-grow">
-              <SkeletonText className="w-full h-10" />
-            </CardContent>
-            <CardFooter className="flex flex-col items-start pt-2">
-              <SkeletonText className="w-20 h-6 mb-2" />
-              <div className="flex justify-between items-center w-full">
-                <Skeleton className="w-16 h-6 rounded-md" />
-                <Skeleton className="w-20 h-6 rounded-md" />
-              </div>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 export default function Intrabuzz() {
   return (
-    <Suspense fallback={<IntrabuzzSkeleton />}>
+    <Suspense>
       <IntrabuzzContent />
     </Suspense>
   )
