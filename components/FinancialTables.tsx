@@ -8,6 +8,16 @@ import {
     Scale,
     Coins,
 } from 'lucide-react';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table";
+  import { Card, CardHeader, CardContent } from "@/components/ui/card";
+
 
 interface FinancialData {
     [key: string]: {
@@ -86,100 +96,109 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
-    <div className="flex flex-col items-center w-full">
-        {/* Button Group */}
-        <div className="mb-5 flex flex-wrap justify-center gap-2 sm:gap-3 w-full">
-            <button
-                onClick={() => handleTableChange('Quarterly Results')}
-                className={`group px-3 py-2 flex items-center border border-gray-300 bg-gray-100 rounded-lg shadow hover:bg-gray-200 ${selectedTable === 'Quarterly Results' ? 'text-blue-500' : ''}`}
-            >
-                {getIcon('Quarterly Results')}
-                <span className="group-hover:underline">Quarterly Results</span>
-            </button>
-            <button
-                onClick={() => handleTableChange('Profit & Loss')}
-                className={`group px-3 py-2 flex items-center border border-gray-300 bg-gray-100 rounded-lg shadow hover:bg-gray-200 ${selectedTable === 'Profit & Loss' ? 'text-green-500' : ''}`}
-            >
-                {getIcon('Profit & Loss')}
-                <span className="group-hover:underline">Profit & Loss</span>
-            </button>
-            <button
-                onClick={() => handleTableChange('Balance Sheet')}
-                className={`group px-3 py-2 flex items-center border border-gray-300 bg-gray-100 rounded-lg shadow hover:bg-gray-200 ${selectedTable === 'Balance Sheet' ? 'text-yellow-700' : ''}`}
-            >
-                {getIcon('Balance Sheet')}
-                <span className="group-hover:underline">Balance Sheet</span>
-            </button>
-            <button
-                onClick={() => handleTableChange('Cash Flows')}
-                className={`group px-3 py-2 flex items-center border border-gray-300 bg-gray-100 rounded-lg shadow hover:bg-gray-200 ${selectedTable === 'Cash Flows' ? 'text-orange-500' : ''}`}
-            >
-                {getIcon('Cash Flows')}
-                <span className="group-hover:underline">Cash Flows</span>
-            </button>
-            <button
-                onClick={() => handleTableChange('Ratios')}
-                className={`group px-3 py-2 flex items-center border border-gray-300 bg-gray-100 rounded-lg shadow hover:bg-gray-200 ${selectedTable === 'Ratios' ? 'text-red-500' : ''}`}
-            >
-                {getIcon('Ratios')}
-                <span className="group-hover:underline">Ratios</span>
-            </button>
-        </div>
+        <div className="container mx-auto lg:px-8 sm:px-0">
+            <Card>
+                {/* Button Group */}
+                <CardHeader>
+                    <div className="flex flex-wrap gap-2 sm:gap-3 w-full">
+                        <button
+                            onClick={() => handleTableChange('Quarterly Results')}
+                            className={`px-3 py-2 flex items-center border border-gray-300 rounded-lg shadow 
+                                ${selectedTable === 'Quarterly Results' ? 'text-white bg-gray-600' : ''}`}
+                        >
+                            {getIcon('Quarterly Results')}
+                            <span className="">Quarterly Results</span>
+                        </button>
+                        <button
+                            onClick={() => handleTableChange('Profit & Loss')}
+                            className={` px-3 py-2 flex items-center border border-gray-300 rounded-lg shadow 
+                                ${selectedTable === 'Profit & Loss' ? 'text-white bg-gray-600' : ''}`}
+                        >
+                            {getIcon('Profit & Loss')}
+                            <span className="">Profit & Loss</span>
+                        </button>
+                        <button
+                            onClick={() => handleTableChange('Balance Sheet')}
+                            className={` px-3 py-2 flex items-center border border-gray-300 rounded-lg shadow 
+                                ${selectedTable === 'Balance Sheet' ? 'text-white bg-gray-600' : ''}`}
+                        >
+                            {getIcon('Balance Sheet')}
+                            <span className="">Balance Sheet</span>
+                        </button>
+                        <button
+                            onClick={() => handleTableChange('Cash Flows')}
+                            className={` px-3 py-2 flex items-center border border-gray-300 rounded-lg shadow 
+                                ${selectedTable === 'Cash Flows' ? 'text-white bg-gray-600' : ''}`}
+                        >
+                            {getIcon('Cash Flows')}
+                            <span className="">Cash Flows</span>
+                        </button>
+                        <button
+                            onClick={() => handleTableChange('Ratios')}
+                            className={` px-3 py-2 flex items-center border border-gray-300 rounded-lg shadow 
+                                ${selectedTable === 'Ratios' ? 'text-white bg-gray-600' : ''}`}
+                        >
+                            {getIcon('Ratios')}
+                            <span className="">Ratios</span>
+                        </button>
+                    </div>
+                </CardHeader>
 
-        {/* Table Section */}
-        {tableData ? (
-            <div className="container mx-auto px-4 py-4">
-                <div className="inline-block min-w-full overflow-x-auto">
-                    <div className="overflow-hidden border border-gray-300 rounded-lg shadow">
-                        <table className="min-w-full divide-y divide-gray-300 relative">
-                            <thead className="bg-gray-100">
-                                <tr>
-                                    <th
-                                        className="sticky left-0 z-10 bg-gray-100 px-4 py-2 font-semibold text-left border-r border-gray-300"
+                {/* Table Section */}
+                <CardContent>
+                    {tableData ? (
+                        <div className="overflow-auto max-h-[600px]">
+                            <div>
+                                {/* Financial Statement Name shoulg be here */}
+                                <h4 className='text-gray-500 mb-4'>Consolidated Figures in Rs. Crores</h4>
+                            </div>
+                            <Table className="min-w-full divide-y divide-gray-300 relative border border-gray-300">
+                                <TableHeader className="bg-gray-100">
+                                    <TableRow>
+                                    <TableHead
+                                        className="sticky left-0 z-10 bg-gray-100 font-semibold text-left border-r border-b border-gray-300"
                                     >
                                         Financial Year
-                                    </th>
+                                    </TableHead>
                                     {tableData.header.slice(1).map((header, index) => (
-                                        <th
-                                            key={index}
-                                            className="px-4 py-2 text-left font-semibold border-r border-gray-300"
+                                        <TableHead
+                                        key={index}
+                                        className="text-left font-semibold border-r border-b border-gray-300"
                                         >
-                                            {header}
-                                        </th>
+                                        {header}
+                                        </TableHead>
                                     ))}
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-300">
-                                {tableData.rows.map((row, rowIndex) => (
-                                    <tr key={rowIndex} className="hover:bg-gray-50">
-                                        <td
-                                            className="sticky left-0 z-10 bg-white px-4 py-2 font-medium text-gray-800 border-r border-gray-300 whitespace-nowrap"
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody className="bg-white divide-y divide-gray-300">
+                                    {tableData.rows.map((row, rowIndex) => (
+                                    <TableRow key={rowIndex} className="hover:bg-gray-50">
+                                        <TableCell
+                                        className="sticky left-0 z-10 bg-white px-4 py-2 font-medium text-gray-800 border-r border-b border-gray-300 whitespace-nowrap"
                                         >
-                                            {row[tableData.header[0]]}
-                                        </td>
+                                        {row[tableData.header[0]]}
+                                        </TableCell>
                                         {tableData.header.slice(1).map((header, colIndex) => (
-                                            <td
-                                                key={colIndex}
-                                                className="px-4 py-2 text-gray-700 border-r border-gray-300 whitespace-nowrap"
-                                            >
-                                                {row[header]}
-                                            </td>
+                                        <TableCell
+                                            key={colIndex}
+                                            className="px-4 py-2 text-gray-700 border-r border-b border-gray-300 whitespace-nowrap"
+                                        >
+                                            {row[header]}
+                                        </TableCell>
                                         ))}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        ) : (
-            <div className="text-center py-4 text-gray-500">
-                No data available for {selectedTable}
-            </div>
-        )}
-    </div>
-</div>
+                                    </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    ) : (
+                        <div className="text-center py-4 text-gray-500">
+                            No data available for {selectedTable}
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
 
     );
 };
