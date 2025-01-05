@@ -204,7 +204,7 @@ export default function Sectors() {
                       className="text-right w-1/6">
                       <span
                           className={`inline-flex items-center rounded px-1 py-1 ${
-                            stock.changepct >= 0
+                            (stock.volumespike ?? 0) >= 0
                               ? 'text-orange-600 bg-orange-100 rounded-lg'
                               : 'text-yellow-600 bg-yellow-100 rounded-lg'
                           }`}
