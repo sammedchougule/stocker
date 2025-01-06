@@ -11,6 +11,8 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { StockModal } from './StockModal'
 import Image from 'next/image';
 import MarketMood from './MarketMood';
+import { useStockAnimation } from '@/hooks/useStockAnimation'; 
+import { AnimatedValue } from './AnimatedValue';
 
 type FilterType = 'gainers' | 'losers' | 'most-active' | '52w-high' | '52w-low'
 
@@ -70,6 +72,12 @@ const TodaysStocks = () => {
     setLargeCapFilterIndex((prevIndex) => (prevIndex + 1) % largeCapFilters.length)
   }
 
+    // Create an array of animation hooks for each possible sector (up to 9)
+    const stockAnimations = filteredStocks.map((stock, index) => ({
+      priceDirection: useStockAnimation(stock, ['price']),
+      changeDirection: useStockAnimation(stock, ['change', 'changepct'])
+    }));
+
   const renderSkeleton = () => (
     <div className="space-y-4">
       {Array(5)
@@ -101,7 +109,15 @@ const TodaysStocks = () => {
   }
 
   if (error) {
-    return <div>Error: {error}</div>
+    return (
+      <div className="container mx-auto sm:px-6 lg:px-8">
+      <Card className="bg-white">
+        <CardContent>
+          <p className="text-red-500 ">Error: {error}</p>
+        </CardContent>
+      </Card>
+    </div>
+    );
   }
 
   return (
@@ -195,7 +211,7 @@ const TodaysStocks = () => {
               renderSkeleton()
             ) : (
               <div className="divide-y">
-                {filteredStocks.map((stock) => (
+                {filteredStocks.map((stock, index) => (
                   <div key={stock.symbol} className="grid grid-cols-12 gap-4 items-center py-3 px-2 sm:px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleStockClick(stock)}>
                     {/* Adjusted Stock Info  col span */}
                     <div className="col-span-1 sm:col-span-1 flex items-center justify-center">
@@ -213,11 +229,15 @@ const TodaysStocks = () => {
                     </div>
                     {/* Adjusted price and change col span */}
                     <div className="col-span-4 sm:col-span-4 text-right">
-                      <div className="font-medium">₹ {Number(stock.price).toFixed(2)}</div>
+                    <AnimatedValue
+                        value={`₹${Number(stock.price).toFixed(2)}`}
+                        direction={stockAnimations[index].priceDirection}
+                        className="font-medium"
+                      />
                     </div>
                     <div className="col-span-4 sm:col-span-4 flex items-center justify-end gap-2 pr-2">
                       <span
-                        className={`inline-flex items-center rounded p-1 ${
+                        className={`inline-flex items-center rounded px-1.5 py-1 font-medium ${
                           stock.changepct >= 0
                             ? 'text-green-500 bg-green-50 rounded-lg'
                             : 'text-red-500 bg-red-50 rounded-lg'
@@ -228,9 +248,10 @@ const TodaysStocks = () => {
                         ) : (
                           <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
                         )}
-                        <span className="text-sm">
-                          {Number(stock.changepct).toFixed(2)}%
-                        </span>
+                        <AnimatedValue
+                          value={`${Number(stock.changepct).toFixed(2)}%`}
+                          direction={stockAnimations[index].priceDirection}
+                        />
                       </span>
                       <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Plus className="h-4 w-4" />

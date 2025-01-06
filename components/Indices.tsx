@@ -10,6 +10,8 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { useStockContext } from '@/context/StockContext';
 import { Stock } from '@/types/Stock';
 import { StockModal } from './StockModal';
+import { useStockAnimation } from '@/hooks/useStockAnimation'; 
+import { AnimatedValue } from './AnimatedValue';
 
 const INDICES = [
     'NIFTY_50',
@@ -33,6 +35,12 @@ const Indices: React.FC = () => {
   const [activeCard, setActiveCard] = useState(0);
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Create an array of animation hooks for each possible sector (up to 9)
+  const sectorAnimations = Array(9).fill(null).map((_, index) => ({
+    priceDirection: useStockAnimation(filteredSectors[index] || {}, ['price']),
+    changeDirection: useStockAnimation(filteredSectors[index] || {}, ['change', 'changepct'])
+  }));
 
   useEffect(() => {
     if (stocks.length > 0) {
@@ -75,42 +83,51 @@ const Indices: React.FC = () => {
 
   const renderCard = (startIndex: number, endIndex: number) => (
     <div className="grid grid-cols-1 gap-5">
-      {filteredSectors.slice(startIndex, endIndex).map((sector) => (
-        <div key={sector.symbol} className="flex justify-between items-start cursor-pointer" onClick={() => handleStockClick(sector)}>
-          <div className="flex items-center space-x-1">
-          <Image
-            className='w-8 h-8 rounded-full'
-            src={`/images/${sector.symbol}.svg`}
-            alt={sector.companyname}
-            width={32}
-            height={32}
-          />
-            <span className="text-md font-md truncate max-w-[150px]">{sector.companyname}</span>
-          </div>
+      {filteredSectors.slice(startIndex, endIndex).map((sector, index) => {
+        const { priceDirection, changeDirection } = sectorAnimations[startIndex + index];
 
-          <div className="text-right">
-            <div className="text-md font-md">{sector.price}</div>
-            <div className="flex items-center justify-end mt-0.5">
-              <span
-                className={`inline-flex items-center rounded px-1 py-1 ${
-                  sector.changepct >= 0
-                    ? 'text-green-500 bg-green-50 rounded-lg'
-                    : 'text-red-500 bg-red-50 rounded-lg'
-                }`}
-              >
-                {sector.changepct >= 0 ? (
-                  <ArrowUpIcon className="w-3.5 h-3.5 mr-0.5" />
-                ) : (
-                  <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
-                )}
-                <span className="text-sm font-md">
-                  {sector.changepct}%
+        return (
+          <div key={sector.symbol} className="flex justify-between items-start px-1 cursor-pointer" onClick={() => handleStockClick(sector)}>
+            <div className="flex items-center space-x-2">
+              <Image
+                src={`/images/${sector.symbol}.svg`}
+                alt={sector.companyname}
+                width={30}
+                height={30}
+                className="rounded-full border border-gray-200"
+              />
+              <span className="text-md font-semibold text-gray-800 truncate max-w-[120px]">{sector.companyname}</span>
+            </div>
+
+            <div className="text-right">
+              <AnimatedValue
+                value={Number(sector.price).toFixed(2)}
+                direction={priceDirection}
+                className="text-md font-semibold text-gray-900"
+              />
+              <div className="flex items-center justify-end mt-0.5">
+                <span
+                  className={`inline-flex items-center rounded px-1.5 py-1 font-medium ${
+                    sector.changepct >= 0
+                      ? 'text-green-500 bg-green-50 rounded-lg'
+                      : 'text-red-500 bg-red-50 rounded-lg'
+                  }`}
+                >
+                  {sector.changepct >= 0 ? (
+                    <ArrowUpIcon className="w-3.5 h-3.5 mr-0.5" />
+                  ) : (
+                    <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
+                  )}
+                  <AnimatedValue
+                    value={`${Number(sector.changepct).toFixed(2)}%`}
+                    direction={changeDirection}
+                  />
                 </span>
-              </span>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 
