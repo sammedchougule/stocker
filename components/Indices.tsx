@@ -141,7 +141,7 @@ const Indices: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent className="relative p-1">
-            {loading ? (
+            {loading || filteredSectors.length === 0 ? (
               <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="pr-4">
                   {renderSkeleton()}
