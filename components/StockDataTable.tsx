@@ -10,15 +10,12 @@ interface StockDataTableProps {
   onSort: (column: SortColumn) => void;
   sortColumn: SortColumn;
   sortDirection: SortDirection;
-  currentPage?: number;
-  totalPages?: number;
-  onPageChange?: (page: number) => void;
 }
 
 type SortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'change' | 'changepct' | 'volumespike';
 type SortDirection = 'asc' | 'desc';
 
-const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, onSort, sortColumn, sortDirection,  currentPage = 1, totalPages = 1, onPageChange }) => {
+const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, onSort, sortColumn, sortDirection }) => {
 
   const sortedStocks = useMemo(() => {
     return [...stocks].sort((a, b) => {
