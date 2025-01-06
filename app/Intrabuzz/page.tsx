@@ -14,7 +14,6 @@ import { ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from 'lucid
 import { StockModal } from '@/components/StockModal';
 import { Button } from '@/components/ui/buttons'
 import { useSearchParams } from 'next/navigation'
-import { useStockAnimation } from '@/hooks/useStockAnimation'
 import StockDataTable from '@/components/StockDataTable';
 import StockCard from '@/components/StockCard';
 
@@ -48,11 +47,6 @@ function IntrabuzzContent() {
   
   const { stocks } = useStockContext()
   const searchParams = useSearchParams()
-
-  // Move these hooks to the top level
-  const priceDirections = stocks?.map(stock => useStockAnimation(stock, ['price'])) || [];
-  const changeDirections = stocks?.map(stock => useStockAnimation(stock, ['change', 'changepct'])) || [];
-  const volumespikeDirections = stocks?.map(stock => useStockAnimation(stock, ['volumespike'])) || [];
 
   const [sortBy, setSortBy] = useState<SortOption>(() => {
     if (typeof window !== 'undefined') {
@@ -134,13 +128,6 @@ function IntrabuzzContent() {
     return filtered
   }, [stocks, sortBy, filterBy, viewMode, tableSortColumn, tableSortDirection])
 
-  const stockAnimations = useMemo(() => {
-    return filteredAndSortedStocks.map((stock) => ({
-      priceDirection: priceDirections[stocks.indexOf(stock)],
-      changeDirection: changeDirections[stocks.indexOf(stock)],
-      volumespikeDirection: volumespikeDirections[stocks.indexOf(stock)]
-    }));
-  }, [filteredAndSortedStocks, stocks, priceDirections, changeDirections, volumespikeDirections]);
   
   //TODO: Implement Modal Open
   const handleStockClick = (stock: Stock) => {
@@ -247,7 +234,6 @@ function IntrabuzzContent() {
                   stock={stock}
                   index={index}
                   sortBy={sortBy}
-                  stockAnimations={stockAnimations[index]}
                   onClick={handleStockClick}
                 />
               ))}
@@ -256,7 +242,6 @@ function IntrabuzzContent() {
         <>
           <StockDataTable
             stocks={currentTableData}
-            stockAnimations={stockAnimations}
             onStockClick={handleStockClick}
             onSort={handleTableSort}
             sortColumn={tableSortColumn}

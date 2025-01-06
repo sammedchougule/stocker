@@ -10,8 +10,6 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { useStockContext } from '@/context/StockContext';
 import { Stock } from '@/types/Stock';
 import { StockModal } from './StockModal';
-import { useStockAnimation } from '@/hooks/useStockAnimation'; 
-import { AnimatedValue } from './AnimatedValue';
 
 const INDICES = [
     'NIFTY_50',
@@ -78,11 +76,8 @@ const Indices: React.FC = () => {
   const renderCard = (startIndex: number, endIndex: number) => (
     <div className="grid grid-cols-1 gap-5">
       {filteredSectors.slice(startIndex, endIndex).map((sector) => {
-        const priceDirection = useStockAnimation(sector, ['price']);
-        const changeDirection = useStockAnimation(sector, ['change', 'changepct']);
-
         return (
-          <div key={sector.symbol} className="flex justify-between items-start px-1 " onClick={() => handleStockClick(sector)}>
+          <div key={sector.symbol} className="flex justify-between items-start px-1 cursor-pointer" onClick={() => handleStockClick(sector)}>
             <div className="flex items-center space-x-2">
               <Image
                 src={`/images/${sector.symbol}.svg`}
@@ -95,11 +90,9 @@ const Indices: React.FC = () => {
             </div>
 
             <div className="text-right">
-              <AnimatedValue
-                value={Number(sector.price).toFixed(2)}
-                direction={priceDirection}
-                className="text-md font-semibold text-gray-900"
-              />
+              <span className="text-md font-semibold text-gray-900">
+                {Number(sector.price).toFixed(2)}
+              </span>
               <div className="flex items-center justify-end mt-0.5">
                 <span
                   className={`inline-flex items-center rounded px-1.5 py-1 font-medium ${
@@ -113,10 +106,7 @@ const Indices: React.FC = () => {
                   ) : (
                     <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
                   )}
-                  <AnimatedValue
-                    value={`${Number(sector.changepct).toFixed(2)}%`}
-                    direction={changeDirection}
-                  />
+                  {`${Number(sector.changepct).toFixed(2)}%`}
                 </span>
               </div>
             </div>

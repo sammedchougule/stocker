@@ -6,24 +6,17 @@ import { Button } from '@/components/ui/buttons'
 import { CandlestickChartIcon as ChartCandlestick, Flame } from 'lucide-react'
 import Link from 'next/link';
 import { Stock } from '@/types/Stock'
-import { AnimatedValue } from '@/components/AnimatedValue'
 
 interface StockCardProps {
   stock: Stock;
   index: number;
   sortBy: string;
-  stockAnimations: {
-    priceDirection: 'up' | 'down' | null;
-    changeDirection: 'up' | 'down' | null;
-    volumespikeDirection: 'up' | 'down' | null;
-  };
   onClick: (stock: Stock) => void;
 }
 
 const StockCard: React.FC<StockCardProps> = ({ 
   stock, 
   sortBy, 
-  stockAnimations, 
   onClick 
 }) => (
   <Card className="relative flex flex-col cursor-pointer" onClick={() => onClick(stock)}> 
@@ -43,10 +36,9 @@ const StockCard: React.FC<StockCardProps> = ({
     </CardContent>
     <CardFooter className="flex flex-col items-start pt-2">
     <div className="text-xl font-semibold mb-2 w-full">
-        <AnimatedValue
-          value={`₹${Number(stock.price).toFixed(2)}`}
-          direction={stockAnimations.priceDirection}
-        />
+        <span>
+          ₹{Number(stock.price).toFixed(2)}
+        </span>
       </div>
       <div className="flex justify-between items-center w-full">
         <div className={`flex items-center px-2 py-1 rounded-md text-sm font-medium ${
@@ -57,18 +49,16 @@ const StockCard: React.FC<StockCardProps> = ({
           {(sortBy === 'changepct_asc' || sortBy === 'changepct_desc') ? (
             <>
               {stock.changepct >= 0 ? '↑' : '↓'}{' '}
-              <AnimatedValue
-                value={Number(stock.changepct).toFixed(2) + '%'}
-                direction={stockAnimations.changeDirection}
-              />
+              <span>
+                {Number(stock.changepct).toFixed(2) + '%'}
+              </span>
             </>
           ) : (
             <>
               <Flame className="w-4 h-4 mr-1" />
-              <AnimatedValue
-                value={Number(stock.volumespike).toFixed(2) + 'X'}
-                direction={stockAnimations.volumespikeDirection}
-              />
+              <span>
+                {Number(stock.volumespike).toFixed(2) + 'X'}
+              </span>
             </>
           )}
         </div>
@@ -92,4 +82,3 @@ const StockCard: React.FC<StockCardProps> = ({
 )
 
 export default StockCard;
-

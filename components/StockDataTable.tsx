@@ -2,15 +2,10 @@ import React, { useMemo } from 'react';
 import { ArrowUp, ArrowDown, Flame, ArrowUpDown } from 'lucide-react'
 import Image from 'next/image'
 import { Stock } from '@/types/Stock'
-import { AnimatedValue } from '@/components/AnimatedValue'
 
 interface StockDataTableProps {
   stocks: Stock[];
-  stockAnimations: {
-    priceDirection: 'up' | 'down' | null;
-    changeDirection: 'up' | 'down' | null;
-    volumespikeDirection: 'up' | 'down' | null;
-  }[];
+  // End of Selection
   onStockClick?: (stock: Stock) => void;
   onSort: (column: SortColumn) => void;
   sortColumn: SortColumn;
@@ -24,7 +19,7 @@ interface StockDataTableProps {
 type SortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'change' | 'changepct' | 'volumespike';
 type SortDirection = 'asc' | 'desc';
 
-const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, stockAnimations, onStockClick, onSort, sortColumn, sortDirection, usePagination = false, currentPage = 1, totalPages = 1, onPageChange }) => {
+const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, onSort, sortColumn, sortDirection, usePagination = false, currentPage = 1, totalPages = 1, onPageChange }) => {
 
   const sortedStocks = useMemo(() => {
     return [...stocks].sort((a, b) => {
@@ -140,10 +135,7 @@ const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, stockAnimations
                 <td className="p-4 border-t truncate max-w-[200px]">{stock.companyname}</td>
                 <td className="p-4 border-t text-right">₹{Number(stock.closeyest).toFixed(2)}</td>
                 <td className="p-4 border-t text-right">
-                  <AnimatedValue
-                    value={`₹${Number(stock.price).toFixed(2)}`}
-                    direction={stockAnimations[index].priceDirection}
-                  />
+                  ₹{Number(stock.price).toFixed(2)}
                 </td>
                 <td className="p-4 border-t text-right">
                   <span
@@ -158,10 +150,7 @@ const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, stockAnimations
                     ) : (
                       <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
                     )}
-                    <AnimatedValue
-                      value={`${Number(stock.change).toFixed(2)}`}
-                      direction={stockAnimations[index].changeDirection}
-                    />
+                    {Number(stock.change).toFixed(2)}
                   </span>
                 </td>
                 <td className="p-4 border-t text-right">
@@ -191,10 +180,7 @@ const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, stockAnimations
                     }`}
                   >
                     <Flame className="w-3.5 h-3.5 mr-0.5" />
-                    <AnimatedValue
-                      value={`${Number(stock.volumespike).toFixed(2)}X`}
-                      direction={stockAnimations[index].volumespikeDirection}
-                    />
+                    {Number(stock.volumespike).toFixed(2)}X
                   </span>
                 </td>
               </tr>
