@@ -170,7 +170,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
 
       {/* Modal */}
       <Dialog open={showModal} onOpenChange={() => setShowModal(false)}>
-        <DialogContent className="bg-white/80 backdrop-blur-md border border-gray-200 max-w-xl w-[60%] min-h-[450px] rounded-lg shadow-lg mx-auto">
+        <DialogContent className="bg-white/80 backdrop-blur-md border border-gray-200 rounded-lg w-[calc(100%-32px)] sm:w-full shadow-lg mx-auto">
           <DialogHeader className="flex flex-col">
             <div className="flex justify-between items-start w-full border-b">
               <DialogTitle className="text-xl font-semibold">See How to Read All Zones</DialogTitle>
