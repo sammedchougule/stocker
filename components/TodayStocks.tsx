@@ -42,6 +42,8 @@ const TodaysStocks = () => {
 
   const largeCapFilter = largeCapFilters[largeCapFilterIndex]
 
+  
+
   const filteredStocks = useMemo(() => {
     if (!stocks) return []
 
@@ -68,15 +70,15 @@ const TodaysStocks = () => {
     }
   }, [stocks, activeFilter, largeCapFilter])
 
+  // Animation effect
+  const stockAnimations = filteredStocks.map((stock) => ({
+    priceDirection: useStockAnimation(stock, ['price']),
+    changeDirection: useStockAnimation(stock, ['change', 'changepct'])
+  }));
+
   const cycleLargeCapFilter = () => {
     setLargeCapFilterIndex((prevIndex) => (prevIndex + 1) % largeCapFilters.length)
   }
-
-    // Create an array of animation hooks for each possible sector (up to 9)
-    const stockAnimations = filteredStocks.map((stock) => ({
-      priceDirection: useStockAnimation(stock, ['price']),
-      changeDirection: useStockAnimation(stock, ['change', 'changepct'])
-    }));
 
   const renderSkeleton = () => (
     <div className="space-y-4">
