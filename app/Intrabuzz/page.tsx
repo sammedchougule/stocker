@@ -187,15 +187,15 @@ function IntrabuzzContent() {
               {stock.symbol}
             </span>
           </div>
-          <Link
+          {/* <Link
               href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
               target="_blank"
               rel="noopener noreferrer"
-            >
+          >
               <Button size="icon" className="hover:bg-gray-200">
                 <ChartCandlestick className="h-6 w-6 text-gray-700 hover:text-blue-500" />
               </Button>
-            </Link>
+          </Link> */}
         </div>
       </CardHeader>
       <CardContent className="pb-2 flex-grow">
@@ -214,10 +214,20 @@ function IntrabuzzContent() {
               {stock.changepct >= 0 ? '↑' : '↓'} {Number(stock.changepct).toFixed(2)}%
             </div>
           ) : (
-            <div className="flex items-center px-2 py-1 rounded-md text-sm font-medium text-yellow-700 bg-yellow-100">
-              <Flame className="w-4 h-4 mr-1" /> {Number(stock.volumespike).toFixed(2)}X
+            <div className={`flex items-center px-2 py-1 rounded-md text-sm font-medium
+            ${((stock.volumespike ?? 0) >= 0 ? 'text-orange-700 bg-orange-100' : 'text-yellow-700 bg-yellow-100')}`}>
+              <Flame className="w-4 h-4 mr-1" />
+              {Number(stock.volumespike).toFixed(2)}X
             </div>
           )}
+          <Link
+              href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
+              target="_blank"
+              rel="noopener noreferrer">
+              <Button size="icon" className="hover:bg-gray-200">
+                <ChartCandlestick className="h-6 w-6 text-gray-500"/>
+              </Button>
+          </Link>
         </div>
       </CardFooter>
     </Card>
