@@ -36,14 +36,6 @@ const Indices: React.FC = () => {
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Create individual hooks for each sector's animation
-  const priceDirections = filteredSectors.map((sector) =>
-    useStockAnimation(sector || {}, ['price'])
-  );
-  const changeDirections = filteredSectors.map((sector) =>
-    useStockAnimation(sector || {}, ['change', 'changepct'])
-  );
-
   useEffect(() => {
     if (stocks.length > 0) {
       const sectorsData = stocks.filter((stock) => INDICES.includes(stock.symbol)).slice(0, 9);
@@ -85,13 +77,12 @@ const Indices: React.FC = () => {
 
   const renderCard = (startIndex: number, endIndex: number) => (
     <div className="grid grid-cols-1 gap-5">
-      {filteredSectors.slice(startIndex, endIndex).map((sector, index) => {
+      {filteredSectors.slice(startIndex, endIndex).map((sector) => {
         const priceDirection = useStockAnimation(sector, ['price']);
         const changeDirection = useStockAnimation(sector, ['change', 'changepct']);
 
         return (
-          <div key={sector.symbol} className="flex justify-between items-start px-1 cursor-pointer" 
-          onClick={() => handleStockClick(sector)}>
+          <div key={sector.symbol} className="flex justify-between items-start px-1 " onClick={() => handleStockClick(sector)}>
             <div className="flex items-center space-x-2">
               <Image
                 src={`/images/${sector.symbol}.svg`}
@@ -100,15 +91,13 @@ const Indices: React.FC = () => {
                 height={30}
                 className="rounded-full border border-gray-200"
               />
-              <span className="text-md font-semibold text-gray-800 truncate max-w-[120px]">
-                {sector.companyname}
-              </span>
+              <span className="text-md font-semibold text-gray-800 truncate max-w-[120px]">{sector.companyname}</span>
             </div>
 
             <div className="text-right">
               <AnimatedValue
                 value={Number(sector.price).toFixed(2)}
-                direction={priceDirection === 'neutral' ? null : priceDirection}
+                direction={priceDirection}
                 className="text-md font-semibold text-gray-900"
               />
               <div className="flex items-center justify-end mt-0.5">
@@ -126,7 +115,7 @@ const Indices: React.FC = () => {
                   )}
                   <AnimatedValue
                     value={`${Number(sector.changepct).toFixed(2)}%`}
-                    direction={changeDirection === 'neutral' ? null : changeDirection}
+                    direction={changeDirection}
                   />
                 </span>
               </div>
