@@ -3,7 +3,6 @@
 import { useEffect, useState, useMemo, Suspense } from 'react'
 import { useStockContext } from '@/context/StockContext'
 import { Stock } from '@/types/Stock'
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -11,23 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ChartCandlestick , ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from 'lucide-react'
+import { ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from 'lucide-react'
 import { StockModal } from '@/components/StockModal';
 import { Button } from '@/components/ui/buttons'
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import Link from 'next/link'
-import { useStockAnimation } from '@/hooks/useStockAnimation';
-import { AnimatedValue } from '@/components/AnimatedValue';
+import { useStockAnimation } from '@/hooks/useStockAnimation'
 import StockDataTable from '@/components/StockDataTable';
+import StockCard from '@/components/StockCard';
 
 type SortOption = 
   | 'changepct_desc' 
@@ -52,6 +41,9 @@ type FilterOption =
 | "Nifty PSU Bank"
 | "Nifty Realty";
 
+type TableSortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'change' | 'changepct' | 'volumespike';
+type TableSortDirection = 'asc' | 'desc';
+
 function IntrabuzzContent() {
   const { stocks } = useStockContext()
   const searchParams = useSearchParams()
@@ -75,6 +67,14 @@ function IntrabuzzContent() {
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [tableSortColumn, setTableSortColumn] = useState<TableSortColumn>('symbol');
+  const [tableSortDirection, setTableSortDirection] = useState<TableSortDirection>('asc');
+
+  // Move these hooks to the top level
+  const priceDirections = stocks?.map(stock => useStockAnimation(stock, ['price'])) || [];
+  const changeDirections = stocks?.map(stock => useStockAnimation(stock, ['change', 'changepct'])) || [];
+  const volumespikeDirections = stocks?.map(stock => useStockAnimation(stock, ['volumespike'])) || [];
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -100,79 +100,56 @@ function IntrabuzzContent() {
       )
     }
 
-    switch (sortBy) {
-      case 'changepct_desc':
-        filtered.sort((a, b) => b.changepct - a.changepct)
-        break
-      case 'changepct_asc':
-        filtered.sort((a, b) => a.changepct - b.changepct)
-        break
-      case 'volumespike_desc':
-        filtered.sort((a, b) => (b.volumespike || 0) - (a.volumespike || 0))
-        break
-      case 'volumespike_asc':
-        filtered.sort((a, b) => (a.volumespike || 0) - (b.volumespike || 0))
-        break
+    // First apply the main sorting (if in card view)
+    if (viewMode === 'card') {
+      switch (sortBy) {
+        case 'changepct_desc':
+          filtered.sort((a, b) => b.changepct - a.changepct)
+          break
+        case 'changepct_asc':
+          filtered.sort((a, b) => a.changepct - b.changepct)
+          break
+        case 'volumespike_desc':
+          filtered.sort((a, b) => (b.volumespike || 0) - (a.volumespike || 0))
+          break
+        case 'volumespike_asc':
+          filtered.sort((a, b) => (a.volumespike || 0) - (b.volumespike || 0))
+          break
+      }
+    } else {
+      // Apply table sorting
+      filtered.sort((a, b) => {
+        let aValue = a[tableSortColumn];
+        let bValue = b[tableSortColumn];
+
+        if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+        if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+
+        if ((aValue ?? 0) < (bValue ?? 0)) return tableSortDirection === 'asc' ? -1 : 1;
+        if ((aValue ?? 0) > (bValue ?? 0)) return tableSortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
     }
 
     return filtered
-  }, [stocks, sortBy, filterBy])
+  }, [stocks, sortBy, filterBy, viewMode, tableSortColumn, tableSortDirection])
 
-  //TODO Animation effect if the value changes Up and Down
-  const stockAnimations = filteredAndSortedStocks.map((stock) => ({
-    priceDirection: useStockAnimation(stock, ['price']),
-    changeDirection: useStockAnimation(stock, ['change', 'changepct']),
-    volumespikeDirection: useStockAnimation(stock, ['volumespike'])
-  }));
-
-  //TODO Generating Random BG Color For symbols
-  const getRandomColor = (symbol: string): string => {
-    if (typeof window !== "undefined") {
-      // Check if the color for the symbol is already stored in localStorage
-      const cachedColor = localStorage.getItem(symbol);
-      if (cachedColor) {
-        return cachedColor; // Return the cached color from localStorage
-      }
+  const stockAnimations = useMemo(() => {
+    return filteredAndSortedStocks.map((stock, index) => ({
+      priceDirection: priceDirections[stocks.indexOf(stock)],
+      changeDirection: changeDirections[stocks.indexOf(stock)],
+      volumespikeDirection: volumespikeDirections[stocks.indexOf(stock)]
+    }));
+  }, [filteredAndSortedStocks, stocks, priceDirections, changeDirections, volumespikeDirections]);
   
-      // Generate a new random color (excluding black) and store it
-      let newColor;
-      do {
-        newColor = generateRandomColor();
-      } while (newColor === "#000000"); // Ensure it's not black
-  
-      localStorage.setItem(symbol, newColor); // Store the generated color in localStorage
-      return newColor; 
-    }
-  
-    return "#ffffff"; 
-  };
-  
-  // Function to generate a random hex color
-  const generateRandomColor = (): string => {
-    const randomHex = Math.floor(Math.random() * 16777215).toString(16); 
-    return `#${randomHex.padStart(6, "0")}`; 
-  };
-  
-  // Stock Details Modal
+  //TODO: Implement Modal Open
   const handleStockClick = (stock: Stock) => {
     setSelectedStock(stock);
     setIsModalOpen(true);
   };
 
-  //Pagination for table
-  const ITEMS_PER_PAGE = 10; // Number of rows per page
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  // Calculate the indices for slicing the data
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-
-  // Get the current page's data
-  const currentTableData = filteredAndSortedStocks.slice(startIndex, endIndex);
-
-  // Calculate total pages
-  const totalPages = Math.ceil(filteredAndSortedStocks.length / ITEMS_PER_PAGE);
+  //TODO: Implement Pagination
+  const totalPages = Math.ceil(filteredAndSortedStocks.length / 10);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -186,71 +163,19 @@ function IntrabuzzContent() {
     }
   };
 
-  const StockCard = ({ stock, index }: { stock: Stock; index: number }) => (
-    <Card className="relative flex flex-col cursor-pointer" onClick={() => handleStockClick(stock)}> 
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-center" >
-          <div className="w-28 px-3 py-1 rounded-md text-white font-medium text-sm flex items-center justify-center"
-            style={{ backgroundColor: getRandomColor(stock.symbol) }}
-          >
-            <span className="text-center whitespace-nowrap text-[13px] leading-none">
-              {stock.symbol}
-            </span>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="pb-2 flex-grow">
-        <h3 className="text-md font-medium text-gray-900 leading-tight line-clamp-2">
-          {stock.companyname}
-        </h3>
-      </CardContent>
-      <CardFooter className="flex flex-col items-start pt-2">
-      <div className="text-xl font-semibold mb-2 w-full">
-          <AnimatedValue
-            value={`₹${Number(stock.price).toFixed(2)}`}
-            direction={stockAnimations[index].priceDirection}
-          />
-        </div>
-        <div className="flex justify-between items-center w-full">
-          <div className={`flex items-center px-2 py-1 rounded-md text-sm font-medium ${
-            (sortBy === 'changepct_asc' || sortBy === 'changepct_desc')
-              ? (stock.changepct >= 0 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100')
-              : ((stock.volumespike ?? 0) >= 0 ? 'text-orange-700 bg-orange-100' : 'text-yellow-700 bg-yellow-100')
-          }`}>
-            {(sortBy === 'changepct_asc' || sortBy === 'changepct_desc') ? (
-              <>
-                {stock.changepct >= 0 ? '↑' : '↓'}{' '}
-                <AnimatedValue
-                  value={Number(stock.changepct).toFixed(2) + '%'}
-                  direction={stockAnimations[index].changeDirection}
-                />
-              </>
-            ) : (
-              <>
-                <Flame className="w-4 h-4 mr-1" />
-                <AnimatedValue
-                  value={Number(stock.volumespike).toFixed(2) + 'X'}
-                  direction={stockAnimations[index].volumespikeDirection}
-                />
-              </>
-            )}
-          </div>
+  const handleTableSort = (column: TableSortColumn) => {
+    if (column === tableSortColumn) {
+      setTableSortDirection(tableSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setTableSortColumn(column);
+      setTableSortDirection('asc');
+    }
+  };
 
-          <Link
-            href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
-            target="_blank"
-            rel="noopener noreferrer">
-            <Button size="icon" className="hover:bg-gray-200">
-              <ChartCandlestick className="h-6 w-6 text-gray-500"/>
-            </Button>
-          </Link>
-        </div>
-      </CardFooter>
-    </Card>
-  )
+  const currentTableData = filteredAndSortedStocks;
 
   return (
-    <div className="container mx-auto px-4 mt-8">
+    <div className="container mx-auto px-4 mt-2">
       <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-4 mb-6">
         <Select
           value={filterBy}
@@ -325,45 +250,37 @@ function IntrabuzzContent() {
         </div>
       </div>
 
+      {stocks?.length === 0 ? (
+        <div>Loading...</div>
+      ) : (
       <>
       {viewMode === 'card' ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {filteredAndSortedStocks.map((stock, index) => (
-                <StockCard key={stock.symbol} stock={stock} index={index} />
+                <StockCard
+                  key={stock.symbol}
+                  stock={stock}
+                  index={index}
+                  sortBy={sortBy}
+                  stockAnimations={stockAnimations[index]}
+                  onClick={handleStockClick}
+                />
               ))}
         </div>
       ) : (
         <>
-        
           <StockDataTable
             stocks={currentTableData}
-            stockAnimations={stockAnimations.slice(startIndex, endIndex)}
+            stockAnimations={stockAnimations}
             onStockClick={handleStockClick}
+            onSort={handleTableSort}
+            sortColumn={tableSortColumn}
+            sortDirection={tableSortDirection}
           />
-
-          {/* Pagination Controls */}
-          <div className="flex justify-center items-center gap-4 mt-4">
-            <button
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="text-gray-700">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
         </>
       )}
     </>
+      )}
 
       <StockModal
         stock={selectedStock}

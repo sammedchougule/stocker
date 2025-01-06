@@ -16,7 +16,7 @@ import {
 } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
 import { Stock } from "@/types/Stock";
-import { ArrowUp, ArrowDown, Flame } from 'lucide-react';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 import {
   Table,
   TableBody,
