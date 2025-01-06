@@ -36,11 +36,13 @@ const Indices: React.FC = () => {
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Create an array of animation hooks for each possible sector (up to 9)
-  const sectorAnimations = Array(9).fill(null).map((_, index) => ({
-    priceDirection: useStockAnimation(filteredSectors[index] || {}, ['price']),
-    changeDirection: useStockAnimation(filteredSectors[index] || {}, ['change', 'changepct'])
-  }));
+  // Create individual hooks for each sector's animation
+  const priceDirections = filteredSectors.map((sector) =>
+    useStockAnimation(sector || {}, ['price'])
+  );
+  const changeDirections = filteredSectors.map((sector) =>
+    useStockAnimation(sector || {}, ['change', 'changepct'])
+  );
 
   useEffect(() => {
     if (stocks.length > 0) {
@@ -84,7 +86,8 @@ const Indices: React.FC = () => {
   const renderCard = (startIndex: number, endIndex: number) => (
     <div className="grid grid-cols-1 gap-5">
       {filteredSectors.slice(startIndex, endIndex).map((sector, index) => {
-        const { priceDirection, changeDirection } = sectorAnimations[startIndex + index];
+        const priceDirection = priceDirections[startIndex + index];
+        const changeDirection = changeDirections[startIndex + index];
 
         return (
           <div key={sector.symbol} className="flex justify-between items-start px-1 cursor-pointer" onClick={() => handleStockClick(sector)}>
