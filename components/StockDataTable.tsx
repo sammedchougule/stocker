@@ -114,7 +114,7 @@ const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, o
             </tr>
           </thead>
           <tbody>
-            {sortedStocks.map((stock, index) => (
+            {sortedStocks.map((stock) => (
               <tr 
                 key={stock.symbol} 
                 className="cursor-pointer hover:bg-gray-50"
