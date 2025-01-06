@@ -26,7 +26,6 @@ type SortDirection = 'asc' | 'desc';
 
 const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, stockAnimations, onStockClick, onSort, sortColumn, sortDirection, usePagination = false, currentPage = 1, totalPages = 1, onPageChange }) => {
 
-
   const sortedStocks = useMemo(() => {
     return [...stocks].sort((a, b) => {
       let aValue = a[sortColumn];

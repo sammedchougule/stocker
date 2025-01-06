@@ -44,16 +44,24 @@ type FilterOption =
 type TableSortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'change' | 'changepct' | 'volumespike';
 type TableSortDirection = 'asc' | 'desc';
 
+
+
 function IntrabuzzContent() {
+  
   const { stocks } = useStockContext()
   const searchParams = useSearchParams()
+
+  // Move these hooks to the top level
+  const priceDirections = stocks?.map(stock => useStockAnimation(stock, ['price'])) || [];
+  const changeDirections = stocks?.map(stock => useStockAnimation(stock, ['change', 'changepct'])) || [];
+  const volumespikeDirections = stocks?.map(stock => useStockAnimation(stock, ['volumespike'])) || [];
 
   const [sortBy, setSortBy] = useState<SortOption>(() => {
     if (typeof window !== 'undefined') {
       const savedSort = localStorage.getItem('sortBy')
       return (savedSort as SortOption) || searchParams.get('sort') || 'changepct_desc'
     }
-    return 'changepct_desc' // Default value for SSR
+    return 'changepct_desc'
   })
 
   const [filterBy, setFilterBy] = useState<FilterOption>(() => {
@@ -61,20 +69,14 @@ function IntrabuzzContent() {
       const savedFilter = localStorage.getItem('filterBy')
       return (savedFilter as FilterOption) || searchParams.get('filter') || 'Nifty FnO'
     }
-    return 'Nifty FnO' // Default value for SSR
+    return 'Nifty FnO'
   })
 
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [tableSortColumn, setTableSortColumn] = useState<TableSortColumn>('symbol');
   const [tableSortDirection, setTableSortDirection] = useState<TableSortDirection>('asc');
-
-  // Move these hooks to the top level
-  const priceDirections = stocks?.map(stock => useStockAnimation(stock, ['price'])) || [];
-  const changeDirections = stocks?.map(stock => useStockAnimation(stock, ['change', 'changepct'])) || [];
-  const volumespikeDirections = stocks?.map(stock => useStockAnimation(stock, ['volumespike'])) || [];
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -135,7 +137,7 @@ function IntrabuzzContent() {
   }, [stocks, sortBy, filterBy, viewMode, tableSortColumn, tableSortDirection])
 
   const stockAnimations = useMemo(() => {
-    return filteredAndSortedStocks.map((stock, index) => ({
+    return filteredAndSortedStocks.map((stock) => ({
       priceDirection: priceDirections[stocks.indexOf(stock)],
       changeDirection: changeDirections[stocks.indexOf(stock)],
       volumespikeDirection: volumespikeDirections[stocks.indexOf(stock)]
@@ -146,21 +148,6 @@ function IntrabuzzContent() {
   const handleStockClick = (stock: Stock) => {
     setSelectedStock(stock);
     setIsModalOpen(true);
-  };
-
-  //TODO: Implement Pagination
-  const totalPages = Math.ceil(filteredAndSortedStocks.length / 10);
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
   };
 
   const handleTableSort = (column: TableSortColumn) => {
@@ -175,7 +162,7 @@ function IntrabuzzContent() {
   const currentTableData = filteredAndSortedStocks;
 
   return (
-    <div className="container mx-auto px-4 mt-2">
+    <div className="container mx-auto px-4 mt-6">
       <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-4 mb-6">
         <Select
           value={filterBy}
@@ -201,7 +188,7 @@ function IntrabuzzContent() {
               </SelectContent>
         </Select>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <Button
             variant="outline"
             size="sm"
