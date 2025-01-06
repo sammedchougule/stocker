@@ -73,7 +73,7 @@ const TodaysStocks = () => {
   }
 
     // Create an array of animation hooks for each possible sector (up to 9)
-    const stockAnimations = filteredStocks.map((stock, index) => ({
+    const stockAnimations = filteredStocks.map((stock) => ({
       priceDirection: useStockAnimation(stock, ['price']),
       changeDirection: useStockAnimation(stock, ['change', 'changepct'])
     }));
