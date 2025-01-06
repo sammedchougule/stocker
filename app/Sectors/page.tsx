@@ -121,12 +121,6 @@ export default function Sectors() {
 
 
   const IndexTable = ({ sector, stocks }: { sector: string; stocks: Stock[] }) => {
-    const stockAnimations = stocks.map(() => ({
-      priceDirection: null,
-      changeDirection: null,
-      volumespikeDirection: null
-    }));
-
     return (
       <Card
         className={`mt-8 m-2 transition-all duration-300 ${
@@ -144,8 +138,10 @@ export default function Sectors() {
         <CardContent className="p-0">
           <StockDataTable
             stocks={stocks}
-            stockAnimations={stockAnimations}
             onStockClick={() => {}}
+            onSort={() => {}}
+            sortColumn="symbol"
+            sortDirection="asc"
           />
         </CardContent>
       </Card>
