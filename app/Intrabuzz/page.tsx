@@ -25,6 +25,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import Link from 'next/link'
+import { useStockAnimation } from '@/hooks/useStockAnimation';
+import { AnimatedValue } from '@/components/AnimatedValue';
+import StockDataTable from '@/components/StockDataTable';
 
 type SortOption = 
   | 'changepct_desc' 
@@ -114,7 +117,14 @@ function IntrabuzzContent() {
 
     return filtered
   }, [stocks, sortBy, filterBy])
-  
+
+  //TODO Animation effect if the value changes Up and Down
+  const stockAnimations = filteredAndSortedStocks.map((stock) => ({
+    priceDirection: useStockAnimation(stock, ['price']),
+    changeDirection: useStockAnimation(stock, ['change', 'changepct']),
+    volumespikeDirection: useStockAnimation(stock, ['volumespike'])
+  }));
+
   //TODO Generating Random BG Color For symbols
   const getRandomColor = (symbol: string): string => {
     if (typeof window !== "undefined") {
@@ -176,7 +186,7 @@ function IntrabuzzContent() {
     }
   };
 
-  const StockCard = ({ stock }: { stock: Stock }) => (
+  const StockCard = ({ stock, index }: { stock: Stock; index: number }) => (
     <Card className="relative flex flex-col cursor-pointer" onClick={() => handleStockClick(stock)}> 
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center" >
@@ -187,15 +197,6 @@ function IntrabuzzContent() {
               {stock.symbol}
             </span>
           </div>
-          {/* <Link
-              href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
-              target="_blank"
-              rel="noopener noreferrer"
-          >
-              <Button size="icon" className="hover:bg-gray-200">
-                <ChartCandlestick className="h-6 w-6 text-gray-700 hover:text-blue-500" />
-              </Button>
-          </Link> */}
         </div>
       </CardHeader>
       <CardContent className="pb-2 flex-grow">
@@ -204,29 +205,44 @@ function IntrabuzzContent() {
         </h3>
       </CardContent>
       <CardFooter className="flex flex-col items-start pt-2">
-        <div className="text-xl font-semibold mb-2 w-full">
-          ₹{Number(stock.price).toFixed(2)}
+      <div className="text-xl font-semibold mb-2 w-full">
+          <AnimatedValue
+            value={`₹${Number(stock.price).toFixed(2)}`}
+            direction={stockAnimations[index].priceDirection}
+          />
         </div>
         <div className="flex justify-between items-center w-full">
-          {(sortBy === 'changepct_asc' || sortBy === 'changepct_desc') ? (
-            <div className={`flex items-center px-2 py-1 rounded-md text-sm font-medium
-              ${(stock.changepct >= 0 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100')}`}>
-              {stock.changepct >= 0 ? '↑' : '↓'} {Number(stock.changepct).toFixed(2)}%
-            </div>
-          ) : (
-            <div className={`flex items-center px-2 py-1 rounded-md text-sm font-medium
-            ${((stock.volumespike ?? 0) >= 0 ? 'text-orange-700 bg-orange-100' : 'text-yellow-700 bg-yellow-100')}`}>
-              <Flame className="w-4 h-4 mr-1" />
-              {Number(stock.volumespike).toFixed(2)}X
-            </div>
-          )}
+          <div className={`flex items-center px-2 py-1 rounded-md text-sm font-medium ${
+            (sortBy === 'changepct_asc' || sortBy === 'changepct_desc')
+              ? (stock.changepct >= 0 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100')
+              : ((stock.volumespike ?? 0) >= 0 ? 'text-orange-700 bg-orange-100' : 'text-yellow-700 bg-yellow-100')
+          }`}>
+            {(sortBy === 'changepct_asc' || sortBy === 'changepct_desc') ? (
+              <>
+                {stock.changepct >= 0 ? '↑' : '↓'}{' '}
+                <AnimatedValue
+                  value={Number(stock.changepct).toFixed(2) + '%'}
+                  direction={stockAnimations[index].changeDirection}
+                />
+              </>
+            ) : (
+              <>
+                <Flame className="w-4 h-4 mr-1" />
+                <AnimatedValue
+                  value={Number(stock.volumespike).toFixed(2) + 'X'}
+                  direction={stockAnimations[index].volumespikeDirection}
+                />
+              </>
+            )}
+          </div>
+
           <Link
-              href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
-              target="_blank"
-              rel="noopener noreferrer">
-              <Button size="icon" className="hover:bg-gray-200">
-                <ChartCandlestick className="h-6 w-6 text-gray-500"/>
-              </Button>
+            href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
+            target="_blank"
+            rel="noopener noreferrer">
+            <Button size="icon" className="hover:bg-gray-200">
+              <ChartCandlestick className="h-6 w-6 text-gray-500"/>
+            </Button>
           </Link>
         </div>
       </CardFooter>
@@ -312,93 +328,19 @@ function IntrabuzzContent() {
       <>
       {viewMode === 'card' ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {filteredAndSortedStocks.map((stock) => (
-                <StockCard key={stock.symbol} stock={stock} />
+          {filteredAndSortedStocks.map((stock, index) => (
+                <StockCard key={stock.symbol} stock={stock} index={index} />
               ))}
         </div>
       ) : (
         <>
-          <Table className='border'>
-            <TableHeader className='bg-blue-200'>
-              <TableRow>
-                <TableHead>Symbol</TableHead>
-                <TableHead>Company Name</TableHead>
-                <TableHead className="text-right">Previous Close</TableHead>
-                <TableHead className="text-right">Price</TableHead>
-                <TableHead className="text-right">Change</TableHead>
-                <TableHead className="text-right">Change %</TableHead>
-                <TableHead className="text-right">Vol_Spike</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currentTableData.map((stock) => (
-                    <TableRow className="cursor-pointer" key={stock.symbol}>
-                      <TableCell className="font-medium flex items-center gap-2">
-                      <Image
-                          className="w-6 h-6 rounded-full"
-                          src={`/images/${stock.symbol}.svg`}
-                          alt={stock.companyname}
-                          width={20}
-                          height={20}
-                        />
-                        {stock.symbol}
-                      </TableCell>
-                      <TableCell className='truncate max-w-[100px]'>{stock.companyname}</TableCell>
-                      <TableCell className="text-right">₹{Number(stock.closeyest).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">₹{Number(stock.price).toFixed(2)}</TableCell>
-                      <TableCell className="text-right">
-                        <span
-                          className={`inline-flex items-center rounded px-1 py-1 ${
-                            stock.change >= 0
-                              ? 'text-green-500 bg-green-50 rounded-lg'
-                              : 'text-red-500 bg-red-50 rounded-lg'
-                          }`}
-                        >
-                          {stock.change >= 0 ? (
-                            <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
-                          ) : (
-                            <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
-                          )}
-                          <span className="text-sm font-md">
-                            {stock.change}
-                          </span>
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <span
-                          className={`inline-flex items-center rounded px-1 py-1 ${
-                            stock.changepct >= 0
-                              ? 'text-green-500 bg-green-50 rounded-lg'
-                              : 'text-red-500 bg-red-50 rounded-lg'
-                          }`}
-                        >
-                          {stock.changepct >= 0 ? (
-                            <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
-                          ) : (
-                            <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
-                          )}
-                          <span className="text-sm font-md">
-                            {stock.changepct}%
-                          </span>
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <span
-                          className={`inline-flex items-center rounded px-1 py-1 ${
-                            (stock.volumespike ?? 0) >= 0
-                              ? 'text-orange-600 bg-orange-100 rounded-lg'
-                              : 'text-yellow-600 bg-yellow-100 rounded-lg'
-                          }`}
-                        ><Flame className="w-3.5 h-3.5 mr-0.5" />
-                          <span className="text-sm font-md">
-                          {Number(stock.volumespike).toFixed(2)}X
-                          </span>
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-            </TableBody>
-          </Table>
+        
+          <StockDataTable
+            stocks={currentTableData}
+            stockAnimations={stockAnimations.slice(startIndex, endIndex)}
+            onStockClick={handleStockClick}
+          />
+
           {/* Pagination Controls */}
           <div className="flex justify-center items-center gap-4 mt-4">
             <button

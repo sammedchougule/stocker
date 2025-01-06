@@ -25,7 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Image from 'next/image';
+import StockDataTable from '@/components/StockDataTable';
 
 // Define available sectors
 const SECTORS = [
@@ -120,109 +120,37 @@ export default function Sectors() {
 }, [selectedSector]);
 
 
-  const IndexTable = ({ sector, stocks }: { sector: string; stocks: Stock[] }) => (
-    <Card
-      className={`mt-8 m-2 transition-all duration-300 ${
-        selectedSector === sector ? "ring-2 ring-blue-500" : ""
-      }`}
-      ref={(el: HTMLDivElement | null) => {
-        sectorRefs.current[sector] = el;
-      }}
-    >
-      <CardHeader>
-        <h3 className="text-xl font-semibold">
-          {sector.replace("NIFTY_", "").replace("_", " ")} Stocks
-        </h3>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[600px] overflow-hidden">
-          <div className="overflow-auto  max-h-[600px]">
-            <Table>
-              <TableHeader className="sticky top-0 bg-blue-200 z-20">
-                <TableRow>
-                  <TableHead className="w-1/6">Symbol</TableHead>
-                  <TableHead className="w-1/6 text-right">Price</TableHead>
-                  <TableHead className="w-1/6 text-right">Change</TableHead>
-                  <TableHead className="w-1/6 text-right">Chg %</TableHead>
-                  <TableHead className="w-1/6 text-right">Vol_Spike</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {stocks.map((stock) => (
-                  <TableRow key={stock.symbol}>
-                    <TableCell className="sticky left-0 z-10 bg-white font-medium w-1/6">
-                      <span className="flex items-center gap-2"><Image
-                        className='rounded-full'
-                        width={20}
-                        height={20}
-                        src={`/images/${stock.symbol}.svg`}
-                        alt={stock.companyname}
-                      /> {stock.symbol}</span>
-                    </TableCell>
-                    <TableCell className="text-right w-1/6">
-                      ₹{Number(stock.price).toFixed(2)}
-                    </TableCell>
-                    <TableCell
-                      className="text-right w-1/6">
-                      <span
-                          className={`inline-flex items-center rounded px-1 py-1 ${
-                            stock.change >= 0
-                              ? 'text-green-500 bg-green-50 rounded-lg'
-                              : 'text-red-500 bg-red-50 rounded-lg'
-                          }`}
-                        >
-                          {stock.change >= 0 ? (
-                            <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
-                          ) : (
-                            <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
-                          )}
-                          <span className="text-sm font-md">
-                            {stock.change}
-                          </span>
-                        </span>
-                    </TableCell>
-                    <TableCell
-                      className="text-right w-1/6">
-                      <span
-                          className={`inline-flex items-center rounded px-1 py-1 ${
-                            stock.changepct >= 0
-                              ? 'text-green-500 bg-green-50 rounded-lg'
-                              : 'text-red-500 bg-red-50 rounded-lg'
-                          }`}
-                        >
-                          {stock.changepct >= 0 ? (
-                            <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
-                          ) : (
-                            <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
-                          )}
-                          <span className="text-sm font-md">
-                            {stock.changepct}%
-                          </span>
-                        </span>
-                    </TableCell>
-                    <TableCell
-                      className="text-right w-1/6">
-                      <span
-                          className={`inline-flex items-center rounded px-1 py-1 ${
-                            (stock.volumespike ?? 0) >= 0
-                              ? 'text-orange-600 bg-orange-100 rounded-lg'
-                              : 'text-yellow-600 bg-yellow-100 rounded-lg'
-                          }`}
-                        ><Flame className="w-3.5 h-3.5 mr-0.5" />
-                          <span className="text-sm font-md">
-                          {Number(stock.volumespike)?.toLocaleString() ?? "N/A"}
-                          </span>
-                        </span>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  const IndexTable = ({ sector, stocks }: { sector: string; stocks: Stock[] }) => {
+    const stockAnimations = stocks.map(() => ({
+      priceDirection: null,
+      changeDirection: null,
+      volumespikeDirection: null
+    }));
+
+    return (
+      <Card
+        className={`mt-8 m-2 transition-all duration-300 ${
+          selectedSector === sector ? "ring-2 ring-blue-500" : ""
+        }`}
+        ref={(el: HTMLDivElement | null) => {
+          sectorRefs.current[sector] = el;
+        }}
+      >
+        <CardHeader>
+          <h3 className="text-xl font-semibold">
+            {sector.replace("NIFTY_", "").replace("_", " ")} Stocks
+          </h3>
+        </CardHeader>
+        <CardContent className="p-0">
+          <StockDataTable
+            stocks={stocks}
+            stockAnimations={stockAnimations}
+            onStockClick={() => {}}
+          />
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <div className="container mx-auto mt-6">
