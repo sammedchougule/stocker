@@ -44,8 +44,6 @@ type FilterOption =
 type TableSortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'change' | 'changepct' | 'volumespike';
 type TableSortDirection = 'asc' | 'desc';
 
-
-
 function IntrabuzzContent() {
   
   const { stocks } = useStockContext()
