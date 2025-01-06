@@ -86,11 +86,12 @@ const Indices: React.FC = () => {
   const renderCard = (startIndex: number, endIndex: number) => (
     <div className="grid grid-cols-1 gap-5">
       {filteredSectors.slice(startIndex, endIndex).map((sector, index) => {
-        const priceDirection = priceDirections[startIndex + index];
-        const changeDirection = changeDirections[startIndex + index];
+        const priceDirection = useStockAnimation(sector, ['price']);
+        const changeDirection = useStockAnimation(sector, ['change', 'changepct']);
 
         return (
-          <div key={sector.symbol} className="flex justify-between items-start px-1 cursor-pointer" onClick={() => handleStockClick(sector)}>
+          <div key={sector.symbol} className="flex justify-between items-start px-1 cursor-pointer" 
+          onClick={() => handleStockClick(sector)}>
             <div className="flex items-center space-x-2">
               <Image
                 src={`/images/${sector.symbol}.svg`}
@@ -99,13 +100,15 @@ const Indices: React.FC = () => {
                 height={30}
                 className="rounded-full border border-gray-200"
               />
-              <span className="text-md font-semibold text-gray-800 truncate max-w-[120px]">{sector.companyname}</span>
+              <span className="text-md font-semibold text-gray-800 truncate max-w-[120px]">
+                {sector.companyname}
+              </span>
             </div>
 
             <div className="text-right">
               <AnimatedValue
                 value={Number(sector.price).toFixed(2)}
-                direction={priceDirection}
+                direction={priceDirection === 'neutral' ? null : priceDirection}
                 className="text-md font-semibold text-gray-900"
               />
               <div className="flex items-center justify-end mt-0.5">
@@ -123,7 +126,7 @@ const Indices: React.FC = () => {
                   )}
                   <AnimatedValue
                     value={`${Number(sector.changepct).toFixed(2)}%`}
-                    direction={changeDirection}
+                    direction={changeDirection === 'neutral' ? null : changeDirection}
                   />
                 </span>
               </div>
