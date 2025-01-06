@@ -22,12 +22,11 @@ interface StockCardProps {
 
 const StockCard: React.FC<StockCardProps> = ({ 
   stock, 
-  index, 
   sortBy, 
   stockAnimations, 
   onClick 
 }) => (
-  <Card className="relative flex flex-col cursor-pointer"> 
+  <Card className="relative flex flex-col cursor-pointer" onClick={() => onClick(stock)}> 
     <CardHeader className="pb-2">
       <div className="flex justify-between items-center" >
         <div className="w-28 px-3 py-1 rounded-md text-gray-800 font-medium text-sm flex items-center justify-center bg-gray-200">
