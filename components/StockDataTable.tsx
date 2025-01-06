@@ -10,7 +10,6 @@ interface StockDataTableProps {
   onSort: (column: SortColumn) => void;
   sortColumn: SortColumn;
   sortDirection: SortDirection;
-  usePagination?: boolean;
   currentPage?: number;
   totalPages?: number;
   onPageChange?: (page: number) => void;
@@ -19,7 +18,7 @@ interface StockDataTableProps {
 type SortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'change' | 'changepct' | 'volumespike';
 type SortDirection = 'asc' | 'desc';
 
-const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, onSort, sortColumn, sortDirection, usePagination = false, currentPage = 1, totalPages = 1, onPageChange }) => {
+const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, onSort, sortColumn, sortDirection,  currentPage = 1, totalPages = 1, onPageChange }) => {
 
   const sortedStocks = useMemo(() => {
     return [...stocks].sort((a, b) => {
@@ -188,27 +187,6 @@ const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, o
           </tbody>
         </table>
       </div>
-      {usePagination && (
-        <div className="flex justify-center items-center gap-4 mt-4">
-          <button
-            onClick={() => onPageChange && onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <span className="text-gray-700">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => onPageChange && onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
-      )}
     </div>
   );
 };
