@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { ArrowUp, ArrowDown, Flame, ArrowUpDown } from 'lucide-react'
 import Image from 'next/image'
 import { Stock } from '@/types/Stock'
+import StockSymbolBgColor from './StockSymbolBgColor';
 
 interface StockDataTableProps {
   stocks: Stock[];
@@ -22,8 +23,14 @@ const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, o
       let aValue = a[sortColumn];
       let bValue = b[sortColumn];
 
-      if (typeof aValue === 'string') aValue = aValue.toLowerCase();
-      if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+      if (typeof aValue === 'string') {
+        aValue = aValue.toLowerCase();
+        if (aValue.includes('%')) aValue = parseFloat(aValue);
+      }
+      if (typeof bValue === 'string') {
+        bValue = bValue.toLowerCase();
+        if (bValue.includes('%')) bValue = parseFloat(bValue);
+      }
 
       if ((aValue ?? 0) < (bValue ?? 0)) return sortDirection === 'asc' ? -1 : 1;
       if ((aValue ?? 0) > (bValue ?? 0)) return sortDirection === 'asc' ? 1 : -1;
@@ -125,7 +132,7 @@ const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, o
                       width={20}
                       height={20}
                     />
-                    <span className="font-medium">{stock.symbol}</span>
+                    <span className="font-medium"><StockSymbolBgColor symbol={stock.symbol} className="custom-class" /></span>
                   </div>
                 </td>
                 <td className="p-4 border-t truncate max-w-[200px]">{stock.companyname}</td>
@@ -162,9 +169,7 @@ const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, o
                     ) : (
                       <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
                     )}
-                    <span className="text-sm font-medium">
-                      {stock.changepct}%
-                    </span>
+                    {Number(stock.changepct).toFixed(2)}%
                   </span>
                 </td>
                 <td className="p-4 border-t text-right">
