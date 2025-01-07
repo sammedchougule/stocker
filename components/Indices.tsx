@@ -229,4 +229,3 @@ const Indices: React.FC = () => {
 };
 
 export default Indices;
-
