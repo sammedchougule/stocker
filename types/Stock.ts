@@ -50,4 +50,3 @@ export interface Stock {
 export interface StockData {
   data: Stock[];
 }
-
