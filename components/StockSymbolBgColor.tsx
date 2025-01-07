@@ -37,7 +37,7 @@ const StockSymbolBgColor = ({ symbol, className }: { symbol: string; className?:
         img.onload = async () => {
           const vibrant = new Vibrant(img);
           const swatch = await vibrant.getPalette();
-          let color = swatch?.Vibrant?.hex || '#e5e7eb'; // Default to gray
+          const color = swatch?.Vibrant?.hex || '#e5e7eb'; // Default to gray
 
           // Adjust the background color to reduce contrast
           const adjustedColor = tinycolor(color).lighten(20).toHexString();
