@@ -10,6 +10,7 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { useStockContext } from '@/context/StockContext';
 import { Stock } from '@/types/Stock';
 import { StockModal } from './StockModal';
+import { Button } from '@/components/ui/buttons';
 
 const INDICES = [
     'NIFTY_50',
@@ -118,11 +119,23 @@ const Indices: React.FC = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto sm:px-6 lg:px-8">
-        <Card className="bg-white">
-          <CardContent>
-            <p className="text-red-500 ">Error: {error}</p>
-          </CardContent>
+      <div className="container mx-auto sm:px-6 lg:px-8 mt-4">
+        <Card className="overflow-y-auto max-h-[calc(100vh-8rem)]">
+          <Card className="p-2">
+            <CardHeader className="p-2 pb-2">
+              <div className="flex justify-between items-center border-b">
+                <h2 className="text-xl font-medium text-red-500">Oops! Something went wrong.</h2>
+              </div>
+            </CardHeader>
+            <CardContent className="relative p-1">
+              <div className="text-center">
+                <p className="text-md text-gray-700 mb-4">Error: {error}</p>
+                <Button variant="outline" onClick={() => window.location.reload()}>
+                  Try Again
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </Card>
       </div>
     );

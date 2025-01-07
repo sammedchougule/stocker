@@ -18,6 +18,7 @@ const nifty50Symbols = [
 export default function Marquee() {
   const { stocks } = useStockContext()
   const [greeting, setGreeting] = useState("")
+  const [showGreeting, setShowGreeting] = useState(true)
 
   useEffect(() => {
     const hour = new Date().getHours()
@@ -28,6 +29,12 @@ export default function Marquee() {
     } else {
       setGreeting("Good Evening 🛋️")
     }
+
+    const timer = setTimeout(() => {
+      setShowGreeting(false)
+    }, 5000) // Show greeting for 10 seconds
+
+    return () => clearTimeout(timer)
   }, [])
 
   const filteredStocks = useMemo(() => {
@@ -35,10 +42,18 @@ export default function Marquee() {
     return stocks.filter(stock => nifty50Symbols.includes(stock.symbol))
   }, [stocks])
 
-  if (!stocks || filteredStocks.length === 0) {
+  if (showGreeting) {
     return (
       <div className="fixed top-0 left-0 right-0 z-50 h-8 backdrop-blur-md bg-white/50 border-b ">
         <p className="flex items-center justify-center h-full">{greeting}</p>
+      </div>
+    )
+  }
+
+  if (filteredStocks.length === 0) {
+    return (
+      <div className="fixed top-0 left-0 right-0 z-50 h-8 backdrop-blur-md bg-white/50 border-b ">
+        <p className="flex items-center justify-center h-full">No stocks available</p>
       </div>
     )
   }
@@ -67,4 +82,3 @@ export default function Marquee() {
     </div>
   )
 }
-
