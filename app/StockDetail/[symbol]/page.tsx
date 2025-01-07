@@ -15,6 +15,7 @@ import { StockChart } from "@/components/StockChart";
 import StockCard from "@/components/StockCard";
 import { format } from "date-fns";
 import FinancialTables from "@/components/FinancialTables";
+import Link from "next/link";
 
 export default function StockDetailPage() {
   const params = useParams();
@@ -51,7 +52,7 @@ export default function StockDetailPage() {
       <div className="flex justify-between items-center mb-4 border-b ml-4">
         <div>
           <div className="flex items-center gap-2">
-            <a href="/" className="text-md text-gray-600">Home</a>
+            <Link href="/" className="text-md text-gray-600">Home</Link>
             <span className="text-md text-gray-800"> &gt; {stockData.symbol} • {stockData.exchange}</span>
           </div>
           <h1 className="text-2xl font-semibold mt-2">{stockData.companyname}</h1>
@@ -139,12 +140,10 @@ export default function StockDetailPage() {
       <div className="mt-8">
         <h2 className="text-xl font-semibold mb-4">Compare To</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-          {similarStocks.map((stock, index) => (
+          {similarStocks.map((stock) => (
             <StockCard
               key={stock.symbol}
               stock={stock}
-              index={index}
-              sortBy="changepct_desc"
               onClick={() => {
                 window.location.href = `/StockDetail/${stock.symbol}`;
               }}

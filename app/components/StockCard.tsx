@@ -1,11 +1,12 @@
+import { type SortOption } from "@/types/Stock";
+
 interface StockCardProps {
   stock: Stock;
-  index: number;
-  sortBy: string;
+  sortBy: SortOption;
   className?: string;
-  onClick: () => void;
+  onClick: (stock: Stock) => void;
 }
 
-export default function StockCard({ stock, index, sortBy, className, onClick }: StockCardProps) {
-  // ... rest of the component
+export default function StockCard({ stock, sortBy, className, onClick }: StockCardProps) {
+  // ... rest of component
 } 

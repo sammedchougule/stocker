@@ -17,12 +17,6 @@ import { useSearchParams } from 'next/navigation'
 import StockDataTable from '@/components/StockDataTable';
 import StockCard from '@/components/StockCard';
 
-type SortOption = 
-  | 'changepct_desc' 
-  | 'changepct_asc' 
-  | 'volumespike_desc' 
-  | 'volumespike_asc' 
-
 type FilterOption = 
 | "all"
 | "Nifty 50"
@@ -42,6 +36,7 @@ type FilterOption =
 
 type TableSortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'change' | 'changepct' | 'volumespike';
 type TableSortDirection = 'asc' | 'desc';
+type SortOption = 'changepct_desc' | 'changepct_asc' | 'volumespike_desc' | 'volumespike_asc'; 
 
 function IntrabuzzContent() {
   
@@ -228,11 +223,10 @@ function IntrabuzzContent() {
       <>
       {viewMode === 'card' ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {filteredAndSortedStocks.map((stock, index) => (
+          {filteredAndSortedStocks.map((stock) => (
                 <StockCard
                   key={stock.symbol}
                   stock={stock}
-                  index={index}
                   sortBy={sortBy}
                   onClick={handleStockClick}
                 />
