@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -9,6 +8,8 @@ import StockSymbolBgColor from './StockSymbolBgColor';
 
 interface StockCardProps {
   stock: Stock;
+  index: number;
+  sortBy: string;
   onClick: (stock: Stock) => void;
 }
 
@@ -24,7 +25,7 @@ const StockCard: React.FC<StockCardProps> = ({
   > 
     <CardHeader>
       <div className="flex justify-between items-center">
-        <StockSymbolBgColor symbol={stock.symbol} />
+        <StockSymbolBgColor symbol={stock.symbol} className="custom-class" />
       </div>
     </CardHeader>
     <CardContent className="flex-grow">
