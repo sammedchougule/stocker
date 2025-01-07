@@ -76,7 +76,7 @@ export function StockChart({ stock }: StockChartProps) {
       filteredData: data,
       isPositive: endPrice >= startPrice,
     };
-  }, [getFilteredData]);
+  }, [getFilteredData, timeFrame, stock.closings]);
 
   const yAxisDomain = useMemo(() => {
     if (filteredData.length === 0) return [0, 100];
