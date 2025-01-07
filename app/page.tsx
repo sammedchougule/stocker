@@ -1,6 +1,6 @@
 import Indices from '@/components/Indices'
 import TodaysStocks from '@/components/TodayStocks'
-import FinancialTables from "@/components/FinancialTables"
+
 // import { StockProvider } from '@/context/StockContext'
 
 // export default function Home() {
@@ -38,7 +38,7 @@ export default async function Home() {
     <StockProvider initialData={initialData}>
         <Indices />
         <TodaysStocks />
-        <FinancialTables stockName="TATAMOTORS" />
+        
     </StockProvider>
   )
 }

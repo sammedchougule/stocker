@@ -110,7 +110,7 @@ export default function Heatmap() {
                                     key={option}
                                     variant={selectedIndex === option ? "default" : "outline"}
                                     onClick={() => setSelectedIndex(option)}
-                                    className="flex-shrink-0"
+                                    className={`flex-shrink-0 ${selectedIndex === option ? "bg-gray-600 text-white" : "bg-white"}`}
                                 >
                                     {option}
                                 </Button>
@@ -119,12 +119,12 @@ export default function Heatmap() {
                     </div>
                 </CardHeader>
                 <CardContent style={{ maxHeight: "calc(100vh - 180px)", overflowY: "auto"}}>
-                    <div className="grid gap-2 grid-cols-4 sm:grid-cols-6 lg:grid-cols-8">
+                    <div className="grid gap-1 grid-cols-4 sm:grid-cols-6 lg:grid-cols-8">
                         {heatmapData.map((stock) => (
                             <div
                                 key={stock.symbol}
                                 className={cn(
-                                    "flex flex-col items-center justify-center rounded-lg p-2 h-28 md:h-28 mt-2",
+                                    "flex flex-col items-center justify-center rounded-sm h-28 md:h-28"
                                 )}
                                 style={{ background: getColor(stock.changepct)}}
                             >
