@@ -68,6 +68,8 @@ import StockSymbolBgColor from './StockSymbolBgColor';
 
 interface StockCardProps {
   stock: Stock;
+  index: number;
+  sortBy: string;
   onClick: (stock: Stock) => void;
 }
 
