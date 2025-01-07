@@ -228,10 +228,12 @@ function IntrabuzzContent() {
       <>
       {viewMode === 'card' ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {filteredAndSortedStocks.map((stock) => (
+          {filteredAndSortedStocks.map((stock, index) => (
                 <StockCard
                   key={stock.symbol}
                   stock={stock}
+                  index={index}
+                  sortBy={sortBy}
                   onClick={handleStockClick}
                 />
               ))}

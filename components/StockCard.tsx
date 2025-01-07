@@ -8,6 +8,8 @@ import StockSymbolBgColor from './StockSymbolBgColor';
 
 interface StockCardProps {
   stock: Stock;
+  index: number;
+  sortBy: string;
   onClick: (stock: Stock) => void;
 }
 
@@ -23,7 +25,12 @@ const StockCard: React.FC<StockCardProps> = ({
   > 
     <CardHeader>
       <div className="flex justify-between items-center">
-        <StockSymbolBgColor symbol={stock.symbol} />
+        {/* <div className="w-28 px-3 py-1 rounded-md font-semibold flex items-center justify-center bg-gray-200">
+          <span className="text-center whitespace-nowrap text-[15px] leading-none">
+            {stock.symbol}
+          </span>
+        </div> */}
+        <StockSymbolBgColor symbol={stock.symbol} className="custom-class" />
       </div>
     </CardHeader>
     <CardContent className="flex-grow">
