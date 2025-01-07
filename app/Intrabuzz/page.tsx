@@ -232,8 +232,6 @@ function IntrabuzzContent() {
                 <StockCard
                   key={stock.symbol}
                   stock={stock}
-                  index={index}
-                  sortBy={sortBy}
                   onClick={handleStockClick}
                 />
               ))}

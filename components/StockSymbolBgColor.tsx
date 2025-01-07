@@ -6,7 +6,7 @@ interface CachedColors {
   [key: string]: { backgroundColor: string; textColor: string };
 }
 
-const StockSymbolBgColor = ({ symbol, className }: { symbol: string; className?: string }) => {
+const StockSymbolBgColor = ({ symbol }: { symbol: string; }) => {
   const [backgroundColor, setBackgroundColor] = useState('#e5e7eb'); // Default background color
   const [textColor, setTextColor] = useState('text-black'); // Default text color
   const cachedColors = useRef<CachedColors>({}); // Cache for colors
@@ -73,7 +73,7 @@ const StockSymbolBgColor = ({ symbol, className }: { symbol: string; className?:
 
   return isClient ? (
     <div
-      className={`w-28 px-3 py-1 rounded-md font-semibold flex items-center justify-center ${className}`}
+      className={`w-28 px-3 py-1 rounded-md font-semibold flex items-center justify-center`}
       style={{ backgroundColor }}
     >
       <span className={`text-center whitespace-nowrap text-[15px] leading-none ${textColor}`}>
