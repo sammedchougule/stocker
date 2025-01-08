@@ -4,8 +4,8 @@ import Link from "next/link"
 import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, BriefcaseBusiness } from 'lucide-react'
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
-import { Input } from "@/components/ui/input"
 import EyeAnimation from "./EyeAnimation"
+import { StockInput } from "./Input"
 
 const Navbar = () => {
   const pathname = usePathname()
@@ -37,13 +37,13 @@ const Navbar = () => {
           {/* Website Name and Eye Animation */}
           <div className="flex items-center">
             <Link href="/" className="text-xl font-bold text-black flex items-center">
-              ST<EyeAnimation />CKER
+              Stocker
             </Link>
           </div>
 
           {/* Search Input for Tablet and Desktop */}
           <div className="hidden md:flex flex-grow max-w-md px-4 relative">
-            <Input type="search" placeholder="Search..." className="w-full" />
+            <StockInput />
           </div>
 
           {/* Links for Desktop */}
@@ -93,7 +93,7 @@ const Navbar = () => {
         {/* Search Input for Mobile */}
         <div className="md:hidden px-2 pt-0 py-1">
           <div className="relative mx-4">
-            <Input type="search" placeholder="Search..." className="w-full" />
+            <StockInput />
           </div>
         </div>
 
