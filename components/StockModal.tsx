@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/buttons"
 import { ArrowUpIcon, ArrowDownIcon, SquareArrowOutUpRight, Scan } from 'lucide-react'
 import Link from 'next/link'
 import { Stock } from '@/types/Stock'
-import { StockChart } from "./StockChart"
 
 interface StockModalProps {
   stock: Stock | null
