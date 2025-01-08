@@ -11,7 +11,10 @@ interface StockCardProps {
   onClick?: (stock: Stock) => void; // Make it optional if not always needed
 }
 
-const StockCard: React.FC<StockCardProps> = ({ stock, onClick }) => (
+const StockCard: React.FC<StockCardProps> = ({ 
+  stock, 
+  onClick 
+}) => (
   <Card
     className={`relative flex flex-col cursor-pointer transition-transform duration-300 transform hover:scale-105 shadow-md ${
       stock.changepct >= 0 ? 'shadow-green-500' : 'shadow-red-500'
