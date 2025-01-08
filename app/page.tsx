@@ -4,7 +4,6 @@ import { StockProvider } from '@/context/StockContext'
 import Indices from '@/components/Indices'
 import TodayNews from '@/components/TodayNews'
 import TodaysStocks from '@/components/TodayStocks'
-import { Footer } from '@/components/Footer'
 
 export const revalidate = 60 // Revalidate every 60 seconds
 
@@ -28,7 +27,6 @@ export default async function Home() {
         <TodaysStocks />
         <TodayNews />
         <SubscriptionPlans />
-        <Footer />
     </StockProvider>
   )
 }
