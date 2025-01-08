@@ -214,6 +214,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { FaChevronDown, FaChevronUp, FaChartLine, FaBalanceScale, FaMoneyBillWave, FaCalculator, FaChartPie } from "react-icons/fa";
 
 interface FinancialData {
     [key: string]: {
@@ -236,6 +237,7 @@ interface FinancialTablesProps {
 
 const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
     const [financialData, setFinancialData] = useState<FinancialData | null>(null);
+    const [openSection, setOpenSection] = useState<string>("Quarterly Results");
 
     useEffect(() => {
         // Load JSON data
@@ -274,60 +276,87 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
         "Ratios",
     ];
 
+    const sectionIcons: Record<string, JSX.Element> = {
+        "Quarterly Results": <FaChartLine className="mr-2" />,
+        "Profit & Loss": <FaBalanceScale className="mr-2" />,
+        "Balance Sheet": <FaMoneyBillWave className="mr-2" />,
+        "Cash Flows": <FaCalculator className="mr-2" />,
+        "Ratios": <FaChartPie className="mr-2" />,
+    };
+
     return (
         <div className="container mx-auto lg:px-8 sm:px-0">
             {tableSections.map((section) => {
                 const tableData = prepareTableData(section);
+                const isOpen = openSection === section;
 
-                return tableData ? (
+                return (
                     <div key={section} className="mb-8">
-                        <h3 className="text-lg font-semibold mb-4 text-gray-800">{section}</h3>
-                        <h4 className="text-gray-500 mb-4">Consolidated Figures in Rs. Crores</h4>
-
-                        <div className="overflow-auto max-h-[600px]">
-                            <Table className="min-w-full divide-y divide-gray-300 relative border border-gray-300">
-                                <TableHeader className="bg-gray-100">
-                                    <TableRow>
-                                        <TableHead
-                                            className="sticky left-0 z-10 bg-gray-100 font-semibold text-left border-r border-b border-gray-300"
-                                        >
-                                            Financial Year
-                                        </TableHead>
-                                        {tableData.header.slice(1).map((header, index) => (
-                                            <TableHead
-                                                key={index}
-                                                className="text-left font-semibold border-r border-b border-gray-300"
-                                            >
-                                                {header}
-                                            </TableHead>
-                                        ))}
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody className="bg-white divide-y divide-gray-300">
-                                    {tableData.rows.map((row, rowIndex) => (
-                                        <TableRow key={rowIndex} className="hover:bg-gray-50">
-                                            <TableCell
-                                                className="sticky left-0 z-10 bg-white px-4 py-2 font-medium text-gray-800 border-r border-b border-gray-300 whitespace-nowrap"
-                                            >
-                                                {row[tableData.header[0]]}
-                                            </TableCell>
-                                            {tableData.header.slice(1).map((header, colIndex) => (
-                                                <TableCell
-                                                    key={colIndex}
-                                                    className="px-4 py-2 text-gray-700 border-r border-b border-gray-300 whitespace-nowrap"
-                                                >
-                                                    {row[header]}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                        <div
+                            className="flex items-center cursor-pointer mb-4 border-b"
+                            onClick={() => setOpenSection(isOpen ? "" : section)}
+                        >
+                            <h3 className="text-xl font-medium text-gray-800 mr-4 flex items-center">
+                                {sectionIcons[section]} {section}
+                            </h3>
+                            <div className="flex-1 text-center text-gray-600">
+                                {!isOpen && `View ${section} Statement`}
+                            </div>
+                            <div>
+                                {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+                            </div>
                         </div>
-                    </div>
-                ) : (
-                    <div key={section} className="text-center py-4 text-gray-500">
-                        No data available for {section}
+                        {isOpen ? (
+                            tableData ? (
+                                <>
+                                    <h4 className="text-gray-500 mb-4">Consolidated Figures in Rs. Crores</h4>
+                                    <div className="overflow-auto max-h-[600px]">
+                                        <Table className="min-w-full border-collapse overflow-hidden shadow-lg rounded-lg">
+                                            <TableHeader className="bg-gradient-to-r from-blue-400 to-indigo-500 text-white">
+                                                <TableRow>
+                                                    <TableHead
+                                                        className="sticky left-0 z-10 bg-gradient-to-r from-blue-400 to-indigo-500 font-semibold text-left px-4 py-2"
+                                                    >
+                                                        Financial Year
+                                                    </TableHead>
+                                                    {tableData.header.slice(1).map((header, index) => (
+                                                        <TableHead
+                                                            key={index}
+                                                            className="text-left font-semibold px-4 py-2"
+                                                        >
+                                                            {header}
+                                                        </TableHead>
+                                                    ))}
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody className="bg-white">
+                                                {tableData.rows.map((row, rowIndex) => (
+                                                    <TableRow key={rowIndex} className="hover:bg-gray-200 transition-colors cursor-pointer duration-200">
+                                                        <TableCell
+                                                            className="sticky left-0 z-10 bg-gray-100 px-4 py-2 font-medium text-gray-800 whitespace-nowrap"
+                                                        >
+                                                            {row[tableData.header[0]]}
+                                                        </TableCell>
+                                                        {tableData.header.slice(1).map((header, colIndex) => (
+                                                            <TableCell
+                                                                key={colIndex}
+                                                                className="px-4 py-2 text-gray-700 whitespace-nowrap"
+                                                            >
+                                                                {row[header]}
+                                                            </TableCell>
+                                                        ))}
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="text-center py-4 text-gray-500">
+                                    No data available for {section}
+                                </div>
+                            )
+                        ) : null}
                     </div>
                 );
             })}
