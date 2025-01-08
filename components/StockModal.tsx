@@ -1,19 +1,20 @@
 'use client'
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/buttons"
 import { ArrowUpIcon, ArrowDownIcon, SquareArrowOutUpRight, Scan } from 'lucide-react'
 import Link from 'next/link'
 import { Stock } from '@/types/Stock'
+import { StockChart } from "./StockChart"
 
 interface StockModalProps {
-  stock: Stock
+  stock: Stock | null
   isOpen: boolean
   onClose: () => void
 }
 
 export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
-  if (!isOpen) return null
+  if (!stock) return null
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -22,6 +23,9 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
         <div className="flex justify-between items-start w-full">
           <DialogTitle className="text-lg font-semibold">{stock.companyname}</DialogTitle>
         </div>
+        <DialogDescription>
+          Detailed information about {stock.symbol} stock
+        </DialogDescription>
         <div className="flex items-center justify-between mt-2 border-b">
           {/* Left Section */}
           <div className="flex items-center gap-2">
@@ -36,13 +40,9 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button
-                size="icon"
-                className="h-10 w-10 bg-white/50 hover:bg-white/70 focus:ring focus:ring-blue-300"
-              >
+              <Button size="icon" className="h-10 w-10 bg-white/50 hover:bg-white/70 group">
                 <Scan className="h-6 w-6 text-gray-700 group-hover:text-blue-600" />
               </Button>
-
             </Link>
 
             <Link href={`/StockDetail/${stock.symbol}`}>
