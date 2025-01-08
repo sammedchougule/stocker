@@ -2,14 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Vibrant } from 'node-vibrant/browser';
 import tinycolor from 'tinycolor2';
 
+
 interface CachedColors {
-  [key: string]: { backgroundColor: string; textColor: string };
+  [key: string]: string;
 }
 
-const StockSymbolBgColor = ({ symbol }: { symbol: string; }) => {
-  const [backgroundColor, setBackgroundColor] = useState('#e5e7eb'); // Default background color
-  const [textColor, setTextColor] = useState('text-black'); // Default text color
-  const cachedColors = useRef<CachedColors>({}); // Cache for colors
+const StockSymbolBgColor = ({ symbol, className, width }: { symbol: string; className?: string; width?:string }) => {
+  const containerWidth = width || '7rem';
+  const [backgroundColor, setBackgroundColor] = useState('bg-gray-200'); // Default color
+  const cachedColors = useRef<CachedColors>({}); // Cache colors
   const [isClient, setIsClient] = useState(false); // Check if running on client
 
   useEffect(() => {
@@ -21,9 +22,7 @@ const StockSymbolBgColor = ({ symbol }: { symbol: string; }) => {
 
     const fetchColor = async () => {
       if (cachedColors.current[symbol]) {
-        const cached = cachedColors.current[symbol];
-        setBackgroundColor(cached.backgroundColor);
-        setTextColor(cached.textColor);
+        setBackgroundColor(cachedColors.current[symbol]);
         return;
       }
 
@@ -37,34 +36,23 @@ const StockSymbolBgColor = ({ symbol }: { symbol: string; }) => {
         img.onload = async () => {
           const vibrant = new Vibrant(img);
           const swatch = await vibrant.getPalette();
-          const color = swatch?.Vibrant?.hex || '#e5e7eb'; // Default to gray
+          let color = swatch?.Vibrant?.hex || '#e5e7eb'; // Default to gray (#e5e7eb)
 
-          // Adjust the background color to reduce contrast
-          const adjustedColor = tinycolor(color).lighten(20).toHexString();
-
-          // Determine text color based on luminance
-          const calculatedTextColor = tinycolor(adjustedColor).isLight() ? 'text-black' : 'text-white';
-
-          // Cache and update state
-          cachedColors.current[symbol] = {
-            backgroundColor: adjustedColor,
-            textColor: calculatedTextColor,
-          };
+          // Adjust the color to reduce contrast
+          const adjustedColor = tinycolor(color).lighten(10).toHexString(); // Lighten by 20%
+          cachedColors.current[symbol] = adjustedColor;
           setBackgroundColor(adjustedColor);
-          setTextColor(calculatedTextColor);
           URL.revokeObjectURL(img.src);
         };
 
         img.onerror = () => {
-          cachedColors.current[symbol] = { backgroundColor: '#e5e7eb', textColor: 'text-black' };
+          cachedColors.current[symbol] = '#e5e7eb';
           setBackgroundColor('#e5e7eb');
-          setTextColor('text-black');
         };
       } catch (error) {
         console.error(`Error fetching image for ${symbol}:`, error);
-        cachedColors.current[symbol] = { backgroundColor: '#e5e7eb', textColor: 'text-black' };
+        cachedColors.current[symbol] = '#e5e7eb';
         setBackgroundColor('#e5e7eb');
-        setTextColor('text-black');
       }
     };
 
@@ -73,16 +61,19 @@ const StockSymbolBgColor = ({ symbol }: { symbol: string; }) => {
 
   return isClient ? (
     <div
-      className={`w-28 px-3 py-1 rounded-md font-semibold flex items-center justify-center`}
-      style={{ backgroundColor }}
+      className={`px-2 py-1 rounded-md text-white font-semibold flex items-center justify-center ${className}`}
+       style={{ backgroundColor, width: containerWidth }}
     >
-      <span className={`text-center whitespace-nowrap text-[15px] leading-none ${textColor}`}>
-        {symbol}
-        </span>
+      <span
+        className="whitespace-nowrap text-[14px] leading-none text-center block overflow-hidden text-ellipsis"
+         style={{ paddingLeft: '4px', paddingRight: '4px', maxWidth: '100%',
+           fontSize: symbol.length > 4 ? '12px' : '14px' }}
 
+      >
+        {symbol}
+      </span>
     </div>
-  ) : null; // Render nothing on the server
+  ) : null;
 };
 
 export default StockSymbolBgColor;
-

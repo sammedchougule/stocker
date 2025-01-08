@@ -7,13 +7,13 @@ import Link from 'next/link'
 import { Stock } from '@/types/Stock'
 
 interface StockModalProps {
-  stock: Stock | null
+  stock: Stock
   isOpen: boolean
   onClose: () => void
 }
 
 export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
-  if (!stock) return null
+  if (!isOpen) return null
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -36,9 +36,13 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button size="icon" className="h-10 w-10 bg-white/50 hover:bg-white/70 group">
+              <Button
+                size="icon"
+                className="h-10 w-10 bg-white/50 hover:bg-white/70 focus:ring focus:ring-blue-300"
+              >
                 <Scan className="h-6 w-6 text-gray-700 group-hover:text-blue-600" />
               </Button>
+
             </Link>
 
             <Link href={`/StockDetail/${stock.symbol}`}>

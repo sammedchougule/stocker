@@ -2,25 +2,22 @@
 
 import React from 'react';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
-import { Flame } from 'lucide-react'
+import { Flame, ArrowUp, ArrowDown } from 'lucide-react'
 import { Stock } from '@/types/Stock'
 import StockSymbolBgColor from './StockSymbolBgColor';
 
 interface StockCardProps {
   stock: Stock;
-  onClick: (stock: Stock) => void;
+  onClick?: (stock: Stock) => void; // Make it optional if not always needed
 }
 
-const StockCard: React.FC<StockCardProps> = ({ 
-  stock, 
-  onClick 
-}) => (
-  <Card 
+const StockCard: React.FC<StockCardProps> = ({ stock, onClick }) => (
+  <Card
     className={`relative flex flex-col cursor-pointer transition-transform duration-300 transform hover:scale-105 shadow-md ${
       stock.changepct >= 0 ? 'shadow-green-500' : 'shadow-red-500'
-    }`} 
-    onClick={() => onClick(stock)}
-  > 
+    }`}
+    onClick={() => onClick?.(stock)} // Optional chaining
+  >
     <CardHeader>
       <div className="flex justify-between items-center">
         <StockSymbolBgColor symbol={stock.symbol} />
@@ -33,27 +30,34 @@ const StockCard: React.FC<StockCardProps> = ({
     </CardContent>
     <CardFooter className="flex flex-col">
       <div className="text-xl font-semibold mb-1 w-full">
-        <span>
-          ₹{Number(stock.price).toFixed(2)}
-        </span>
+        <span>₹{Number(stock.price).toFixed(2)}</span>
       </div>
       <div className="flex justify-between items-center w-full">
-        <div className={`flex items-center px-1 py-1 rounded-md text-[15px] font-medium ${
-          stock.changepct >= 0 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
-        }`}>
-          {stock.changepct >= 0 ? '↑' : '↓'}{' '}
-          <span>
-            {Number(stock.changepct).toFixed(2) + '%'}
-          </span>
-        </div>
-        <div className={`flex items-center px-1 py-1 rounded-md text-[15px] font-medium ${
-          (stock.volumespike ?? 0) >= 0 ? 'text-orange-700 bg-orange-100' : 'text-yellow-700 bg-yellow-100'
-        }`}>
-          <Flame className="w-4 h-4"/><span>{Number(stock.volumespike).toFixed(2) + 'X'}</span>
+        <div
+          className={`flex items-center text-[15px] rounded px-1 py-1 font-medium ${
+            stock.changepct >= 0
+              ? 'text-green-500 bg-green-100 rounded-lg'
+              : 'text-red-500 bg-red-100 rounded-lg'
+          }`}
+        >
+          {stock.changepct >= 0 ? (
+            <ArrowUp className="w-3.5 h-3.5" />
+          ) : (
+            <ArrowDown className="w-3.5 h-3.5" />
+          )}
+          {Number(stock.changepct).toFixed(2)}%
+        </div> 
+        <div
+          className={`flex items-center px-1 py-1 rounded-md text-[15px] font-medium ${
+            (stock.volumespike ?? 0) >= 0 ? 'text-orange-700 bg-orange-100' : 'text-yellow-700 bg-yellow-100'
+          }`}
+        >
+          <Flame className="w-4 h-4" />
+          <span>{Number(stock.volumespike).toFixed(2) + 'X'}</span>
         </div>
       </div>
     </CardFooter>
   </Card>
-)
+);
 
 export default StockCard;

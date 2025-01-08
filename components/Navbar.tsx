@@ -138,7 +138,7 @@ const Navbar = () => {
           <Link
             href="/"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/') ? 'bg-gray-200 rounded-2xl px-2 py-1' : ''
+              isActive('/') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
             }`}
           >
             <Home className={`h-6 w-6 ${isActive('/') ? 'text-blue-500' : 'text-gray-700'}`} />

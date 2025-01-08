@@ -1,12 +1,10 @@
 import React, { useMemo } from 'react';
 import { ArrowUp, ArrowDown, Flame, ArrowUpDown } from 'lucide-react'
-import Image from 'next/image'
 import { Stock } from '@/types/Stock'
 import StockSymbolBgColor from './StockSymbolBgColor';
 
 interface StockDataTableProps {
   stocks: Stock[];
-  // End of Selection
   onStockClick?: (stock: Stock) => void;
   onSort: (column: SortColumn) => void;
   sortColumn: SortColumn;
@@ -125,14 +123,9 @@ const StockDataTable: React.FC<StockDataTableProps> = ({ stocks, onStockClick, o
               >
                 <td className="sticky left-0 bg-white z-10 p-4 border-t">
                   <div className="flex items-center gap-2">
-                    <Image
-                      className="w-6 h-6 rounded-full"
-                      src={`/images/${stock.symbol}.svg`}
-                      alt={stock.companyname}
-                      width={20}
-                      height={20}
-                    />
-                    <span className="font-medium"><StockSymbolBgColor symbol={stock.symbol} className="custom-class" /></span>
+                    <span className="font-medium">
+                      <StockSymbolBgColor symbol={stock.symbol} />
+                    </span>
                   </div>
                 </td>
                 <td className="p-4 border-t truncate max-w-[200px]">{stock.companyname}</td>
