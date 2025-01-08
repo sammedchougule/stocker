@@ -5,7 +5,6 @@ import Link from "next/link"
 import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, BriefcaseBusiness } from 'lucide-react'
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
-import EyeAnimation from "./EyeAnimation"
 import { StockInput } from "./Input"
 
 const Navbar = () => {
