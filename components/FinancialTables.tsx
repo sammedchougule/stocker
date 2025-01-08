@@ -214,7 +214,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { FaChevronDown, FaChevronUp, FaChartLine, FaBalanceScale, FaMoneyBillWave, FaCalculator, FaChartPie } from "react-icons/fa";
+import { ChevronDown, ChevronUp, ChartLine, Scale, ReceiptIndianRupee , Calculator, ChartPie } from "lucide-react";
 
 interface FinancialData {
     [key: string]: {
@@ -276,13 +276,14 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
         "Ratios",
     ];
 
-    const sectionIcons: Record<string, JSX.Element> = {
-        "Quarterly Results": <FaChartLine className="mr-2" />,
-        "Profit & Loss": <FaBalanceScale className="mr-2" />,
-        "Balance Sheet": <FaMoneyBillWave className="mr-2" />,
-        "Cash Flows": <FaCalculator className="mr-2" />,
-        "Ratios": <FaChartPie className="mr-2" />,
-    };
+    const sectionIcons: Record<string, React.ReactNode> = {
+        "Quarterly Results": <ChartLine className="mr-2" />,
+        "Profit & Loss": <Scale className="mr-2" />,
+        "Balance Sheet": <ReceiptIndianRupee className="mr-2" />,
+        "Cash Flows": <Calculator className="mr-2" />,
+        "Ratios": <ChartPie className="mr-2" />,
+      };
+      
 
     return (
         <div className="container mx-auto lg:px-8 sm:px-0">
@@ -303,7 +304,7 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
                                 {!isOpen && `View ${section} Statement`}
                             </div>
                             <div>
-                                {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+                                {isOpen ? <ChevronUp /> : <ChevronDown />}
                             </div>
                         </div>
                         {isOpen ? (
