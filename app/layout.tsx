@@ -5,6 +5,7 @@ import { StockProvider } from '@/context/StockContext'
 import Navbar from '@/components/Navbar'
 import Marquee from '@/components/Marquee'
 import Head from 'next/head'
+import { Footer } from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -66,6 +67,7 @@ export default async function RootLayout({
             <div className="content-container mb-20">
               {children}
             </div>
+            <Footer />
           </div>
         </StockProvider>
 
