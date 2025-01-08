@@ -1,22 +1,10 @@
-import Indices from '@/components/Indices'
-import TodaysStocks from '@/components/TodayStocks'
-
-// import { StockProvider } from '@/context/StockContext'
-
-// export default function Home() {
-//   return (
-//     <main>
-//       <StockProvider>    
-//         <Indices />
-//         <TodaysStocks />
-//       </StockProvider>
-//     </main>
-//   )
-// }
-
-
-// app/stocks/page.tsx
+import { SubscriptionPlans } from '@/components/SubscriptionPlans'
+import './globals.css'
 import { StockProvider } from '@/context/StockContext'
+import Indices from '@/components/Indices'
+import TodayNews from '@/components/TodayNews'
+import TodaysStocks from '@/components/TodayStocks'
+import { Footer } from '@/components/Footer'
 
 export const revalidate = 60 // Revalidate every 60 seconds
 
@@ -38,7 +26,9 @@ export default async function Home() {
     <StockProvider initialData={initialData}>
         <Indices />
         <TodaysStocks />
-        
+        <TodayNews />
+        <SubscriptionPlans />
+        <Footer />
     </StockProvider>
   )
 }
