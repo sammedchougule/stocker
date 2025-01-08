@@ -1,5 +1,6 @@
 'use client'
 
+import * as React from "react"
 import Link from "next/link"
 import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, BriefcaseBusiness } from 'lucide-react'
 import { useState, useEffect } from "react"
