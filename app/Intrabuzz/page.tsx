@@ -183,13 +183,13 @@ function IntrabuzzContent() {
             <Percent className="w-4 h-4" />
             {sortBy.startsWith('changepct') && (
               sortBy === 'changepct_desc' ? (
-                <ArrowDown className="w-4 h-4 font-extrabold text-green-500" />
+                <ArrowUp className="w-4 h-4 font-extrabold text-green-500" />
               ) : (
-                <ArrowUp className="w-4 h-4 font-extrabold text-red-500" />
+                <ArrowDown className="w-4 h-4 font-extrabold text-red-500" />
               )
             )}
             {!sortBy.startsWith('changepct') && (
-              <ArrowDown className="w-4 h-4 text-gray-400" />
+              <ArrowUp className="w-4 h-4 text-gray-400" />
             )}
           </Button>
 
@@ -202,9 +202,9 @@ function IntrabuzzContent() {
             <Flame className="w-4 h-4" />
             {sortBy.startsWith('volumespike') && (
               sortBy === 'volumespike_desc' ? (
-                <ArrowDown className="w-4 h-4 font-extrabold text-green-500" />
+                <ArrowUp className="w-4 h-4 font-extrabold text-green-500" />
               ) : (
-                <ArrowUp className="w-4 h-4 font-extrabold text-red-500" />
+                <ArrowDown className="w-4 h-4 font-extrabold text-red-500" />
               )
             )}
             {!sortBy.startsWith('volumespike') && (
@@ -227,7 +227,7 @@ function IntrabuzzContent() {
       ) : (
       <>
       {viewMode === 'card' ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {filteredAndSortedStocks.map((stock) => (
                 <StockCard
                   key={stock.symbol}
