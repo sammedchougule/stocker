@@ -47,7 +47,7 @@ export default function StockDetailPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto mt-10 sm:mt-2">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 border-b ml-4">
         <div>
@@ -140,15 +140,24 @@ export default function StockDetailPage() {
       <div className="mt-8">
         <h2 className="text-xl font-semibold mb-4">Compare To</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-          {similarStocks.map((stock) => (
-            <StockCard
-              key={stock.symbol}
-              stock={stock}
-              onClick={() => {
-                window.location.href = `/StockDetail/${stock.symbol}`;
-              }}
-            />
-          ))}
+          {similarStocks.length > 0 ? (
+            similarStocks.map((stock) => (
+              <StockCard
+                key={stock.symbol}
+                stock={stock}
+                onClick={() => {
+                  window.location.href = `/StockDetail/${stock.symbol}`;
+                }}
+              />
+            ))
+          ) : (
+            <>
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-24 w-full" />
+            </>
+          )}
         </div>
       </div>
 
@@ -156,11 +165,11 @@ export default function StockDetailPage() {
         <Card>
           <CardHeader>
             <CardTitle>
-              <h2 className="text-xl font-semibold">Financials</h2>
+              <h2 className="text-2xl font-semibold">Financials</h2>
             </CardTitle>
           </CardHeader>
           <CardContent>
-          <FinancialTables stockName={symbol} />
+            <FinancialTables stockName={symbol} />
           </CardContent>
         </Card>
       </div>
