@@ -16,6 +16,7 @@ import StockCard from "@/components/StockCard";
 import { format } from "date-fns";
 import FinancialTables from "@/components/FinancialTables";
 import Link from "next/link";
+import CustomizedProgressBars from "@/components/CustomizedProgressBars";
 
 export default function StockDetailPage() {
   const params = useParams();
@@ -29,7 +30,6 @@ export default function StockDetailPage() {
       const stock = stocks.find((s) => s.symbol === symbol);
       if (stock) {
         setStockData(stock);
-        // Find similar stocks in the same sector
         const similar = stocks
           .filter(s => s.sector === stock.sector && s.symbol !== stock.symbol)
           .slice(0, 6);
@@ -41,7 +41,7 @@ export default function StockDetailPage() {
   if (!stockData) {
     return (
       <div className="container mx-auto">
-        <Skeleton className="h-[500px] w-full" />
+        <CustomizedProgressBars />
       </div>
     );
   }
@@ -173,8 +173,6 @@ export default function StockDetailPage() {
           </CardContent>
         </Card>
       </div>
-
     </div>
   );
 }
-
