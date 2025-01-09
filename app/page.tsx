@@ -1,28 +1,16 @@
-import { SubscriptionPlans } from '@/components/SubscriptionPlans'
+
 import './globals.css'
 import { StockProvider } from '@/context/StockContext'
 import Indices from '@/components/Indices'
 import TodayNews from '@/components/TodayNews'
 import TodaysStocks from '@/components/TodayStocks'
+import { SubscriptionPlans } from '@/components/SubscriptionPlans'
 
-export const revalidate = 60 // Revalidate every 60 seconds
-
-async function fetchStockData() {
-  const res = await fetch(process.env.NEXT_PUBLIC_STOCK_API_URL || '', {
-    next: { revalidate: 60 }, // Revalidate every 60 seconds
-  })
-  const stockData = await res.json()
-  return {
-    stocks: stockData.data,
-    lastUpdated: new Date().toISOString(),
-  }
-}
-
-export default async function Home() {
-  const initialData = await fetchStockData()
+export default  function Home() {
+  
 
   return (
-    <StockProvider initialData={initialData}>
+    <StockProvider>
         <Indices />
         <TodaysStocks />
         <TodayNews />
