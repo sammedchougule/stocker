@@ -8,7 +8,9 @@ import TodaysStocks from '@/components/TodayStocks'
 export const revalidate = 60 // Revalidate every 60 seconds
 
 async function fetchStockData() {
-  const res = await fetch(process.env.NEXT_PUBLIC_STOCK_API_URL || '')
+  const res = await fetch(process.env.NEXT_PUBLIC_STOCK_API_URL || '', {
+    next: { revalidate: 60 }, // Revalidate every 60 seconds
+  })
   const stockData = await res.json()
   return {
     stocks: stockData.data,
