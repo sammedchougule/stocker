@@ -40,8 +40,8 @@ const StockInput: React.FC = () => {
               }}
             >
               <div>
-                <div className="font-medium text-gray-100">{stock.companyname}</div>
-                <div className="text-xs text-gray-500">{stock.symbol} • {stock.exchange} ({stock.type})</div>
+                <div className="font-medium text-gray-800">{stock.companyname}</div>
+                <div className="text-xs text-gray-600">{stock.symbol} • {stock.exchange} ({stock.type})</div>
               </div>
               <div className="text-right flex items-center space-x-2">
                 <div className="text-sm text-gray-800">{stock.price}</div>
