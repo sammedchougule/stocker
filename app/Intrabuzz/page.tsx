@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/buttons'
 import { useSearchParams } from 'next/navigation'
 import StockDataTable from '@/components/StockDataTable';
 import StockCard from '@/components/StockCard';
+import CustomizedProgressBars from '@/components/CustomizedProgressBars';
 
 type SortOption = 
   | 'changepct_desc' 
@@ -147,39 +148,40 @@ function IntrabuzzContent() {
   const currentTableData = filteredAndSortedStocks;
 
   return (
-    <div className="container mx-auto px-4 mt-6">
-      <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-4 mb-6">
-        <Select
-          value={filterBy}
-          onValueChange={(value: FilterOption) => setFilterBy(value)}>
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="Filter by Index" />
-          </SelectTrigger>
-          <SelectContent>
-                <SelectItem value="Nifty FnO">All</SelectItem>
-                  <SelectItem value="Nifty 50">Nifty 50</SelectItem>
-                <SelectItem value="Nifty Auto">Auto</SelectItem>
-                <SelectItem value="Nifty Bank">Bank</SelectItem>
-                  <SelectItem value="Nifty Financial Services">Financials</SelectItem>
-                  <SelectItem value="Nifty FMCG">FMCG</SelectItem>
-                  <SelectItem value="Nifty Healthcare">Healthcare</SelectItem>
-                  <SelectItem value="Nifty IT">IT</SelectItem>
-                  <SelectItem value="Nifty Media">Media</SelectItem>
-                  <SelectItem value="Nifty Metal">Metal</SelectItem>
-                  <SelectItem value="Nifty Pharma">Pharma</SelectItem>
-                  <SelectItem value="Nifty PVT Bank">PVT Bank</SelectItem>
-                  <SelectItem value="Nifty PSU Bank">PSU Bank</SelectItem>
-                  <SelectItem value="Nifty Realty">Realty</SelectItem>
-              </SelectContent>
-        </Select>
+    <div className="container mx-auto mt-10">
+      <div className="flex overflow-x-auto scrollbar-hide mb-6">
+        <div className="flex flex-row items-center gap-2 ">
+          <Select
+            value={filterBy}
+            onValueChange={(value: FilterOption) => setFilterBy(value)}>
+            <SelectTrigger className="w-[120px]">
+              <SelectValue placeholder="Filter by Index" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Nifty FnO">All</SelectItem>
+              <SelectItem value="Nifty 50">Nifty 50</SelectItem>
+              <SelectItem value="Nifty Auto">Auto</SelectItem>
+              <SelectItem value="Nifty Bank">Bank</SelectItem>
+              <SelectItem value="Nifty Financial Services">Financials</SelectItem>
+              <SelectItem value="Nifty FMCG">FMCG</SelectItem>
+              <SelectItem value="Nifty Healthcare">Healthcare</SelectItem>
+              <SelectItem value="Nifty IT">IT</SelectItem>
+              <SelectItem value="Nifty Media">Media</SelectItem>
+              <SelectItem value="Nifty Metal">Metal</SelectItem>
+              <SelectItem value="Nifty Pharma">Pharma</SelectItem>
+              <SelectItem value="Nifty PVT Bank">PVT Bank</SelectItem>
+              <SelectItem value="Nifty PSU Bank">PSU Bank</SelectItem>
+              <SelectItem value="Nifty Realty">Realty</SelectItem>
+            </SelectContent>
+          </Select>
 
-        <div className="flex items-center gap-4">
           <Button
             variant="outline"
             size="sm"
             className="flex items-center gap-1"
             onClick={() => setSortBy(sortBy === 'changepct_desc' ? 'changepct_asc' : 'changepct_desc')}
-          >Change
+          >
+            Change
             <Percent className="w-4 h-4" />
             {sortBy.startsWith('changepct') && (
               sortBy === 'changepct_desc' ? (
@@ -198,7 +200,8 @@ function IntrabuzzContent() {
             size="sm"
             className="flex items-center gap-1"
             onClick={() => setSortBy(sortBy === 'volumespike_desc' ? 'volumespike_asc' : 'volumespike_desc')}
-          > Spike
+          >
+            Spike
             <Flame className="w-4 h-4" />
             {sortBy.startsWith('volumespike') && (
               sortBy === 'volumespike_desc' ? (
@@ -208,7 +211,7 @@ function IntrabuzzContent() {
               )
             )}
             {!sortBy.startsWith('volumespike') && (
-              <ArrowDown className="w-4 h-4  text-gray-400" />
+              <ArrowDown className="w-4 h-4 text-gray-400" />
             )}
           </Button>
 
@@ -223,7 +226,7 @@ function IntrabuzzContent() {
       </div>
 
       {stocks?.length === 0 ? (
-        <div>Loading...</div>
+        <CustomizedProgressBars />
       ) : (
       <>
       {viewMode === 'card' ? (
@@ -263,7 +266,7 @@ function IntrabuzzContent() {
 
 export default function Intrabuzz() {
   return (
-    <Suspense>
+    <Suspense fallback={<CustomizedProgressBars />}>
       <IntrabuzzContent />
     </Suspense>
   )
