@@ -41,3 +41,6 @@ next-env.d.ts
 
 # sheet link
 # context/StockContext.tsx
+
+#ignore the api url
+.env
