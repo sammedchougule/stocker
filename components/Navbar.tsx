@@ -6,6 +6,7 @@ import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, Brief
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { StockInput } from "./Input"
+import Image from 'next/image';
 
 const Navbar = () => {
   const pathname = usePathname()
@@ -36,8 +37,16 @@ const Navbar = () => {
         <div className="container mx-auto px-4 flex justify-between items-center py-1">
           {/* Website Name and Eye Animation */}
           <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-black flex items-center">
+            <Link href="/" className="text-2xl font-bold text-black flex items-center">
               Stocker
+              <Image
+                 //src="/stocker1.png" // Replace with your image path in the public folder
+                src="/stocker.jpg"
+                alt="Stocker Logo" // Alt text for accessibility
+                width={30}     // Set the desired width
+                height={30}    // Set the desired height
+                className="ml-2" // Add margin to the left
+            />
             </Link>
           </div>
 
