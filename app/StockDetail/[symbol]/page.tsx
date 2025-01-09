@@ -32,7 +32,7 @@ export default function StockDetailPage() {
         // Find similar stocks in the same sector
         const similar = stocks
           .filter(s => s.sector === stock.sector && s.symbol !== stock.symbol)
-          .slice(0, 4);
+          .slice(0, 6);
         setSimilarStocks(similar);
       }
     }
@@ -47,16 +47,16 @@ export default function StockDetailPage() {
   }
 
   return (
-    <div className="container mx-auto mt-10 sm:mt-2">
+    <div className="container mx-auto mt-10 sm:mt-4">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 border-b ml-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Link href="/" className="text-md text-gray-600">Home</Link>
             <span className="text-md text-gray-800"> &gt; {stockData.symbol} • {stockData.exchange}</span>
           </div>
-          <h1 className="text-2xl font-semibold mt-2">{stockData.companyname}</h1>
-          <p className="text-md text-gray-600 mt-1">{stockData.sector}</p>
+          <h1 className="text-2xl font-semibold ">{stockData.companyname}</h1>
+          <p className="text-md text-gray-600">Sector : {stockData.sector}</p>
         </div>
       </div>
 
@@ -139,7 +139,7 @@ export default function StockDetailPage() {
       {/* Similar Stocks */}
       <div className="mt-8">
         <h2 className="text-xl font-semibold mb-4">Compare To</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
           {similarStocks.length > 0 ? (
             similarStocks.map((stock) => (
               <StockCard
@@ -161,7 +161,7 @@ export default function StockDetailPage() {
         </div>
       </div>
 
-      <div>
+      <div className="mt-8">
         <Card>
           <CardHeader>
             <CardTitle>
