@@ -5,6 +5,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { Stock } from '@/types/Stock'
 import { CircleArrowOutDownLeft, CircleArrowOutUpLeft, CircleArrowOutUpRight, CircleArrowOutDownRight  } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Skeleton } from "@/components/ui/skeleton"
 
 // Nifty 50 stocks array
 const NIFTY50_STOCKS = [
@@ -25,7 +26,7 @@ interface MarketMoodProps {
 }
 
 export default function MarketMood({ stocks }: MarketMoodProps) {
-  const [marketMood, setMarketMood] = useState(50)
+  const [marketMood, setMarketMood] = useState<number | null>(null)
   const [showModal, setShowModal] = useState(false);
 
   const nifty50Data = useMemo(() => {
@@ -58,7 +59,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
     return { text: 'Extreme Greed', color: '#dc2626', explanation: 'Extreme greed (>70) suggests avoiding fresh positions as markets are overbought.' };
   };
 
-  const moodInfo = getMoodInfo(marketMood);
+  const moodInfo = marketMood !== null ? getMoodInfo(marketMood) : null;
 
   return (
     <Card className="h-full">
@@ -125,39 +126,46 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
                   strokeDashoffset={`${Math.PI * 220 / 2}`}
                 />
 
+              {marketMood !== null ? (
+                <g transform={`translate(150, 170) rotate(${calculateRotation(marketMood)})`}
+                  className="transition-transform duration-1000">
+                  <line
+                    x1="0"
+                    y1="5"
+                    x2="0"
+                    y2="-95"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    className="origin-bottom"
+                  />
+                  <circle r="8" fill="currentColor" />
+                </g>
+              ) : (
+                <Skeleton className="w-full h-[200px]" />
+              )}
 
-              <g transform={`translate(150, 170) rotate(${calculateRotation(marketMood)})`}
-                className="transition-transform duration-1000">
-                <line
-                  x1="0"
-                  y1="5"
-                  x2="0"
-                  y2="-95"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  className="origin-bottom"
-                />
-                <circle r="8" fill="currentColor" />
-              </g>
-
-              <text
-                x="150"
-                y="170"
-                textAnchor="middle"
-                className="text-5xl font-bold"
-                fill="currentColor"
-              >
-                {marketMood.toFixed(2)}
-              </text>
+              {marketMood !== null && (
+                <text
+                  x="150"
+                  y="170"
+                  textAnchor="middle"
+                  className="text-5xl font-bold"
+                  fill="currentColor"
+                >
+                  {marketMood.toFixed(2)}
+                </text>
+              )}
             </svg>
           </div>
 
-          <p className="text-sm text-gray-500 mx-10">
-            MMI is in the <span 
-              style={{ color: moodInfo.color, fontWeight: 'bold', fontSize: '1.1rem' }}>
-               {moodInfo.text} Zone.
-            </span> {moodInfo.explanation}
-          </p>
+          {moodInfo && (
+            <p className="text-sm text-gray-500 mx-10">
+              MMI is in the <span 
+                style={{ color: moodInfo.color, fontWeight: 'bold', fontSize: '1.1rem' }}>
+                {moodInfo.text} Zone.
+              </span> {moodInfo.explanation}
+            </p>
+          )}
 
           <button 
             className="text-blue-600 mt-2"

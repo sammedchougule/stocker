@@ -78,7 +78,8 @@ const Indices: React.FC = () => {
     <div className="grid grid-cols-1 gap-5">
       {filteredSectors.slice(startIndex, endIndex).map((sector) => {
         return (
-          <div key={sector.symbol} className="flex justify-between items-start px-1 cursor-pointer" onClick={() => handleStockClick(sector)}>
+          <div key={sector.symbol} className="flex justify-between items-start px-1 cursor-pointer" 
+          onClick={() => handleStockClick(sector)}>
             <div className="flex items-center space-x-2">
               <Image
                 src={`/images/${sector.symbol}.svg`}
@@ -87,11 +88,11 @@ const Indices: React.FC = () => {
                 height={30}
                 className="rounded-full border border-gray-200"
               />
-              <span className="text-md font-semibold text-gray-800 truncate max-w-[120px]">{sector.companyname}</span>
+              <span className="text-md font-mediumtruncate max-w-[120px]">{sector.companyname}</span>
             </div>
 
             <div className="text-right">
-              <span className="text-md font-semibold text-gray-900">
+              <span className="text-[17px] font-medium">
                 {Number(sector.price).toFixed(2)}
               </span>
               <div className="flex items-center justify-end mt-0.5">
