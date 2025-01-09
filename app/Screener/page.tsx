@@ -16,7 +16,7 @@ export default function Screener() {
           Ready to Discover Hidden Gems.
           </p>
           <div className="mt-6 text-center text-3xl font-bold text-blue-500">
-          Our Screener is Almost Live!
+          Our Screener is in Development!
           </div>
         </CardContent>
       </Card>
