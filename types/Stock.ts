@@ -50,3 +50,6 @@ export interface Stock {
 export interface StockData {
   data: Stock[];
 }
+
+export type SortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'change' | 'changepct' | 'volumespike';
+export type SortDirection = 'asc' | 'desc';
