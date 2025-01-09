@@ -41,11 +41,11 @@ const Navbar = () => {
               Stocker
               <Image
                  //src="/stocker1.png" // Replace with your image path in the public folder
-                src="/stocker.jpg"
+                src="/stocker.png"
                 alt="Stocker Logo" // Alt text for accessibility
                 width={30}     // Set the desired width
                 height={30}    // Set the desired height
-                className="ml-2" // Add margin to the left
+                className="ml-1" // Add margin to the left
             />
             </Link>
           </div>
