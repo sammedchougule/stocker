@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useEffect, useState, useMemo, Suspense } from 'react'
@@ -14,9 +15,9 @@ import { ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from 'lucid
 import { StockModal } from '@/components/StockModal';
 import { Button } from '@/components/ui/buttons'
 import { useSearchParams } from 'next/navigation'
-import StockDataTable from '@/components/StockDataTable';
 import StockCard from '@/components/StockCard';
-import CustomizedProgressBars from '@/components/CustomizedProgressBars';
+import IntrabuzzStockDataTable from "@/components/IntrabuzzStockDataTable";
+import CustomizedProgressBars from '@/components/CustomizedProgressBars'
 
 type SortOption = 
   | 'changepct_desc' 
@@ -45,7 +46,6 @@ type TableSortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'chang
 type TableSortDirection = 'asc' | 'desc';
 
 function IntrabuzzContent() {
-  
   const { stocks } = useStockContext()
   const searchParams = useSearchParams()
 
@@ -54,7 +54,7 @@ function IntrabuzzContent() {
       const savedSort = localStorage.getItem('sortBy')
       return (savedSort as SortOption) || searchParams.get('sort') || 'changepct_desc'
     }
-    return 'changepct_desc'
+    return 'changepct_desc' // Default value for SSR
   })
 
   const [filterBy, setFilterBy] = useState<FilterOption>(() => {
@@ -62,12 +62,13 @@ function IntrabuzzContent() {
       const savedFilter = localStorage.getItem('filterBy')
       return (savedFilter as FilterOption) || searchParams.get('filter') || 'Nifty FnO'
     }
-    return 'Nifty FnO'
+    return 'Nifty FnO' // Default value for SSR
   })
 
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [tableSortColumn, setTableSortColumn] = useState<TableSortColumn>('symbol');
   const [tableSortDirection, setTableSortDirection] = useState<TableSortDirection>('asc');
 
@@ -129,11 +130,23 @@ function IntrabuzzContent() {
     return filtered
   }, [stocks, sortBy, filterBy, viewMode, tableSortColumn, tableSortDirection])
 
-  
-  //TODO: Implement Modal Open
   const handleStockClick = (stock: Stock) => {
     setSelectedStock(stock);
     setIsModalOpen(true);
+  };
+
+  const totalPages = Math.ceil(filteredAndSortedStocks.length / 10);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
   };
 
   const handleTableSort = (column: TableSortColumn) => {
@@ -148,40 +161,39 @@ function IntrabuzzContent() {
   const currentTableData = filteredAndSortedStocks;
 
   return (
-    <div className="container mx-auto mt-10">
-      <div className="flex overflow-x-auto scrollbar-hide mb-6">
-        <div className="flex flex-row items-center gap-2 ">
-          <Select
-            value={filterBy}
-            onValueChange={(value: FilterOption) => setFilterBy(value)}>
-            <SelectTrigger className="w-[120px]">
-              <SelectValue placeholder="Filter by Index" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Nifty FnO">All</SelectItem>
-              <SelectItem value="Nifty 50">Nifty 50</SelectItem>
-              <SelectItem value="Nifty Auto">Auto</SelectItem>
-              <SelectItem value="Nifty Bank">Bank</SelectItem>
-              <SelectItem value="Nifty Financial Services">Financials</SelectItem>
-              <SelectItem value="Nifty FMCG">FMCG</SelectItem>
-              <SelectItem value="Nifty Healthcare">Healthcare</SelectItem>
-              <SelectItem value="Nifty IT">IT</SelectItem>
-              <SelectItem value="Nifty Media">Media</SelectItem>
-              <SelectItem value="Nifty Metal">Metal</SelectItem>
-              <SelectItem value="Nifty Pharma">Pharma</SelectItem>
-              <SelectItem value="Nifty PVT Bank">PVT Bank</SelectItem>
-              <SelectItem value="Nifty PSU Bank">PSU Bank</SelectItem>
-              <SelectItem value="Nifty Realty">Realty</SelectItem>
-            </SelectContent>
-          </Select>
+    <div className="container mx-auto px-4 mt-4">
+      <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-4 mb-6">
+        <Select
+          value={filterBy}
+          onValueChange={(value: FilterOption) => setFilterBy(value)}>
+          <SelectTrigger className="w-[120px]">
+            <SelectValue placeholder="Filter by Index" />
+          </SelectTrigger>
+          <SelectContent>
+                <SelectItem value="Nifty FnO">All</SelectItem>
+                  <SelectItem value="Nifty 50">Nifty 50</SelectItem>
+                <SelectItem value="Nifty Auto">Auto</SelectItem>
+                <SelectItem value="Nifty Bank">Bank</SelectItem>
+                  <SelectItem value="Nifty Financial Services">Financials</SelectItem>
+                  <SelectItem value="Nifty FMCG">FMCG</SelectItem>
+                  <SelectItem value="Nifty Healthcare">Healthcare</SelectItem>
+                  <SelectItem value="Nifty IT">IT</SelectItem>
+                  <SelectItem value="Nifty Media">Media</SelectItem>
+                  <SelectItem value="Nifty Metal">Metal</SelectItem>
+                  <SelectItem value="Nifty Pharma">Pharma</SelectItem>
+                  <SelectItem value="Nifty PVT Bank">PVT Bank</SelectItem>
+                  <SelectItem value="Nifty PSU Bank">PSU Bank</SelectItem>
+                  <SelectItem value="Nifty Realty">Realty</SelectItem>
+              </SelectContent>
+        </Select>
 
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
             className="flex items-center gap-1"
             onClick={() => setSortBy(sortBy === 'changepct_desc' ? 'changepct_asc' : 'changepct_desc')}
-          >
-            Change
+          > Change
             <Percent className="w-4 h-4" />
             {sortBy.startsWith('changepct') && (
               sortBy === 'changepct_desc' ? (
@@ -200,8 +212,7 @@ function IntrabuzzContent() {
             size="sm"
             className="flex items-center gap-1"
             onClick={() => setSortBy(sortBy === 'volumespike_desc' ? 'volumespike_asc' : 'volumespike_desc')}
-          >
-            Spike
+          >Spike
             <Flame className="w-4 h-4" />
             {sortBy.startsWith('volumespike') && (
               sortBy === 'volumespike_desc' ? (
@@ -211,7 +222,7 @@ function IntrabuzzContent() {
               )
             )}
             {!sortBy.startsWith('volumespike') && (
-              <ArrowDown className="w-4 h-4 text-gray-400" />
+              <ArrowDown className="w-4 h-4  text-gray-400" />
             )}
           </Button>
 
@@ -226,28 +237,48 @@ function IntrabuzzContent() {
       </div>
 
       {stocks?.length === 0 ? (
-        <CustomizedProgressBars />
+        <div><CustomizedProgressBars /></div>
       ) : (
       <>
       {viewMode === 'card' ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {filteredAndSortedStocks.map((stock) => (
-                <StockCard
-                  key={stock.symbol}
-                  stock={stock}
-                  onClick={handleStockClick}
-                />
-              ))}
+            <StockCard
+              key={stock.symbol}
+              stock={stock}
+              onClick={handleStockClick}
+            />
+          ))}
         </div>
       ) : (
         <>
-          <StockDataTable
+          <IntrabuzzStockDataTable
             stocks={currentTableData}
             onStockClick={handleStockClick}
             onSort={handleTableSort}
             sortColumn={tableSortColumn}
             sortDirection={tableSortDirection}
           />
+          {/* Pagination Controls */}
+          <div className="flex justify-center items-center gap-4 mt-4">
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-gray-700">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </>
       )}
     </>
@@ -263,11 +294,11 @@ function IntrabuzzContent() {
   )
 }
 
-
 export default function Intrabuzz() {
   return (
-    <Suspense fallback={<CustomizedProgressBars />}>
+    <Suspense>
       <IntrabuzzContent />
     </Suspense>
   )
 }
+

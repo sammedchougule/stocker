@@ -1,3 +1,5 @@
+
+// components/Sectors.tsx
 "use client";
 
 import React, { useMemo, useState, useRef, useEffect } from "react";
@@ -25,7 +27,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import StockDataTable from '@/components/StockDataTable';
+import SectorStockDataTable from "@/components/SectorStockDataTable";
+import { StockModal } from '@/components/StockModal';
+import { SortColumn, SortDirection } from "@/types/Stock";
 
 // Define available sectors
 const SECTORS = [
@@ -44,10 +48,21 @@ const SECTORS = [
   "NIFTY_PVT_BANK",
 ];
 
+
+interface SortState {
+  [key: string]: {
+    column: SortColumn;
+    direction: SortDirection;
+  };
+}
+
 export default function Sectors() {
   const { stocks } = useStockContext();
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
+  const [sortState, setSortState] = useState<SortState>({});
   const sectorRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Prepare sector data
   const sectorData = useMemo(() => {
@@ -90,7 +105,7 @@ export default function Sectors() {
 
     return Object.fromEntries(
       SECTORS.map((sector) => {
-        const indicesKey = indicesMap[sector] as keyof typeof stocks[0]['indices'];
+        const indicesKey = indicesMap[sector] as keyof typeof stocks[0]["indices"];
         const sectorStocks = stocks
           .filter((stock) => stock.indices && stock.indices[indicesKey])
           .sort((a, b) => b.changepct - a.changepct);
@@ -110,17 +125,35 @@ export default function Sectors() {
 
   useEffect(() => {
     if (selectedSector) {
-        const element = sectorRefs.current[selectedSector];
-        if (element) {
-            const yOffset = -100;
-            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({ top: y, behavior: 'smooth' });
-        }
+      const element = sectorRefs.current[selectedSector];
+      if (element) {
+        const yOffset = -100;
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
     }
-}, [selectedSector]);
+  }, [selectedSector]);
 
+    const handleSort = (tableId: string, column: SortColumn) => {
+      setSortState((prevState) => {
+        const currentSort = prevState[tableId] || { column: 'symbol', direction: 'asc' };
+        const newDirection = currentSort.column === column && currentSort.direction === 'asc' ? 'desc' : 'asc';
+        return {
+          ...prevState,
+          [tableId]: { column, direction: newDirection },
+        };
+      });
+    };
+  
+
+  const handleStockClick = (stock: Stock) => {
+    setSelectedStock(stock);
+    setIsModalOpen(true);
+  };
 
   const IndexTable = ({ sector, stocks }: { sector: string; stocks: Stock[] }) => {
+    const { column: sortColumn, direction: sortDirection } = sortState[sector] || { column: 'symbol', direction: 'asc' as const };
+
     return (
       <Card
         className={`mt-8 m-2 transition-all duration-300 ${
@@ -136,12 +169,13 @@ export default function Sectors() {
           </h3>
         </CardHeader>
         <CardContent className="p-0">
-          <StockDataTable
+          <SectorStockDataTable
+            tableId={sector}
             stocks={stocks}
-            onStockClick={() => {}}
-            onSort={() => {}}
-            sortColumn="symbol"
-            sortDirection="asc"
+            onStockClick={handleStockClick}
+            onSort={handleSort}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
           />
         </CardContent>
       </Card>
@@ -149,7 +183,7 @@ export default function Sectors() {
   };
 
   return (
-    <div className="container mx-auto mt-6">
+    <div className="container mx-auto mt-4">
       {/* Sector Performance Chart */}
       <Card>
         <CardHeader>
@@ -258,12 +292,16 @@ export default function Sectors() {
                               return (
                                 <div className="bg-white p-2 border border-gray-200 rounded shadow">
                                   <p className="font-semibold">Nifty {label}</p>
-                                  <p> Change <span
-                                    className={
-                                      value >= 0
-                                        ? "font-semibold text-[#22c55e]"
-                                        : "font-semibold text-[#ef4444]"
-                                    }>{Number(value).toFixed(2)}%
+                                  <p>
+                                    Change{" "}
+                                    <span
+                                      className={
+                                        value >= 0
+                                          ? "font-semibold text-[#22c55e]"
+                                          : "font-semibold text-[#ef4444]"
+                                      }
+                                    >
+                                      {Number(value).toFixed(2)}%
                                     </span>
                                   </p>
                                 </div>
@@ -304,54 +342,55 @@ export default function Sectors() {
 
             {/* Sector Table */}
             <div className="w-full lg:w-1/3">
-                <div className="h-[600px] overflow-hidden flex flex-col">
+              <div className="h-[600px] overflow-hidden flex flex-col">
                 <div className="flex-none">
-                    <Table>
-                        <TableHeader className="bg-blue-200">
-                        <TableRow>
-                            <TableHead className="sticky top-0">Sector</TableHead>
-                            <TableHead className="sticky top-0 z-10 text-right">
-                            Change %
-                            </TableHead>
-                        </TableRow>
-                        </TableHeader>
-                    </Table>
+                  <Table>
+                    <TableHeader className="bg-blue-200">
+                      <TableRow >
+                        <TableHead className="sticky top-0 text-lg">Sector</TableHead>
+                        <TableHead className="sticky top-0 text-lg z-10 text-right">
+                          Change %
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                  </Table>
                 </div>
-                  <div className="flex-grow overflow-auto">
-                      <Table>
-                      <TableBody>
-                          {sectorData.map((sector) => (
-                            <TableRow
-                              key={sector.sector}
-                              className={`cursor-pointer hover:bg-gray-100 ${selectedSector === sector.sector ? 'bg-gray-100' : ''}`}
-                                onClick={() => setSelectedSector(sector.sector)}
+                <div className="flex-grow overflow-auto">
+                  <Table>
+                    <TableBody>
+                      {sectorData.map((sector) => (
+                        <TableRow
+                          key={sector.sector}
+                          className={`cursor-pointer text-lg hover:bg-gray-100 ${
+                            selectedSector === sector.sector ? "bg-gray-100" : ""
+                          }`}
+                           onClick={() => setSelectedSector(sector.sector)}
+                        >
+                          <TableCell>{sector.name}</TableCell>
+                          <TableCell className="text-right  font-medium">
+                            <span
+                              className={`inline-flex items-center rounded px-1 py-1 ${
+                                sector.changepct >= 0
+                                  ? "text-green-500 bg-green-50 rounded-lg"
+                                  : "text-red-500 bg-red-50 rounded-lg"
+                              }`}
                             >
-                              <TableCell>{sector.name}</TableCell>
-                              <TableCell
-                                className="text-right font-medium">
-                                <span
-                                  className={`inline-flex items-center rounded px-1 py-1 ${
-                                    sector.changepct >= 0
-                                      ? 'text-green-500 bg-green-50 rounded-lg'
-                                      : 'text-red-500 bg-red-50 rounded-lg'
-                                  }`}
-                                >
-                                  {sector.changepct >= 0 ? (
-                                    <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
-                                  ) : (
-                                    <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
-                                  )}
-                                  <span className="text-sm font-md">
-                                    {sector.changepct}%
-                                  </span>
-                                </span>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                  </div>
+                              {sector.changepct >= 0 ? (
+                                <ArrowUp className="w-3.5 h-3.5 mr-0.5" />
+                              ) : (
+                                <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
+                              )}
+                              <span className="text-base font-md">
+                                {sector.changepct}%
+                              </span>
+                            </span>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </div>
+              </div>
             </div>
           </div>
         </CardContent>
@@ -360,13 +399,14 @@ export default function Sectors() {
       {/* Individual Index Tables */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         {SECTORS.map((sector) => (
-          <IndexTable
-            key={sector}
-            sector={sector}
-            stocks={sectorStocks[sector]}
-          />
+          <IndexTable key={sector} sector={sector} stocks={sectorStocks[sector]} />
         ))}
       </div>
+      <StockModal
+        stock={selectedStock}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
