@@ -179,7 +179,7 @@ function IntrabuzzContent() {
             size="sm"
             className="flex items-center gap-1"
             onClick={() => setSortBy(sortBy === 'changepct_desc' ? 'changepct_asc' : 'changepct_desc')}
-          >
+          >Change
             <Percent className="w-4 h-4" />
             {sortBy.startsWith('changepct') && (
               sortBy === 'changepct_desc' ? (
@@ -198,7 +198,7 @@ function IntrabuzzContent() {
             size="sm"
             className="flex items-center gap-1"
             onClick={() => setSortBy(sortBy === 'volumespike_desc' ? 'volumespike_asc' : 'volumespike_desc')}
-          >
+          > Spike
             <Flame className="w-4 h-4" />
             {sortBy.startsWith('volumespike') && (
               sortBy === 'volumespike_desc' ? (
