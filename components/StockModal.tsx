@@ -19,7 +19,6 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
 
   // Get the 5D data
   const getFilteredData = () => {
-    const currentDate = new Date()
     const chartData = Object.entries(stock.closings)
       .map(([date, price]) => ({
         date,
