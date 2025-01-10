@@ -99,12 +99,14 @@ export default function Heatmap() {
 
 
     return (
-        <div className="container mx-auto">
+        <div className="container mx-auto mt-4 sm:mt-0">
             <Card>
                 <CardHeader className="sticky top-0 bg-white z-10">
-                    <CardTitle className="flex gap-2 items-center justify-center"><LayoutGrid />Heatmap</CardTitle>
+                    <CardTitle className="flex gap-2 items-center justify-center">
+                        <LayoutGrid />Heatmap
+                    </CardTitle>
                     <div className="overflow-x-auto whitespace-nowrap pb-2 -mx-4 px-4">
-                        <div className="inline-flex gap-2">
+                        <div className="inline-flex gap-2 mt-4">
                             {filterOptions.map((option) => (
                                 <Button
                                     key={option}
@@ -119,26 +121,26 @@ export default function Heatmap() {
                     </div>
                 </CardHeader>
                 <CardContent style={{ maxHeight: "calc(100vh - 180px)", overflowY: "auto"}}>
-                    <div className="grid gap-1 grid-cols-4 sm:grid-cols-6 lg:grid-cols-8">
+                    <div className="grid gap-1 grid-cols-3 sm:grid-cols-5 lg:grid-cols-7">
                         {heatmapData.map((stock) => (
                             <div
                                 key={stock.symbol}
                                 className={cn(
-                                    "flex flex-col items-center justify-center rounded-sm h-28 md:h-28"
+                                    "flex flex-col items-center justify-center rounded-md h-28 md:h-32"
                                 )}
                                 style={{ background: getColor(stock.changepct)}}
                             >
                                 <Image
-                                    src={`/images/${stock.symbol}.svg`}
+                                    src={`/images/${stock.symbol}.png`}
                                     alt={stock.symbol}
                                     width={20}
                                     height={20}
                                     className="w-10 h-10 rounded-full"
                                 />
-                                <div className="text-gray-50 font-md text-md mt-1 truncate w-full text-center">
+                                <div className="text-gray-800 font-medium text-lg mt-1 truncate w-full text-center">
                                     {stock.symbol}
                                 </div>
-                                <div className="text-gray-50 text-md mt-1 truncate w-full text-center">
+                                <div className="text-gray-800 text-lg mt-1 truncate w-full text-center">
                                     {Number(stock.changepct).toFixed(2)}%
                                 </div>
                             </div>
