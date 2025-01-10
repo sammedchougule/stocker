@@ -42,7 +42,6 @@ interface FinancialTablesProps {
 const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
   const [financialData, setFinancialData] = useState<FinancialData | null>(null);
   const [openSection, setOpenSection] = useState<string>("Quarterly Results");
-  const [viewType, setViewType] = useState<"Normal" | "Growth">("Normal");
 
   useEffect(() => {
     // Load JSON data
@@ -89,42 +88,9 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
     "Ratios": <ChartPie className="mr-2" />,
   };
 
-  const calculateGrowth = (current: number, previous: number): string | number => {
-    if (previous === 0) {
-      return "-"; // Handle division by zero
-    }
-    const change = ((current - previous) / previous) * 100;
-    return change.toFixed(2) + "%";
-  };
-
-  const getCellColor = (value: string | number): string => {
-    if (typeof value === "string" || isNaN(value as number)) {
-      return ""; // No color for existing percentages or non-numeric values
-    }
-    const change = parseFloat(value.slice(0, -1)); // Extract percentage value
-    return change > 0 ? "text-green-500" : change < 0 ? "text-red-500" : "";
-  };
 
   return (
     <div className="container mx-auto lg:px-8 sm:px-0">
-      <div className="flex justify-between mb-4">
-        <button
-          className={`px-4 py-2 rounded-md text-gray-700 font-medium hover:bg-gray-200 ${
-            viewType === "Normal" && "bg-gray-100"
-          }`}
-          onClick={() => setViewType("Normal")}
-        >
-          Normal
-        </button>
-        <button
-          className={`px-4 py-2 rounded-md text-gray-700 font-medium hover:bg-gray-200 ${
-            viewType === "Growth" && "bg-gray-100"
-          }`}
-          onClick={() => setViewType("Growth")}
-        >
-          Growth
-        </button>
-      </div>
 
       {tableSections.map((section) => {
         const tableData = prepareTableData(section);
