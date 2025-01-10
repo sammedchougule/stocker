@@ -1,6 +1,6 @@
 // components/SectorStockDataTable.tsx
 import React, { useMemo } from 'react';
-import { ArrowUp, ArrowDown, Flame, ArrowUpDown } from 'lucide-react'
+import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { Stock } from '@/types/Stock'
 import StockSymbolBgColor from './StockSymbolBgColor';
  import { SortColumn, SortDirection } from '@/types/Stock';
