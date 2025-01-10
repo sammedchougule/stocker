@@ -115,7 +115,7 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                 onClick={() => onSort('volumespike')}
               >
                 <div className="flex items-center justify-end gap-2">
-                  <span>Vol_Spike</span>
+                  <span>Spike</span>
                   {renderSortIcon('volumespike')}
                 </div>
               </th>
