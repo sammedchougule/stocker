@@ -208,9 +208,9 @@ export default function Sectors() {
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={sectorData}
-                        margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
+                        margin={{ top: 20, right: 0, left: -10, bottom: 20 }}
                         barSize={30}
-                        barGap={0} // Gap between bars
+                        barGap={10} // Gap between bars
                       >
                         {/* Gradients for 3D Effect */}
                         <defs>
@@ -278,8 +278,8 @@ export default function Sectors() {
                             position: "insideLeft",
                             offset: -20,
                           }}
-                          tick={{ fontSize: 12 }}
-                          domain={[minValue - 0.1, maxValue + 0.1]}
+                          tick={{ fontSize: 14 }}
+                          domain={[minValue - 0.5, maxValue + 0.5]}
                           tickFormatter={(value) => `${value.toFixed(2)}%`}
                         />
                         <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
@@ -328,7 +328,7 @@ export default function Sectors() {
                               })`}
                               style={{
                                 filter:
-                                  "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2))", // Shadow for depth
+                                  "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4))", // Shadow for depth
                               }}
                             />
                           ))}
@@ -361,7 +361,7 @@ export default function Sectors() {
                       {sectorData.map((sector) => (
                         <TableRow
                           key={sector.sector}
-                          className={`cursor-pointer text-lg hover:bg-gray-100 ${
+                          className={`cursor-pointer text-md hover:bg-gray-100 ${
                             selectedSector === sector.sector ? "bg-gray-100" : ""
                           }`}
                            onClick={() => setSelectedSector(sector.sector)}
@@ -380,7 +380,7 @@ export default function Sectors() {
                               ) : (
                                 <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
                               )}
-                              <span className="text-base font-md">
+                              <span className="text-md font-md">
                                 {sector.changepct}%
                               </span>
                             </span>
