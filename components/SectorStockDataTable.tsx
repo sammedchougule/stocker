@@ -68,6 +68,15 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </th>
               <th 
+                className="p-4 text-left font-medium min-w-[200px] cursor-pointer"
+                onClick={() => onSort(tableId, 'companyname')}
+              >
+                <div className="flex items-center gap-2">
+                  <span>Company</span>
+                  {renderSortIcon('companyname')}
+                </div>
+              </th>
+              <th 
                 className="p-4 text-right font-medium min-w-[100px] cursor-pointer"
                 onClick={() => onSort(tableId, 'price')}
               >
@@ -94,15 +103,6 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                   {renderSortIcon('changepct')}
                 </div>
               </th>
-              <th 
-                className="p-4 text-right font-medium min-w-[100px] cursor-pointer"
-                onClick={() => onSort(tableId, 'volumespike')}
-              >
-                <div className="flex items-center justify-end gap-2">
-                  <span>Vol_Spike</span>
-                  {renderSortIcon('volumespike')}
-                </div>
-              </th>
             </tr>
           </thead>
           <tbody>
@@ -118,6 +118,11 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                       <StockSymbolBgColor symbol={stock.symbol} />
                     </span>
                   </div>
+                </td>
+                <td className="p-4 border-t max-w-[200px] md:max-w-[200px]">
+                  <span className="truncate block">
+                    {stock.companyname}
+                  </span>
                 </td>
                 <td className="p-4 border-t text-right">
                   ₹{Number(stock.price).toFixed(2)}
@@ -152,18 +157,6 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                       <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
                     )}
                     {Number(stock.changepct).toFixed(2)}%
-                  </span>
-                </td>
-                <td className="p-4 border-t text-right">
-                  <span
-                    className={`inline-flex items-center rounded px-1 py-1 font-medium ${
-                      (stock.volumespike ?? 0) >= 1
-                        ? 'text-orange-600 bg-orange-100 rounded-lg'
-                        : 'text-yellow-600 bg-yellow-100 rounded-lg'
-                    }`}
-                  >
-                    <Flame className="w-3.5 h-3.5 mr-0.5" />
-                    {Number(stock.volumespike).toFixed(2)}X
                   </span>
                 </td>
               </tr>
