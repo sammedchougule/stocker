@@ -161,7 +161,7 @@ function IntrabuzzContent() {
   const currentTableData = filteredAndSortedStocks;
 
   return (
-    <div className="container mx-auto px-4 mt-4">
+    <div className="container mx-auto px-4 mt-10 sm:mt-4">
       <div className="flex flex-row flex-wrap sm:flex-nowrap items-center gap-4 mb-6">
         <Select
           value={filterBy}
