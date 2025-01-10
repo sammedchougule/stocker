@@ -96,7 +96,7 @@ export function StockChart({ stock }: StockChartProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-2">
         {timeFrameButtons.map((frame) => (
           <Button
             key={frame}
@@ -108,7 +108,7 @@ export function StockChart({ stock }: StockChartProps) {
           </Button>
         ))}
       </div>
-      <div className="w-full h-[350px]">
+      <div className="w-full h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={filteredData}>
             <XAxis
