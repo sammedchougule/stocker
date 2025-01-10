@@ -132,7 +132,7 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                   <div className="flex items-center gap-2">
                     <Image
                       className="w-6 h-6 rounded-full"
-                      src={`/images/${stock.symbol}.png`}
+                      src={`/images/${stock.symbol}.svg`}
                       alt={stock.companyname}
                       width={20}
                       height={20}

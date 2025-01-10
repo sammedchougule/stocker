@@ -81,7 +81,7 @@ const Indices: React.FC = () => {
           onClick={() => handleStockClick(sector)}>
             <div className="flex items-center space-x-2">
               <Image
-                src={`/images/${sector.symbol}.png`}
+                src={`/images/${sector.symbol}.svg`}
                 alt={sector.companyname}
                 width={30}
                 height={30}

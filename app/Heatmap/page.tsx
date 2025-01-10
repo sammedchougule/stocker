@@ -131,7 +131,7 @@ export default function Heatmap() {
                                 style={{ background: getColor(stock.changepct)}}
                             >
                                 <Image
-                                    src={`/images/${stock.symbol}.png`}
+                                    src={`/images/${stock.symbol}.svg`}
                                     alt={stock.symbol}
                                     width={20}
                                     height={20}

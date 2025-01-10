@@ -210,7 +210,7 @@ const TodaysStocks = () => {
                           className='rounded-full'
                           width={32}
                           height={32}
-                          src={`/images/${stock.symbol}.png`}
+                          src={`/images/${stock.symbol}.svg`}
                           alt={stock.companyname}
                         />
                     </div>
