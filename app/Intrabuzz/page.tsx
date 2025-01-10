@@ -68,7 +68,6 @@ function IntrabuzzContent() {
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [tableSortColumn, setTableSortColumn] = useState<TableSortColumn>('symbol');
   const [tableSortDirection, setTableSortDirection] = useState<TableSortDirection>('asc');
 
@@ -133,20 +132,6 @@ function IntrabuzzContent() {
   const handleStockClick = (stock: Stock) => {
     setSelectedStock(stock);
     setIsModalOpen(true);
-  };
-
-  const totalPages = Math.ceil(filteredAndSortedStocks.length / 10);
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
   };
 
   const handleTableSort = (column: TableSortColumn) => {
@@ -259,26 +244,6 @@ function IntrabuzzContent() {
             sortColumn={tableSortColumn}
             sortDirection={tableSortDirection}
           />
-          {/* Pagination Controls */}
-          <div className="flex justify-center items-center gap-4 mt-4">
-            <button
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="text-gray-700">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
         </>
       )}
     </>
