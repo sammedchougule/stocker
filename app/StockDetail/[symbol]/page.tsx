@@ -47,30 +47,30 @@ export default function StockDetailPage() {
   }
 
   return (
-    <div className="container mx-auto mt-10 sm:mt-4">
+    <div className="container mx-auto mt-8 sm:mt-2">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 border-b ml-4">
         <div>
           <div className="flex items-center gap-1">
-            <Link href="/" className="text-md text-gray-600">Home</Link>
+            <Link href="/" className="text-md text-gray-600 hover:text-blue-500">Home</Link>
             <span className="text-md text-gray-800"> &gt; {stockData.symbol} • {stockData.exchange}</span>
           </div>
-          <h1 className="text-2xl font-semibold ">{stockData.companyname}</h1>
+          <h1 className="text-xl font-semibold ">{stockData.companyname}</h1>
           <p className="text-md text-gray-600">Sector : {stockData.sector}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
         {/* Main Content */}
         <div className="lg:col-span-2">
           <Card className="h-full">
-            <CardContent className="p-4 h-full">
+            <CardContent className=" h-full">
               {/* Price Section */}
-              <div className="mb-6">
+              <div className="mb-0">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-4xl font-semibold">₹{Number(stockData.price).toFixed(2)}</span>
+                  <span className="text-2xl font-semibold">₹{Number(stockData.price).toFixed(2)}</span>
                   <div className={`flex items-center ${stockData.changepct >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    <span className="text-lg font-semibold">
+                    <span className="text-md font-semibold">
                       {stockData.changepct >= 0 ? '+' : ''}{Number(stockData.changepct).toFixed(2)}%
                     </span>
                     <span className="text-md ml-1 font-semibold">
@@ -78,7 +78,7 @@ export default function StockDetailPage() {
                     </span>
                   </div>
                 </div>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500">
                   {format(new Date(), "d MMM, HH:mm:ss")} IST {stockData.currency} • {stockData.exchange}
                 </p>
               </div>
@@ -137,9 +137,13 @@ export default function StockDetailPage() {
       </div>
 
       {/* Similar Stocks */}
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">Compare To</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+      <Card>
+      <div className="">
+        <CardHeader>
+        <h2 className="text-xl font-semibold">Compare To</h2>
+        </CardHeader>
+        <CardContent>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {similarStocks.length > 0 ? (
             similarStocks.map((stock) => (
               <StockCard
@@ -159,7 +163,9 @@ export default function StockDetailPage() {
             </>
           )}
         </div>
+        </CardContent>
       </div>
+      </Card>
 
       <div className="mt-8">
         <Card>
