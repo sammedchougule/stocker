@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
 import { useSwipeable } from 'react-swipeable';
 import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
 import Image from 'next/image';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { useStockContext } from '@/context/StockContext';
@@ -82,7 +81,7 @@ const Indices: React.FC = () => {
           onClick={() => handleStockClick(sector)}>
             <div className="flex items-center space-x-2">
               <Image
-                src={`/images/${sector.symbol}.svg`}
+                src={`/images/${sector.symbol}.png`}
                 alt={sector.companyname}
                 width={30}
                 height={30}

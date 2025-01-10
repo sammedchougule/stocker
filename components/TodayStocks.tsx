@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { useStockContext } from '@/context/StockContext'
 import { Stock } from '@/types/Stock'
 import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
 import { StockModal } from './StockModal'
 import Image from 'next/image';
 import MarketMood from './MarketMood';
@@ -211,7 +210,7 @@ const TodaysStocks = () => {
                           className='rounded-full'
                           width={32}
                           height={32}
-                          src={`/images/${stock.symbol}.svg`}
+                          src={`/images/${stock.symbol}.png`}
                           alt={stock.companyname}
                         />
                     </div>
