@@ -311,8 +311,8 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
                             tableData ? (
                                 <>
                                     <h4 className="text-gray-500 mb-4">Consolidated Figures in Rs. Crores</h4>
-                                    <div className="overflow-auto max-h-[600px]">
-                                        <Table className="min-w-full border-collapse overflow-hidden shadow-lg rounded-lg">
+                                    <div className="overflow-x-auto max-h-[600px]">
+                                        <Table className="min-w-full border-collapse shadow-lg rounded-lg">
                                             <TableHeader className="bg-gradient-to-r from-blue-400 to-indigo-500 text-white">
                                                 <TableRow>
                                                     <TableHead
