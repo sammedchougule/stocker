@@ -19,6 +19,7 @@ import {
   Calculator,
   ChartPie,
 } from "lucide-react";
+import { getStockBgColor } from "@/utils/getstockBgColor";
 
 interface FinancialData {
   [key: string]: {
@@ -105,9 +106,7 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
                             <h3 className="text-xl font-medium text-gray-800 mr-4 flex items-center">
                                 {sectionIcons[section]} {section}
                             </h3>
-                            <div className="flex-1 text-center text-gray-600">
-                                {!isOpen && `View ${section} Statement`}
-                            </div>
+                            
                             <div>
                                 {isOpen ? <ChevronUp /> : <ChevronDown />}
                             </div>
@@ -118,11 +117,12 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
                                     <h4 className="text-gray-500 mb-4">Consolidated Figures in Rs. Crores</h4>
                                     <div className="overflow-x-auto max-h-[600px]">
                                         <Table className="min-w-full border-collapse shadow-lg rounded-lg">
-                                            <TableHeader className="bg-gradient-to-r from-blue-400 to-indigo-500 text-white">
+                                            <TableHeader className="text-white"
+                                              style={{ backgroundColor: getStockBgColor(stockName) }}
+                                            >
                                                 <TableRow>
-                                                    <TableHead
-                                                        className="sticky left-0 z-10 bg-gradient-to-r from-blue-400 to-indigo-500 font-semibold text-left px-4 py-2"
-                                                    >
+                                                    <TableHead className="sticky left-0 z-10 font-semibold text-left text-white px-4 py-2"
+                                                    style={{ backgroundColor: getStockBgColor(stockName) }}>
                                                         Financial Year
                                                     </TableHead>
                                                     {tableData.header.slice(1).map((header, index) => (

@@ -171,7 +171,7 @@ export default function StockDetailPage() {
         <Card>
           <CardHeader>
             <CardTitle>
-              <h2 className="text-2xl font-semibold">Financials</h2>
+              <p className="text-2xl font-semibold">Financials of <span>" {stockData.companyname} "</span></p>
             </CardTitle>
           </CardHeader>
           <CardContent>
