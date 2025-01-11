@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { ArrowUp, ArrowDown, Flame, ArrowUpDown } from 'lucide-react'
-import Image from 'next/image'
-import { Stock } from '@/types/Stock'
-import StockSymbolBgColor from './StockSymbolBgColor';
+import { ArrowUp, ArrowDown, Flame, ArrowUpDown } from 'lucide-react';
+import Image from 'next/image';
+import { Stock } from '@/types/Stock';
+import { getStockBgColor } from '@/utils/getstockBgColor';
 
 interface IntrabuzzStockDataTableProps {
   stocks: Stock[];
@@ -10,6 +10,9 @@ interface IntrabuzzStockDataTableProps {
   onSort: (column: SortColumn) => void;
   sortColumn: SortColumn;
   sortDirection: SortDirection;
+  currentPage: number;
+  rowsPerPage: number;
+  onPageChange: (page: number) => void;
 }
 
 type SortColumn = 'symbol' | 'companyname' | 'closeyest' | 'price' | 'change' | 'changepct' | 'volumespike';
@@ -20,7 +23,10 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
   onStockClick, 
   onSort, 
   sortColumn, 
-  sortDirection 
+  sortDirection,
+  currentPage,
+  rowsPerPage,
+  onPageChange
 }) => {
 
   const sortedStocks = useMemo(() => {
@@ -43,6 +49,13 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
     });
   }, [stocks, sortColumn, sortDirection]);
 
+  // Pagination Logic
+  const paginatedStocks = useMemo(() => {
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    return sortedStocks.slice(startIndex, endIndex);
+  }, [sortedStocks, currentPage, rowsPerPage]);
+
   const renderSortIcon = (column: SortColumn) => {
     if (column === sortColumn) {
       return sortDirection === 'asc' ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />;
@@ -52,23 +65,17 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
 
   return (
     <div className="relative border border-gray-200 rounded-lg">
-      <div className="overflow-auto max-h-[700px]">
+      <div className="overflow-auto max-h-[710px] bottom-b">
         <table className="w-full border-collapse">
           <thead className="sticky top-0 z-20 bg-blue-200">
             <tr>
-              <th 
-                className="sticky left-0 z-30 bg-blue-200 p-4 text-left font-medium cursor-pointer"
-                onClick={() => onSort('symbol')}
-              >
+              <th className="p-4 text-left font-medium cursor-pointer" onClick={() => onSort('symbol')}>
                 <div className="flex items-center gap-2">
                   <span>Symbol</span>
                   {renderSortIcon('symbol')}
                 </div>
               </th>
-              <th 
-                className="p-4 text-left font-medium min-w-[200px] cursor-pointer"
-                onClick={() => onSort('companyname')}
-              >
+              <th className="p-4 text-left font-medium min-w-[200px] cursor-pointer" onClick={() => onSort('companyname')}>
                 <div className="flex items-center gap-2">
                   <span>Company Name</span>
                   {renderSortIcon('companyname')}
@@ -122,24 +129,27 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
             </tr>
           </thead>
           <tbody>
-            {sortedStocks.map((stock) => (
-              <tr 
-                key={stock.symbol} 
-                className="cursor-pointer hover:bg-gray-50"
-                onClick={() => onStockClick && onStockClick(stock)}
-              >
-                <td className="sticky left-0 bg-white z-10 p-4 border-t">
+            {paginatedStocks.map((stock) => (
+              <tr key={stock.symbol} className="cursor-pointer hover:bg-gray-50" onClick={() => onStockClick && onStockClick(stock)}>
+                <td className="p-4 border-t">
                   <div className="flex items-center gap-2">
-                    <Image
-                      className="w-6 h-6 rounded-full"
-                      src={`/images/${stock.symbol}.svg`}
-                      alt={stock.companyname}
-                      width={20}
-                      height={20}
-                    />
-                    <span className="font-medium">
-                      <StockSymbolBgColor symbol={stock.symbol} />
-                    </span>
+                    <Image className="w-6 h-6 rounded-full" src={`/images/${stock.symbol}.svg`} alt={stock.companyname} width={20} height={20} />
+                    <div 
+                      className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
+                      style={{ backgroundColor: getStockBgColor(stock.symbol), width: '7rem' }}
+                      >
+                      <span 
+                        className="whitespace-nowrap text-[14px] leading-none text-center block overflow-hidden text-ellipsis"
+                        style={{
+                          paddingLeft: '4px',
+                          paddingRight: '4px',
+                          maxWidth: '100%',
+                          fontSize: (stock.symbol).length > 10 ? '12px' : '14px'
+                          }}
+                        >
+                        {stock.symbol}
+                      </span>
+                    </div>
                   </div>
                 </td>
                 <td className="p-4 border-t truncate max-w-[200px]">{stock.companyname}</td>
@@ -196,9 +206,27 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-between p-4">
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-gray-200 rounded-md"
+        >
+          Previous
+        </button>
+        <span>Page {currentPage}</span>
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage * rowsPerPage >= stocks.length}
+          className="px-4 py-2 bg-gray-200 rounded-md"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
 
 export default IntrabuzzStockDataTable;
-

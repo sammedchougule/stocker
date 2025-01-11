@@ -143,7 +143,12 @@ function IntrabuzzContent() {
     }
   };
 
-  const currentTableData = filteredAndSortedStocks;
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10; // 10, the number of rows per page
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  }
 
   return (
     <div className="container mx-auto px-4 mt-10 sm:mt-4">
@@ -226,7 +231,7 @@ function IntrabuzzContent() {
       ) : (
       <>
       {viewMode === 'card' ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
           {filteredAndSortedStocks.map((stock) => (
             <StockCard
               key={stock.symbol}
@@ -237,13 +242,16 @@ function IntrabuzzContent() {
         </div>
       ) : (
         <>
-          <IntrabuzzStockDataTable
-            stocks={currentTableData}
-            onStockClick={handleStockClick}
-            onSort={handleTableSort}
-            sortColumn={tableSortColumn}
-            sortDirection={tableSortDirection}
-          />
+        <IntrabuzzStockDataTable
+          stocks={filteredAndSortedStocks}
+          onStockClick={handleStockClick}
+          onSort={handleTableSort}
+          sortColumn={tableSortColumn}
+          sortDirection={tableSortDirection}
+          currentPage={currentPage}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handlePageChange}
+        />
         </>
       )}
     </>
