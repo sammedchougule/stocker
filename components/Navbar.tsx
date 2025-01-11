@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, BriefcaseBusiness } from 'lucide-react'
+import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, Newspaper  } from 'lucide-react'
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { StockInput } from "./Input"
@@ -68,8 +68,8 @@ const Navbar = () => {
             </Link>
             <Link href="/Screener" className="text-black hover:text-gray-600 flex items-center">
               Screener
-            </Link><Link href="/Portfolio" className="text-black hover:text-gray-600 flex items-center">
-              Portfolio
+            </Link><Link href="/News" className="text-black hover:text-gray-600 flex items-center">
+              News
             </Link>
             <Link href="/Account" className="text-black hover:text-gray-600 flex items-center">
               Account
@@ -113,9 +113,9 @@ const Navbar = () => {
           }`}
         >
           <div className="px-4 py-2 space-y-2 bg-gray-800">
-            <Link href="/Portfolio" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
-              <BriefcaseBusiness className="h-5 w-5 mr-3" />
-              Portfolio
+            <Link href="/News" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
+              <Newspaper  className="h-5 w-5 mr-3" />
+              News
             </Link>
             <Link href="/Intrabuzz" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
               <SquareActivity className="h-5 w-5 mr-3" />
@@ -190,13 +190,13 @@ const Navbar = () => {
             <span className={`text-xs text-gray-600 ${isActive('/Screener') ? 'block' : 'hidden'}`}>Screener</span>
           </Link>
           <Link
-            href="/Portfolio"
+            href="/News"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Portfolio') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
+              isActive('/News') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
             }`}
           >
-            <BriefcaseBusiness className={`h-6 w-6 ${isActive('/Portfolio') ? 'text-green-700' : 'text-gray-700'}`} />
-            <span className={`text-xs text-gray-600 ${isActive('/Portfolio') ? 'block' : 'hidden'}`}>Portfolio</span>
+            <Newspaper  className={`h-6 w-6 ${isActive('/News') ? 'text-green-700' : 'text-gray-700'}`} />
+            <span className={`text-xs text-gray-600 ${isActive('/News') ? 'block' : 'hidden'}`}>News</span>
           </Link>
 
         </div>
