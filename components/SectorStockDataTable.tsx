@@ -2,8 +2,8 @@
 import React, { useMemo } from 'react';
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { Stock } from '@/types/Stock'
-import StockSymbolBgColor from './StockSymbolBgColor';
  import { SortColumn, SortDirection } from '@/types/Stock';
+import { getStockBgColor } from '@/utils/getstockBgColor';
 
 
 interface SectorStockDataTableProps {
@@ -114,9 +114,22 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
               >
                 <td className="sticky left-0 bg-white z-10 p-4 border-t">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium">
-                      <StockSymbolBgColor symbol={stock.symbol} />
-                    </span>
+                    <div 
+                      className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
+                      style={{ backgroundColor: getStockBgColor(stock.symbol), width: '7rem' }}
+                    >
+                      <span 
+                        className="whitespace-nowrap text-[14px] leading-none text-center block overflow-hidden text-ellipsis"
+                        style={{
+                          paddingLeft: '4px',
+                          paddingRight: '4px',
+                          maxWidth: '100%',
+                          fontSize: (stock.symbol).length > 10 ? '12px' : '14px'
+                          }}
+                        >
+                        {stock.symbol}
+                      </span>
+                    </div>
                   </div>
                 </td>
                 <td className="p-4 border-t max-w-[200px] md:max-w-[200px]">

@@ -4,7 +4,7 @@ import React from 'react';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
 import { Flame, ArrowUp, ArrowDown } from 'lucide-react'
 import { Stock } from '@/types/Stock'
-import StockSymbolBgColor from './StockSymbolBgColor';
+import { getStockBgColor } from '@/utils/getstockBgColor';
 
 interface StockCardProps {
   stock: Stock;
@@ -16,14 +16,30 @@ const StockCard: React.FC<StockCardProps> = ({
   onClick 
 }) => (
   <Card
-    className={`relative flex flex-col cursor-pointer transition-transform duration-300 transform hover:scale-105 shadow-md ${
-      stock.changepct >= 0 ? 'shadow-green-500' : 'shadow-red-500'
-    }`}
+    className="relative flex flex-col cursor-pointer transition-transform duration-300 transform hover:scale-105"
     onClick={() => onClick?.(stock)} // Optional chaining
+    style={{
+      boxShadow: stock.changepct >= 0
+        ? '4px 4px 8px rgba(34, 197, 94, 0.5)' // green shadow
+        : '4px 4px 8px rgba(239, 68, 68, 0.5)' // red shadow
+    }}
   >
     <CardHeader>
-      <div className="flex justify-between items-center">
-        <StockSymbolBgColor symbol={stock.symbol} />
+      <div 
+        className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
+        style={{ backgroundColor: getStockBgColor(stock.symbol), width: '7rem' }}
+        >
+        <span 
+          className="whitespace-nowrap text-[14px] leading-none text-center block overflow-hidden text-ellipsis"
+          style={{
+            paddingLeft: '4px',
+            paddingRight: '4px',
+            maxWidth: '100%',
+            fontSize: (stock.symbol).length > 10 ? '12px' : '14px'
+            }}
+          >
+          {stock.symbol}
+        </span>
       </div>
     </CardHeader>
     <CardContent className="flex-grow">
