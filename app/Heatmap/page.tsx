@@ -13,6 +13,7 @@ import Image from "next/image";
 import { cn } from "@/utils/utils";
 import { LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/buttons'
+import { StockModal } from '@/components/StockModal';
 
 type FilterOption =
     | "Nifty FnO"
@@ -44,6 +45,8 @@ export default function Heatmap() {
     const { stocks } = useStockContext();
     const [heatmapData, setHeatmapData] = useState<Stock[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<FilterOption>("Nifty FnO");
+    const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
+   const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
         let filtered = stocks.filter((stock) => stock.type === "EQ");
@@ -97,6 +100,12 @@ export default function Heatmap() {
         return `rgb(${interpolatedColor[0]}, ${interpolatedColor[1]}, ${interpolatedColor[2]})`;
     };
 
+    
+    const handleStockClick = (stock: Stock) => {
+        setSelectedStock(stock);
+        setIsModalOpen(true);
+      };
+
 
     return (
         <div className="container mx-auto mt-4 sm:mt-0">
@@ -121,14 +130,15 @@ export default function Heatmap() {
                     </div>
                 </CardHeader>
                 <CardContent style={{ maxHeight: "calc(100vh - 180px)", overflowY: "auto"}}>
-                    <div className="grid gap-1 grid-cols-3 sm:grid-cols-5 lg:grid-cols-7">
+                    <div className="mt-2 grid gap-2 grid-cols-3 sm:grid-cols-5 lg:grid-cols-7">
                         {heatmapData.map((stock) => (
                             <div
                                 key={stock.symbol}
                                 className={cn(
-                                    "flex flex-col items-center justify-center rounded-md h-28 md:h-32"
+                                    "flex flex-col items-center justify-center rounded-md h-28 md:h-32 cursor-pointer transition-transform duration-300 transform hover:scale-105"
                                 )}
                                 style={{ background: getColor(stock.changepct)}}
+                                onClick={() => handleStockClick(stock)}
                             >
                                 <Image
                                     src={`/images/${stock.symbol}.svg`}
@@ -148,6 +158,13 @@ export default function Heatmap() {
                     </div>
                 </CardContent>
             </Card>
+
+            <StockModal
+                stock={selectedStock}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
+
         </div>
     );
 }
