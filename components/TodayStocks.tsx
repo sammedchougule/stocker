@@ -203,7 +203,8 @@ const TodaysStocks = () => {
             ) : (
               <div className="divide-y">
                 {filteredStocks.map((stock) => (
-                  <div key={stock.symbol} className="grid grid-cols-12 gap-4 items-center py-3 px-2 sm:px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleStockClick(stock)}>
+                  <div key={stock.symbol} className="grid grid-cols-12 gap-4 items-center py-3 px-2 sm:px-4 hover:bg-gray-100 cursor-pointer" 
+                  onClick={() => handleStockClick(stock)}>
                     {/* Adjusted Stock Info  col span */}
                     <div className="col-span-1 sm:col-span-1 flex items-center justify-center">
                         <Image
