@@ -142,8 +142,8 @@ export default function TodayNews() {
                           <Image
                             src={news.image}
                             alt={news.title}
-                            width={150}
-                            height={100}
+                            width={120}
+                            height={80}
                             className="rounded-lg object-cover"
                           />
                         </div>

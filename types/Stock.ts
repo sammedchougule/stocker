@@ -36,6 +36,7 @@ export interface Stock {
   volume: number | null;
   volumeavg: number | null;
   volumespike: number | null;
+  hlCross: string | null;
   month_high: number;
   month_low: number;
   high52: number;

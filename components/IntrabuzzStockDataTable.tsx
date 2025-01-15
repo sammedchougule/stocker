@@ -192,7 +192,7 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                 <td className="p-4 border-t text-right">
                   <span
                     className={`inline-flex items-center rounded px-1 py-1 font-medium ${
-                      (stock.volumespike ?? 0) >= 1
+                      (stock.volumespike ?? 0) >= 0
                         ? 'text-orange-600 bg-orange-100 rounded-lg'
                         : 'text-yellow-600 bg-yellow-100 rounded-lg'
                     }`}
