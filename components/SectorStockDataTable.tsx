@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { Stock } from '@/types/Stock'
  import { SortColumn, SortDirection } from '@/types/Stock';
-import { getStockBgColor } from '@/utils/getstockBgColor';
+import { getStockBgColor } from '@/lib/getstockBgColor';
 
 
 interface SectorStockDataTableProps {

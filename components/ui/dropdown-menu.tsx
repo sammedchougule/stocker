@@ -1,7 +1,7 @@
 // components/ui/dropdown-menu.tsx
 import { Fragment, ReactNode } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { cn } from '@/utils/utils';
+import { cn } from '@/lib/utils';
 
 interface DropdownMenuProps {
   children: ReactNode;

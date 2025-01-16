@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ArrowUp, ArrowDown, Flame, ArrowUpDown } from 'lucide-react';
 import Image from 'next/image';
 import { Stock } from '@/types/Stock';
-import { getStockBgColor } from '@/utils/getstockBgColor';
+import { getStockBgColor } from '@/lib/getstockBgColor';
 
 interface IntrabuzzStockDataTableProps {
   stocks: Stock[];

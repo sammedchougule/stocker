@@ -19,7 +19,7 @@ import {
   Calculator,
   ChartPie,
 } from "lucide-react";
-import { getStockBgColor } from "@/utils/getstockBgColor";
+import { getStockBgColor } from "@/lib/getstockBgColor";
 
 interface FinancialData {
   [key: string]: {

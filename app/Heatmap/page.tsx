@@ -10,7 +10,7 @@ import {
     CardTitle 
 } from "@/components/ui/card";
 import Image from "next/image";
-import { cn } from "@/utils/utils";
+import { cn } from "@/lib/utils";
 import { LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/buttons'
 import { StockModal } from '@/components/StockModal';

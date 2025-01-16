@@ -1,5 +1,5 @@
 import * as React from "react"
-import { cn } from "@/utils/utils"
+import { cn } from "@/lib/utils"
 
 // No need to define InputProps separately
 const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(

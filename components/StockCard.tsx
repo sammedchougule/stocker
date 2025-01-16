@@ -4,7 +4,7 @@ import React from 'react';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
 import { Flame, ArrowUp, ArrowDown } from 'lucide-react'
 import { Stock } from '@/types/Stock'
-import { getStockBgColor } from '@/utils/getstockBgColor';
+import { getStockBgColor } from '@/lib/getstockBgColor';
 
 interface StockCardProps {
   stock: Stock;
