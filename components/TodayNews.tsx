@@ -10,100 +10,134 @@ const newsData = {
   topStories: [
     {
       id: 1,
-      source: "Analytics India Magazine",
-      time: "7 hours ago",
-      title: "Junior Devs are Letting AI Do the Heavy ",
-      image: "https://via.placeholder.com/120x80?text=Top+Story+1"
+      source: "Associated Press",
+      time: "Today",
+      title: "Rising borrowing costs batter UK government and threaten to derail its left-leaning program",
+      image: "https://dims.apnews.com/dims4/default/c8f833d/2147483647/strip/true/crop/7079x4719+0+0/resize/1440x960!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Fd1%2F81%2Ffe16e807a1eec521c3fcbd1c0de5%2F6f1276b7466747d28e183674434883c9",
+      url: "https://apnews.com/article/697e0cf30347683d31947a8f4e2c745f"
     },
     {
       id: 2,
-      source: "Bar and Bench",
-      time: "4 hours ago",
-      title: "NCLAT approves merger between Equinox India and Embassy Group",
-      image: "https://via.placeholder.com/120x80?text=Top+Story+2"
+      source: "Reuters",
+      time: "Yesterday",
+      title: "Climate Investment Funds secures $500 million debut bond for clean energy transition",
+      image: "https://via.placeholder.com/120x80?text=Top+Story+2",
+      url: "https://www.reuters.com/sustainability/sustainable-finance-reporting/climate-investment-funds-secures-500-million-debut-bond-clean-energy-transition-2025-01-14/"
     },
     {
       id: 3,
-      source: "MotorOctane",
-      time: "5 hours ago",
-      title: "Upcoming Hyundai Creta Is Now Safer!",
-      image: "https://via.placeholder.com/120x80?text=Top+Story+3"
+      source: "BBC News",
+      time: "Today",
+      title: "European stocks rise as investors eye economic recovery",
+      image: "https://via.placeholder.com/120x80?text=Top+Story+3",
+      url: "https://www.bbc.com/news/topics/cgdzpg5yvdvt"
     },
     {
-      id: 9,
-      source: "TechCrunch",
-      time: "3 hours ago",
-      title: "New Tech Innovations in 2025",
-      image: "https://via.placeholder.com/120x80?text=Top+Story+4"
+      id: 4,
+      source: "CNBC",
+      time: "Today",
+      title: "Asian markets mixed as investors digest economic data",
+      image: "https://via.placeholder.com/120x80?text=Top+Story+4",
+      url: "https://www.cnbc.com/asia-markets/"
     }
   ],
   localMarket: [
     {
-      id: 4,
-      source: "Business Today",
-      time: "5 hours ago",
-      title: "Electrosteel Castings, PN Gadgil: YES Securities sees over 20% upside",
-      image: "https://via.placeholder.com/120x80?text=Local+Market+1"
+      id: 5,
+      source: "Hindustan Times",
+      time: "Today",
+      title: "Drumstick prices soar above ₹400/kg in Pune markets due to unseasonal rains",
+      image: "https://via.placeholder.com/120x80?text=Local+Market+1",
+      url: "https://www.hindustantimes.com/cities/pune-news/drumstick-prices-soar-above-400-kg-in-pune-markets-due-to-unseasonal-rains-101733509630045.html"
     },
     {
-      id: 5,
-      source: "Economic Times",
-      time: "6 hours ago",
-      title: "Local businesses thrive amidst economic challenges",
-      image: "https://via.placeholder.com/120x80?text=Local+Market+2"
+      id: 6,
+      source: "Zee Business",
+      time: "Today",
+      title: "Average housing price in Pune hits all-time high, up 11% in 2024: Report",
+      image: "https://via.placeholder.com/120x80?text=Local+Market+2",
+      url: "https://www.zeebiz.com/real-estate/news-average-housing-price-in-pune-hits-all-time-high-up-11-in-2024-report-339131"
+    },
+    {
+      id: 7,
+      source: "The Bridge Chronicle",
+      time: "Today",
+      title: "Pune Housing Sales Decline 17% YoY in Q3 2024; New Supply Shrinks by 49%",
+      image: "https://via.placeholder.com/120x80?text=Local+Market+3",
+      url: "https://www.thebridgechronicle.com/news/pune-housing-sales-decline-17-yoy-in-q3-2024-new-supply-shrinks-by-49"
+    },
+    {
+      id: 8,
+      source: "Times of India",
+      time: "Today",
+      title: "Price surge, market saturation plunge home sales by 6% in Pune",
+      image: "https://via.placeholder.com/120x80?text=Local+Market+4",
+      url: "https://timesofindia.indiatimes.com/city/pune/price-surge-market-saturation-plunge-home-sales-by-6-in-pune/articleshow/116692777.cms"
     }
   ],
   worldMarkets: [
     {
-      id: 6,
+      id: 9,
       source: "Reuters",
-      time: "2 hours ago",
+      time: "Today",
       title: "Global markets await US inflation data",
-      image: "https://via.placeholder.com/120x80?text=World+Market+1"
+      image: "https://via.placeholder.com/120x80?text=World+Market+1",
+      url: "https://www.reuters.com/markets/"
     },
     {
-      id: 7,
+      id: 10,
       source: "BBC News",
-      time: "1 hour ago",
+      time: "Today",
       title: "European stocks rise as investors eye economic recovery",
-      image: "https://via.placeholder.com/120x80?text=World+Market+2"
+      image: "https://via.placeholder.com/120x80?text=World+Market+2",
+      url: "https://www.bbc.com/news/topics/cgdzpg5yvdvt"
     },
     {
-      id: 8,
+      id: 11,
       source: "CNBC",
-      time: "30 minutes ago",
+      time: "Today",
       title: "Asian markets mixed as investors digest economic data",
-      image: "https://via.placeholder.com/120x80?text=World+Market+3"
+      image: "https://via.placeholder.com/120x80?text=World+Market+3",
+      url: "https://www.cnbc.com/asia-markets/"
+    },
+    {
+      id: 12,
+      source: "Financial Times",
+      time: "Today",
+      title: "US dollar strengthens amid global market volatility",
+      image: "https://via.placeholder.com/120x80?text=World+Market+4",
+      url: "https://www.ft.com/content/us-dollar-strengthens"
     }
   ]
-}
+};
+
 
 // Mock data for earnings calendar
 const earningsData = [
   {
-    date: "JAN 7",
-    company: "One MobiKwik Systems Ltd",
-    time: "Jan 7, 2025"
+    date: "JAN 16",
+    company: "Reliance Industries",
+    time: "Jan 16, 2025, 12:08 PM"
   },
   {
-    date: "JAN 9",
-    company: "Indian Renewable Energy Development Agency",
-    time: "Jan 9, 2025, 12:08 PM"
+    date: "JAN 16",
+    company: "Axis Bank",
+    time: "Jan 16, 2025, 12:08 PM"
   },
   {
-    date: "JAN 9",
-    company: "Tata Consultancy Services",
-    time: "Jan 9, 2025, 12:08 PM"
+    date: "JAN 16",
+    company: "Infosys",
+    time: "Jan 16, 2025, 12:08 PM"
   },
   {
-    date: "JAN 9",
-    company: "Tata Elxsi",
-    time: "Jan 9, 2025"
+    date: "JAN 18",
+    company: "Kotak Mahindra Bank",
+    time: "Jan 18, 2025, 09:15 AM"
   },
   {
-    date: "JAN 10",
-    company: "PCBL Chemical Ltd",
-    time: "Jan 10, 2025, 12:08 PM"
+    date: "JAN 22",
+    company: "Persistent",
+    time: "Jan 22, 2025, 12:08 PM"
   }
 ]
 
@@ -125,17 +159,18 @@ export default function TodayNews() {
               </TabsList>
               <CardContent className="overflow-y-auto h-[400px] scrollbar-hide ">
                 <TabsContent value="top-stories">
-                  <div className="space-y-4">
+                  <div className="space-y-4 ">
                     {newsData.topStories.map((news) => (
-                      <div key={news.id} className="flex gap-4 items-start border-b pb-4">
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-medium leading-snug hover:text-blue-600 cursor-pointer">
+                      <a key={news.id} href={news.url} target="_blank" rel="noreferrer">
+                        <div  className="flex gap-4 items-start border-b pb-2 hover:bg-gray-100 rounded-lg p-2 cursor-pointer">
+                        <div className="flex-1 min-w-0 ">
+                          <h3 className="font-medium leading-snug">
                             {news.title}
                           </h3>
                           <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
                             <span>{news.source}</span>
                             <span>•</span>
-                            <span>{news.time}</span>
+                            <span >{news.time}</span>
                           </div>
                         </div>
                         <div className="flex-none w-1/5">
@@ -148,13 +183,15 @@ export default function TodayNews() {
                           />
                         </div>
                       </div>
+                      </a>
                     ))}
                   </div>
                 </TabsContent>
                 <TabsContent value="local-market">
                   <div className="space-y-4">
                     {newsData.localMarket.map((news) => (
-                      <div key={news.id} className="flex gap-4 items-start border-b pb-4">
+                      <a key={news.id} href={news.url} target="_blank" rel="noreferrer">
+                        <div  className="flex gap-4 items-start border-b pb-2 hover:bg-gray-100 rounded-lg p-2 cursor-pointer">
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium leading-snug hover:text-blue-600 cursor-pointer">
                             {news.title}
@@ -175,13 +212,15 @@ export default function TodayNews() {
                           />
                         </div>
                       </div>
+                      </a>
                     ))}
                   </div>
                 </TabsContent>
                 <TabsContent value="world-markets">
                   <div className="space-y-4">
                     {newsData.worldMarkets.map((news) => (
-                      <div key={news.id} className="flex gap-4 items-start border-b pb-4">
+                      <a  key={news.id} href={news.url} target="_blank" rel="noreferrer">
+                        <div className="flex gap-4 items-start border-b pb-2 hover:bg-gray-100 rounded-lg p-2 cursor-pointer">
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium leading-snug hover:text-blue-600 cursor-pointer">
                             {news.title}
@@ -202,6 +241,7 @@ export default function TodayNews() {
                           />
                         </div>
                       </div>
+                      </a>
                     ))}
                   </div>
                 </TabsContent>
@@ -215,27 +255,27 @@ export default function TodayNews() {
           <Card className="h-[500px]">
             <CardHeader>
               <CardTitle>Earnings calendar</CardTitle>
-              <p className="text-sm text-gray-500">Based on popular stocks</p>
+              {/* <p className="text-sm text-gray-500">Based on popular stocks</p> */}
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {earningsData.map((earning, index) => (
                   <div
-                    key={index}
-                    className="flex items-start gap-4 p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
+                  key={index}
+                  className="flex items-start gap-4 p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
                   >
-                    <div className="flex items-center gap-2 min-w-[60px]">
-                      <CalendarDays className="h-4 w-4 text-blue-500" />
+                    <div className="flex flex-col items-center gap-1 min-w-[100px]">
+                      <CalendarDays className="h-7 w-7 text-blue-500" /> {/* Larger icon */}
                       <span className="text-sm font-medium">{earning.date}</span>
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-medium text-sm">{earning.company}</h4>
+                      <h4 className="font-medium text-md">{earning.company}</h4>
                       <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <CalendarClock className="h-3 w-3" />
+                        <CalendarClock className="h-4 w-4" />
                         <span>{earning.time}</span>
                       </div>
                     </div>
-                  </div>
+                  </div>                
                 ))}
               </div>
             </CardContent>
