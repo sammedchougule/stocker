@@ -3,20 +3,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Newspaper } from "lucide-react"
 
-interface NewsItem {
-  id: number
-  source: string
-  title: string
-  shortDescription: string
-  description: string
-  image: string
-  category: string
-}
-
-interface NewsData {
-  news: NewsItem[]
-}
-
 export default function NewsPage() {
 
 
