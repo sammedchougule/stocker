@@ -142,7 +142,7 @@ const Navbar = () => {
       </nav>
 
       {/* Bottom Tab Bar for Mobile */}
-      <nav className="fixed bottom-2 left-2 right-4 z-50 border border-gray-200 shadow-2xl rounded-xl sm:hidden backdrop-blur-md bg-white/10">
+      <nav className="fixed bottom-2 left-2 right-2 z-50 border border-gray-200 shadow-2xl rounded-xl sm:hidden backdrop-blur-md bg-white/10">
         <div className="flex justify-around items-center py-2">
           <Link
             href="/"
