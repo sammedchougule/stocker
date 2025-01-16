@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, Newspaper  } from 'lucide-react'
+import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, Newspaper } from 'lucide-react'
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { StockInput } from "./Input"
@@ -40,13 +40,12 @@ const Navbar = () => {
             <Link href="/" className="text-2xl font-bold text-black flex items-center">
               Stocker
               <Image
-                 //src="/stocker1.png" // Replace with your image path in the public folder
                 src="/stocker.png"
-                alt="Stocker Logo" // Alt text for accessibility
-                width={30}     // Set the desired width
-                height={30}    // Set the desired height
-                className="ml-1" // Add margin to the left
-            />
+                alt="Stocker Logo"
+                width={30}
+                height={30}
+                className="ml-1"
+              />
             </Link>
           </div>
 
@@ -68,7 +67,8 @@ const Navbar = () => {
             </Link>
             <Link href="/Screener" className="text-black hover:text-gray-600 flex items-center">
               Screener
-            </Link><Link href="/News" className="text-black hover:text-gray-600 flex items-center">
+            </Link>
+            <Link href="/News" className="text-black hover:text-gray-600 flex items-center">
               News
             </Link>
             <Link href="/Account" className="text-black hover:text-gray-600 flex items-center">
@@ -113,10 +113,6 @@ const Navbar = () => {
           }`}
         >
           <div className="px-4 py-2 space-y-2 bg-gray-800">
-            <Link href="/News" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
-              <Newspaper  className="h-5 w-5 mr-3" />
-              News
-            </Link>
             <Link href="/Intrabuzz" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
               <SquareActivity className="h-5 w-5 mr-3" />
               IntraBuzz
@@ -132,6 +128,10 @@ const Navbar = () => {
             <Link href="/Screener" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
               <Sliders className="h-5 w-5 mr-3" />
               Screener
+            </Link>
+            <Link href="/News" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
+              <Newspaper className="h-5 w-5 mr-3" />
+              News
             </Link>
             <Link href="/Account" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
               <User className="h-5 w-5 mr-3" />
@@ -195,10 +195,9 @@ const Navbar = () => {
               isActive('/News') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
             }`}
           >
-            <Newspaper  className={`h-6 w-6 ${isActive('/News') ? 'text-green-700' : 'text-gray-700'}`} />
+            <Newspaper className={`h-6 w-6 ${isActive('/News') ? 'text-green-700' : 'text-gray-700'}`} />
             <span className={`text-xs text-gray-600 ${isActive('/News') ? 'block' : 'hidden'}`}>News</span>
           </Link>
-
         </div>
       </nav>
     </>
@@ -206,4 +205,3 @@ const Navbar = () => {
 }
 
 export default Navbar
-

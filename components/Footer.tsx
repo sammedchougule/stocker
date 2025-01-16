@@ -10,7 +10,7 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">About Stocker</h3>
             <p className="text-gray-400">
-              Empowering investors with real-time stock data, advanced analytics, and comprehensive market insights.
+            View up-to-date information on stock performance, including price changes, volume spikes, and market trends.
             </p>
           </div>
           <div>

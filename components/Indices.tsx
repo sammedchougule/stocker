@@ -142,7 +142,7 @@ const Indices: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto sm:px-6 lg:px-8 mt-4">
+    <div className="container mx-auto sm:px-6 lg:px-8 mt-6 sm:mt-4">
       <Card className="overflow-y-auto max-h-[calc(100vh-8rem)]">
         <Card className="p-2">
           <CardHeader className="p-2 pb-2">
