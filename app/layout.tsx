@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar'
 import Marquee from '@/components/Marquee'
 import Head from 'next/head'
 import { Footer } from '@/components/Footer'
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -66,6 +67,7 @@ export default async function RootLayout({
             <Navbar />
             <div className="content-container mb-20">
               {children}
+              <Analytics />
             </div>
             <Footer />
           </div>
