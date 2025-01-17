@@ -129,7 +129,7 @@ const Indices: React.FC = () => {
             </CardHeader>
             <CardContent className="relative p-1">
               <div className="text-center">
-                <p className="text-md text-gray-700 mb-4">Error: {error}</p>
+                {/* <p className="text-md text-gray-700 mb-4">Error: {error}</p> */}
                 <Button variant="outline" onClick={() => window.location.reload()}>
                   Try Again
                 </Button>
