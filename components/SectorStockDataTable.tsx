@@ -112,7 +112,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 className="cursor-pointer hover:bg-gray-50"
                 onClick={() => onStockClick(stock)}
               >
-                <td className="sticky left-0 bg-white z-10 p-4 border-t">
+                <td className="sticky left-0 z-10 bg-white p-4 border-t">
                   <div className="flex items-center gap-2">
                     <div 
                       className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
