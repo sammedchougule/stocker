@@ -69,7 +69,7 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
         <table className="w-full border-collapse">
           <thead className="sticky top-0 z-20 bg-blue-200">
             <tr>
-              <th className="p-4 text-left font-medium cursor-pointer" onClick={() => onSort('symbol')}>
+              <th className="sticky left-0 z-30 min-w-[100px] bg-blue-200 p-4 text-left font-medium cursor-pointer" onClick={() => onSort('symbol')}>
                 <div className="flex items-center gap-2">
                   <span>Symbol</span>
                   {renderSortIcon('symbol')}
@@ -131,7 +131,7 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
           <tbody>
             {paginatedStocks.map((stock) => (
               <tr key={stock.symbol} className="cursor-pointer hover:bg-gray-50" onClick={() => onStockClick && onStockClick(stock)}>
-                <td className="p-4 border-t">
+                <td className="p-4 border-t sticky left-0 z-10 bg-white">
                   <div className="flex items-center gap-2">
                     <Image className="w-6 h-6 rounded-full" src={`/images/${stock.symbol}.svg`} alt={stock.companyname} width={20} height={20} />
                     <div 
