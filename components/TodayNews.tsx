@@ -7,109 +7,110 @@ import Image from 'next/image'
 
 // Mock data for news
 const newsData = {
-  topStories: [
+  "topStories": [
     {
-      id: 1,
-      source: "Associated Press",
-      time: "Today",
-      title: "Rising borrowing costs batter UK government and threaten to derail its left-leaning program",
-      image: "https://dims.apnews.com/dims4/default/c8f833d/2147483647/strip/true/crop/7079x4719+0+0/resize/1440x960!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Fd1%2F81%2Ffe16e807a1eec521c3fcbd1c0de5%2F6f1276b7466747d28e183674434883c9",
-      url: "https://apnews.com/article/697e0cf30347683d31947a8f4e2c745f"
+      "id": 1,
+      "source": "Associated Press",
+      "time": "Today",
+      "title": "Fossilized dinosaur feces and vomit help scientists reconstruct the creatures rise",
+      "image": "https://via.placeholder.com/120x80?text=Top+Story+1",
+      "url": "https://apnews.com/article/fossilized-dinosaur-feces-vomit-scientists-reconstruct-2025-01-17"
     },
     {
-      id: 2,
-      source: "Reuters",
-      time: "Yesterday",
-      title: "Climate Investment Funds secures $500 million debut bond for clean energy transition",
-      image: "https://via.placeholder.com/120x80?text=Top+Story+2",
-      url: "https://www.reuters.com/sustainability/sustainable-finance-reporting/climate-investment-funds-secures-500-million-debut-bond-clean-energy-transition-2025-01-14/"
+      "id": 2,
+      "source": "Financial Times",
+      "time": "Today",
+      "title": "Israeli cabinet set to vote on Gaza ceasefire deal",
+      "image": "https://via.placeholder.com/120x80?text=Top+Story+2",
+      "url": "https://www.ft.com/content/46705db3-ffcd-4b40-b87d-116d04833e6a"
     },
     {
-      id: 3,
-      source: "BBC News",
-      time: "Today",
-      title: "European stocks rise as investors eye economic recovery",
-      image: "https://via.placeholder.com/120x80?text=Top+Story+3",
-      url: "https://www.bbc.com/news/topics/cgdzpg5yvdvt"
+      "id": 3,
+      "source": "Reuters",
+      "time": "Today",
+      "title": "Suzuki Motor president says India to be global production hub for EVs",
+      "image": "https://via.placeholder.com/120x80?text=Top+Story+3",
+      "url": "https://www.reuters.com/business/autos-transportation/suzuki-motor-president-says-india-be-global-production-hub-evs-2025-01-16/"
     },
     {
-      id: 4,
-      source: "CNBC",
-      time: "Today",
-      title: "Asian markets mixed as investors digest economic data",
-      image: "https://via.placeholder.com/120x80?text=Top+Story+4",
-      url: "https://www.cnbc.com/asia-markets/"
+      "id": 4,
+      "source": "Vogue Business",
+      "time": "Today",
+      "title": "Richemont sales rise 10% in Q3",
+      "image": "https://via.placeholder.com/120x80?text=Top+Story+4",
+      "url": "https://www.voguebusiness.com/story/companies/richemont-sales-rise-10-per-cent-in-q3"
     }
   ],
-  localMarket: [
+  "localMarket": [
     {
-      id: 5,
-      source: "Hindustan Times",
-      time: "Today",
-      title: "Drumstick prices soar above ₹400/kg in Pune markets due to unseasonal rains",
-      image: "https://via.placeholder.com/120x80?text=Local+Market+1",
-      url: "https://www.hindustantimes.com/cities/pune-news/drumstick-prices-soar-above-400-kg-in-pune-markets-due-to-unseasonal-rains-101733509630045.html"
+      "id": 5,
+      "source": "Hindustan Times",
+      "time": "Today",
+      "title": "Drumstick prices soar above ₹400/kg in Pune markets due to unseasonal rains",
+      "image": "https://via.placeholder.com/120x80?text=Local+Market+1",
+      "url": "https://www.hindustantimes.com/cities/pune-news/drumstick-prices-soar-above-400-kg-in-pune-markets-due-to-unseasonal-rains-101733509630045.html"
     },
     {
-      id: 6,
-      source: "Zee Business",
-      time: "Today",
-      title: "Average housing price in Pune hits all-time high, up 11% in 2024: Report",
-      image: "https://via.placeholder.com/120x80?text=Local+Market+2",
-      url: "https://www.zeebiz.com/real-estate/news-average-housing-price-in-pune-hits-all-time-high-up-11-in-2024-report-339131"
+      "id": 6,
+      "source": "Punekar News",
+      "time": "Today",
+      "title": "Increased Demand On Bhogi Causes Fruit And Vegetable Prices To Rise In Pune's Market Yard",
+      "image": "https://via.placeholder.com/120x80?text=Local+Market+2",
+      "url": "https://www.punekarnews.in/increased-demand-on-bhogi-causes-fruit-and-vegetable-prices-to-rise-in-punes-market-yard/"
     },
     {
-      id: 7,
-      source: "The Bridge Chronicle",
-      time: "Today",
-      title: "Pune Housing Sales Decline 17% YoY in Q3 2024; New Supply Shrinks by 49%",
-      image: "https://via.placeholder.com/120x80?text=Local+Market+3",
-      url: "https://www.thebridgechronicle.com/news/pune-housing-sales-decline-17-yoy-in-q3-2024-new-supply-shrinks-by-49"
+      "id": 7,
+      "source": "Pune Mirror",
+      "time": "Today",
+      "title": "Pune News: Fruit and Vegetable Prices Drop Due to Increased Arrivals at Wholesale Market in Shree Chhatrapati Shivaji Market Yard",
+      "image": "https://via.placeholder.com/120x80?text=Local+Market+3",
+      "url": "https://punemirror.com/pune/others/pune-news-fruit-and-vegetable-prices-drop-due-to-increased-arrivals-at-wholesale-market-in-shree-chhatrapati-shivaji/cid1736086821.htm"
     },
     {
-      id: 8,
-      source: "Times of India",
-      time: "Today",
-      title: "Price surge, market saturation plunge home sales by 6% in Pune",
-      image: "https://via.placeholder.com/120x80?text=Local+Market+4",
-      url: "https://timesofindia.indiatimes.com/city/pune/price-surge-market-saturation-plunge-home-sales-by-6-in-pune/articleshow/116692777.cms"
+      "id": 8,
+      "source": "Indian Express",
+      "time": "Today",
+      "title": "Pune firm CEO lured by 'Facebook friend', loses Rs 42 lakh in share trading fraud",
+      "image": "https://via.placeholder.com/120x80?text=Local+Market+4",
+      "url": "https://indianexpress.com/article/cities/pune/pune-firm-ceo-lured-by-facebook-friend-loses-rs-42-lakh-in-share-trading-fraud-2025-01-17/"
     }
   ],
-  worldMarkets: [
+  "worldMarkets": [
     {
-      id: 9,
-      source: "Reuters",
-      time: "Today",
-      title: "Global markets await US inflation data",
-      image: "https://via.placeholder.com/120x80?text=World+Market+1",
-      url: "https://www.reuters.com/markets/"
+      "id": 9,
+      "source": "Reuters",
+      "time": "Today",
+      "title": "Global markets await US inflation data",
+      "image": "https://via.placeholder.com/120x80?text=World+Market+1",
+      "url": "https://www.reuters.com/markets/"
     },
     {
-      id: 10,
-      source: "BBC News",
-      time: "Today",
-      title: "European stocks rise as investors eye economic recovery",
-      image: "https://via.placeholder.com/120x80?text=World+Market+2",
-      url: "https://www.bbc.com/news/topics/cgdzpg5yvdvt"
+      "id": 10,
+      "source": "BBC News",
+      "time": "Today",
+      "title": "European stocks rise as investors eye economic recovery",
+      "image": "https://via.placeholder.com/120x80?text=World+Market+2",
+      "url": "https://www.bbc.com/news/topics/cgdzpg5yvdvt"
     },
     {
-      id: 11,
-      source: "CNBC",
-      time: "Today",
-      title: "Asian markets mixed as investors digest economic data",
-      image: "https://via.placeholder.com/120x80?text=World+Market+3",
-      url: "https://www.cnbc.com/asia-markets/"
+      "id": 11,
+      "source": "CNBC",
+      "time": "Today",
+      "title": "Asian markets mixed as investors digest economic data",
+      "image": "https://via.placeholder.com/120x80?text=World+Market+3",
+      "url": "https://www.cnbc.com/asia-markets/"
     },
     {
-      id: 12,
-      source: "Financial Times",
-      time: "Today",
-      title: "US dollar strengthens amid global market volatility",
-      image: "https://via.placeholder.com/120x80?text=World+Market+4",
-      url: "https://www.ft.com/content/us-dollar-strengthens"
+      "id": 12,
+      "source": "Financial Times",
+      "time": "Today",
+      "title": "US dollar strengthens amid global market volatility",
+      "image": "https://via.placeholder.com/120x80?text=World+Market+4",
+      "url": "https://www.ft.com/content/us-dollar-strengthens"
     }
   ]
-};
+}
+
 
 
 // Mock data for earnings calendar
