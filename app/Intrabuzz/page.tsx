@@ -70,6 +70,7 @@ function IntrabuzzContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tableSortColumn, setTableSortColumn] = useState<TableSortColumn>('symbol');
   const [tableSortDirection, setTableSortDirection] = useState<TableSortDirection>('asc');
+  const [spikeFilterOn, setSpikeFilterOn] = useState(false); // New state for Spike filter
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -95,39 +96,43 @@ function IntrabuzzContent() {
       )
     }
 
-    // First apply the main sorting (if in card view)
-    if (viewMode === 'card') {
-      switch (sortBy) {
-        case 'changepct_desc':
-          filtered.sort((a, b) => b.changepct - a.changepct)
-          break
-        case 'changepct_asc':
-          filtered.sort((a, b) => a.changepct - b.changepct)
-          break
-        case 'volumespike_desc':
-          filtered.sort((a, b) => (b.volumespike || 0) - (a.volumespike || 0))
-          break
-        case 'volumespike_asc':
-          filtered.sort((a, b) => (a.volumespike || 0) - (b.volumespike || 0))
-          break
-      }
-    } else {
-      // Apply table sorting
-      filtered.sort((a, b) => {
-        let aValue = a[tableSortColumn];
-        let bValue = b[tableSortColumn];
-
-        if (typeof aValue === 'string') aValue = aValue.toLowerCase();
-        if (typeof bValue === 'string') bValue = bValue.toLowerCase();
-
-        if ((aValue ?? 0) < (bValue ?? 0)) return tableSortDirection === 'asc' ? -1 : 1;
-        if ((aValue ?? 0) > (bValue ?? 0)) return tableSortDirection === 'asc' ? 1 : -1;
-        return 0;
-      });
+    {/* First apply the main sorting (if in card view) */}
+if (spikeFilterOn) {
+  filtered = filtered.filter(stock => (stock.volumespike ?? 0) > 0)
+  filtered.sort((a, b) => (b.volumespike ?? 0) - (a.volumespike ?? 0)) // Descending order
+} else {
+  if (viewMode === 'card') {
+    switch (sortBy) {
+      case 'changepct_desc':
+        filtered.sort((a, b) => b.changepct - a.changepct)
+        break
+      case 'changepct_asc':
+        filtered.sort((a, b) => a.changepct - b.changepct)
+        break
+      case 'volumespike_desc':
+        filtered.sort((a, b) => (b.volumespike ?? 0) - (a.volumespike ?? 0))
+        break
+      case 'volumespike_asc':
+        filtered.sort((a, b) => (a.volumespike ?? 0) - (b.volumespike ?? 0))
+        break
     }
+  } else {
+    filtered.sort((a, b) => {
+      let aValue = a[tableSortColumn];
+      let bValue = b[tableSortColumn];
+
+      if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+      if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+
+      if ((aValue ?? 0) < (bValue ?? 0)) return tableSortDirection === 'asc' ? -1 : 1;
+      if ((aValue ?? 0) > (bValue ?? 0)) return tableSortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+}
 
     return filtered
-  }, [stocks, sortBy, filterBy, viewMode, tableSortColumn, tableSortDirection])
+  }, [stocks, sortBy, filterBy, viewMode, tableSortColumn, tableSortDirection, spikeFilterOn])
 
   const handleStockClick = (stock: Stock) => {
     setSelectedStock(stock);
@@ -197,32 +202,26 @@ function IntrabuzzContent() {
             )}
           </Button>
 
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-1"
-            onClick={() => setSortBy(sortBy === 'volumespike_desc' ? 'volumespike_asc' : 'volumespike_desc')}
-          >Spike
-            <Flame className="w-4 h-4" />
-            {sortBy.startsWith('volumespike') && (
-              sortBy === 'volumespike_desc' ? (
-                <ArrowUp className="w-4 h-4 font-extrabold text-green-500" />
-              ) : (
-                <ArrowDown className="w-4 h-4 font-extrabold text-red-500" />
-              )
-            )}
-            {!sortBy.startsWith('volumespike') && (
-              <ArrowDown className="w-4 h-4  text-gray-400" />
-            )}
-          </Button>
+            {/* Spike Toggle Button */}
+            <Button
+              variant="outline"
+              onClick={() => setSpikeFilterOn(!spikeFilterOn)}
+              className={`flex items-center gap-2 rounded-lg ${spikeFilterOn ? 'text-orange-700 bg-orange-200' : 'bg-gray-100 text-gray-500'}`}
+            >
+              <span className="text-sm font-semibold">
+                Spike
+              </span>
+              <Flame className="w-4 h-4" />
+            </Button>
 
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setViewMode(viewMode === 'card' ? 'table' : 'card')}
-          >
-            {viewMode === 'card' ? <TableIcon className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
-          </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setViewMode(viewMode === 'card' ? 'table' : 'card')}
+            >
+              {viewMode === 'card' ? <TableIcon className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
+            </Button>
+
         </div>
       </div>
 
@@ -274,4 +273,3 @@ export default function Intrabuzz() {
     </Suspense>
   )
 }
-
