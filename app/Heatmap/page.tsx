@@ -106,7 +106,14 @@ export default function Heatmap() {
       stock, // Store stock object for click handling
     }));
 
-  const renderTreemapCell: TreemapProps<TreemapData>["content"] = (cell) => {
+  const renderTreemapCell = (cell: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    name: string;
+    payload: TreemapData;
+  }) => {
     const { name, x, y, width, height, payload } = cell;
     const { color, stock } = payload;
 
