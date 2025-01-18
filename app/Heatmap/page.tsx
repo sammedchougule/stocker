@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/buttons";
 import { StockModal } from "@/components/StockModal";
-import { Treemap, ResponsiveContainer } from "recharts";
+import { Treemap, ResponsiveContainer, TreemapProps } from "recharts";
 
 type FilterOption =
   | "Nifty FnO"
@@ -20,6 +20,13 @@ type FilterOption =
   | "Nifty IT"
   | "Nifty Metal"
   | "Nifty Pharma";
+
+interface TreemapData {
+  name: string;
+  value: number;
+  color: string;
+  stock: Stock;
+}
 
 const filterOptions: FilterOption[] = [
   "Nifty FnO",
@@ -61,7 +68,7 @@ export default function Heatmap() {
     }
   }, [stocks, selectedIndex]);
 
-  const getColor = (changepct: number, maxChange: number = 10) => {
+  const getColor = (changepct: number, maxChange: number = 10): string => {
     const clampedChange = Math.max(-maxChange, Math.min(changepct, maxChange));
     const normalizedChange = clampedChange / maxChange;
     const green = [20, 180, 20];
@@ -91,7 +98,7 @@ export default function Heatmap() {
     setIsModalOpen(true);
   };
 
-  const formatTreemapData = () =>
+  const formatTreemapData = (): TreemapData[] =>
     heatmapData.map((stock) => ({
       name: stock.symbol,
       value: Math.abs(stock.changepct), // Treemap requires positive values
@@ -99,9 +106,9 @@ export default function Heatmap() {
       stock, // Store stock object for click handling
     }));
 
-  const renderTreemapCell = (cell: any) => {
-    const { name, value, x, y, width, height, color, payload } = cell;
-    const stock = payload.stock;
+  const renderTreemapCell: TreemapProps<TreemapData>["content"] = (cell) => {
+    const { name, x, y, width, height, payload } = cell;
+    const { color, stock } = payload;
 
     return (
       <g key={`cell-${name}`} transform={`translate(${x},${y})`}>
