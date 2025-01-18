@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/buttons";
 import { StockModal } from "@/components/StockModal";
-import { Treemap, ResponsiveContainer, TreemapProps } from "recharts";
+import { Treemap, ResponsiveContainer } from "recharts";
 
 type FilterOption =
   | "Nifty FnO"
