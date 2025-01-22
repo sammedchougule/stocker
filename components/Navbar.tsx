@@ -1,8 +1,7 @@
-'use client'
+"use client"
 
-import * as React from "react"
 import Link from "next/link"
-import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, Newspaper } from 'lucide-react'
+import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, Newspaper  } from "lucide-react"
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { StockInput } from "./Input"
@@ -14,7 +13,7 @@ const Navbar = () => {
   const isActive = (path: string) => pathname === path
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -26,8 +25,8 @@ const Navbar = () => {
       }
     }
 
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
   }, [])
 
   return (
@@ -50,7 +49,7 @@ const Navbar = () => {
           </div>
 
           {/* Search Input for Tablet and Desktop */}
-          <div className="hidden md:flex flex-grow max-w-md px-4 relative">
+          <div className="hidden md:flex flex-grow max-w-md px-4 relative z-10">
             <StockInput />
           </div>
 
@@ -69,7 +68,7 @@ const Navbar = () => {
               Screener
             </Link>
             <Link href="/News" className="text-black hover:text-gray-600 flex items-center">
-              News
+            News
             </Link>
             <Link href="/Account" className="text-black hover:text-gray-600 flex items-center">
               Account
@@ -78,18 +77,12 @@ const Navbar = () => {
           </div>
 
           {/* Hamburger Menu for Tablet */}
-          <div className="hidden md:flex lg:hidden relative">
+          <div className="hidden md:flex lg:hidden items-center relative z-20">
             <button
               onClick={toggleMenu}
-              className="text-black hover:text-gray-600 focus:outline-none transition-transform duration-300 ease-in-out"
+              className="text-black hover:text-gray-600 focus:outline-none p-2 rounded-md transition-colors duration-300 ease-in-out"
             >
-              <div className={`transform ${isMenuOpen ? 'rotate-90' : 'rotate-0'}`}>
-                {isMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </div>
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
 
@@ -106,34 +99,58 @@ const Navbar = () => {
           </div>
         </div>
 
+        {isMenuOpen && (
+          <div
+            className="fixed inset-0  bg-opacity-100 z-40 hidden md:block lg:hidden"
+            onClick={toggleMenu}
+          ></div>
+        )}
         {/* Dropdown Menu for Tablet */}
-        <div 
-          className={`absolute right-0 top-full w-64 shadow-lg transform transition-all duration-300 ease-in-out overflow-hidden ${
-            isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+        <div
+          className={`fixed md:block lg:hidden top-20 right-4 w-64 bg-white rounded-lg shadow-lg transform transition-all duration-300 ease-in-out z-50 ${
+            isMenuOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
           }`}
         >
-          <div className="px-4 py-2 space-y-2 bg-gray-800">
-            <Link href="/Intrabuzz" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
+          <div className="px-4 py-4 space-y-4">
+            <Link
+              href="/Intrabuzz"
+              className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+            >
               <SquareActivity className="h-5 w-5 mr-3" />
               IntraBuzz
             </Link>
-            <Link href="/Heatmap" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
+            <Link
+              href="/Heatmap"
+              className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+            >
               <LayoutGrid className="h-5 w-5 mr-3" />
               Heatmap
             </Link>
-            <Link href="/Sectors" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
+            <Link
+              href="/Sectors"
+              className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+            >
               <Layers className="h-5 w-5 mr-3" />
               Sectors
             </Link>
-            <Link href="/Screener" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
+            <Link
+              href="/Screener"
+              className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+            >
               <Sliders className="h-5 w-5 mr-3" />
               Screener
             </Link>
-            <Link href="/News" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
-              <Newspaper className="h-5 w-5 mr-3" />
+            <Link
+              href="/News"
+              className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+            >
+              <Newspaper  className="h-5 w-5 mr-3" />
               News
             </Link>
-            <Link href="/Account" className="flex items-center py-2 text-white hover:text-gray-300 transition-colors duration-200">
+            <Link
+              href="/Account"
+              className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+            >
               <User className="h-5 w-5 mr-3" />
               Account
             </Link>
@@ -142,61 +159,52 @@ const Navbar = () => {
       </nav>
 
       {/* Bottom Tab Bar for Mobile */}
-      <nav className="fixed bottom-2 left-2 right-2 z-50 border border-gray-200 shadow-2xl rounded-xl sm:hidden backdrop-blur-md bg-white/10">
+      <nav className="fixed bottom-2 left-2 right-2 z-50 border border-gray-200 shadow-2xl rounded-xl md:hidden backdrop-blur-md bg-white/10">
         <div className="flex justify-around items-center py-2">
           <Link
             href="/"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
+              isActive("/") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Home className={`h-6 w-6 ${isActive('/') ? 'text-blue-500' : 'text-gray-700'}`} />
-            <span className={`text-xs text-gray-600 ${isActive('/') ? 'block' : 'hidden'}`}>Home</span>
+            <Home className={`h-6 w-6 ${isActive("/") ? "text-blue-500" : "text-gray-700"}`} />
+            <span className="text-xs text-gray-600">Home</span>
           </Link>
           <Link
             href="/Intrabuzz"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Intrabuzz') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
+              isActive("/Intrabuzz") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <SquareActivity className={`h-6 w-6 ${isActive('/Intrabuzz') ? 'text-blue-500' : 'text-gray-700'}`} />
-            <span className={`text-xs text-gray-600 ${isActive('/Intrabuzz') ? 'block' : 'hidden'}`}>IntraBuzz</span>
+            <SquareActivity className={`h-6 w-6 ${isActive("/Intrabuzz") ? "text-blue-500" : "text-gray-700"}`} />
+            <span className="text-xs text-gray-600">IntraBuzz</span>
           </Link>
           <Link
             href="/Sectors"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Sectors') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
+              isActive("/Sectors") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Layers className={`h-6 w-6 ${isActive('/Sectors') ? 'text-yellow-500' : 'text-gray-700'}`} />
-            <span className={`text-xs text-gray-600 ${isActive('/Sectors') ? 'block' : 'hidden'}`}>Sectors</span>
+            <Layers className={`h-6 w-6 ${isActive("/Sectors") ? "text-yellow-500" : "text-gray-700"}`} />
+            <span className="text-xs text-gray-600">Sectors</span>
           </Link>
           <Link
             href="/Heatmap"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Heatmap') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
+              isActive("/Heatmap") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <LayoutGrid className={`h-6 w-6 ${isActive('/Heatmap') ? 'text-orange-500' : 'text-gray-700'}`} />
-            <span className={`text-xs text-gray-600 ${isActive('/Heatmap') ? 'block' : 'hidden'}`}>Heatmap</span>
-          </Link>
-          <Link
-            href="/Screener"
-            className={`text-gray-700 flex flex-col items-center ${
-              isActive('/Screener') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
-            }`}
-          >
-            <Sliders className={`h-6 w-6 ${isActive('/Screener') ? 'text-red-500' : 'text-gray-700'}`} />
-            <span className={`text-xs text-gray-600 ${isActive('/Screener') ? 'block' : 'hidden'}`}>Screener</span>
+            <LayoutGrid className={`h-6 w-6 ${isActive("/Heatmap") ? "text-orange-500" : "text-gray-700"}`} />
+            <span className="text-xs text-gray-600">Heatmap</span>
           </Link>
           <Link
             href="/News"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive('/News') ? 'bg-gray-200 rounded-md px-2 py-1' : ''
+              isActive("/News") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Newspaper className={`h-6 w-6 ${isActive('/News') ? 'text-green-700' : 'text-gray-700'}`} />
-            <span className={`text-xs text-gray-600 ${isActive('/News') ? 'block' : 'hidden'}`}>News</span>
+            <Newspaper  className={`h-6 w-6 ${isActive("/News") ? "text-green-700" : "text-gray-700"}`} />
+            <span className="text-xs text-gray-600">News</span>
           </Link>
         </div>
       </nav>
@@ -205,3 +213,4 @@ const Navbar = () => {
 }
 
 export default Navbar
+
