@@ -68,7 +68,7 @@ const Navbar = () => {
               Screener
             </Link>
             <Link href="/News" className="text-black hover:text-gray-600 flex items-center">
-            News
+              News
             </Link>
             <Link href="/Account" className="text-black hover:text-gray-600 flex items-center">
               Account
@@ -119,19 +119,20 @@ const Navbar = () => {
               <SquareActivity className="h-5 w-5 mr-3" />
               IntraBuzz
             </Link>
-            <Link
-              href="/Heatmap"
-              className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
-            >
-              <LayoutGrid className="h-5 w-5 mr-3" />
-              Heatmap
-            </Link>
+            
             <Link
               href="/Sectors"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
             >
               <Layers className="h-5 w-5 mr-3" />
               Sectors
+            </Link>
+            <Link
+              href="/Heatmap"
+              className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+            >
+              <LayoutGrid className="h-5 w-5 mr-3" />
+              Heatmap
             </Link>
             <Link
               href="/Screener"
