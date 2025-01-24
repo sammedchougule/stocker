@@ -190,163 +190,144 @@ export default function Sectors() {
           <h2 className="text-2xl font-bold">Sector Performance</h2>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Chart Section */}
-            <div className="w-full lg:w-2/3">
-              <div className="overflow-x-auto pb-4 lg:pb-0">
-                {/* Responsive Chart Container */}
-                <div className="w-full h-72 sm:h-96 lg:h-[600px]">
-                  <ChartContainer
-                    config={{
-                      changepct: {
-                        label: "Change %",
-                        color: "currentColor",
-                      },
+          {/* BarChart: Full Width */}
+          <div className="w-full h-72 sm:h-96 lg:h-[700px]">
+            <ChartContainer
+              config={{
+                changepct: {
+                  label: "Change %",
+                  color: "currentColor",
+                },
+              }}
+              className="h-full"
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={sectorData}
+                  margin={{ top: 20, right: 0, left: -10, bottom: 20 }}
+                  barSize={50}
+                  barGap={10} // Gap between bars
+                >
+                  {/* Gradients for 3D Effect */}
+                  <defs>
+                    <linearGradient
+                      id="positiveGradient3D"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="0%" stopColor="#22c55e" stopOpacity={1} />
+                      <stop offset="50%" stopColor="#16a34a" stopOpacity={0.9} />
+                      <stop offset="100%" stopColor="#15803d" stopOpacity={0.8} />
+                    </linearGradient>
+                    <linearGradient
+                      id="negativeGradient3D"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="0%" stopColor="#ef4444" stopOpacity={1} />
+                      <stop offset="50%" stopColor="#dc2626" stopOpacity={0.9} />
+                      <stop offset="100%" stopColor="#b91c1c" stopOpacity={0.8} />
+                    </linearGradient>
+                  </defs>
+  
+                  {/* Chart Axes */}
+                  <CartesianGrid strokeDasharray="0 3" />
+                  <XAxis
+                    dataKey="name"
+                    angle={-90}
+                    textAnchor="end"
+                    height={90}
+                    interval={0}
+                    tick={{ fontSize: 14 }}
+                  />
+                  <YAxis
+                    label={{
+                      angle: -90,
+                      position: "insideLeft",
+                      offset: -20,
                     }}
-                    className="h-full"
+                    tick={{ fontSize: 14 }}
+                    domain={[minValue - 0.25, maxValue + 0.25]}
+                    tickFormatter={(value) => `${value.toFixed(2)}%`}
+                  />
+                  <ReferenceLine y={0} stroke="#666" strokeWidth={2} />
+  
+                  {/* Tooltip */}
+                  <Tooltip
+                    content={({ active, payload, label }) => {
+                      if (active && payload && payload.length) {
+                        const value = payload[0].value as number;
+                        return (
+                          <div className="bg-white p-2 border border-gray-200 rounded shadow">
+                            <p className="font-semibold">Nifty {label}</p>
+                            <p>
+                              Change{" "}
+                              <span
+                                className={
+                                  value >= 0
+                                    ? "font-semibold text-[#22c55e]"
+                                    : "font-semibold text-[#ef4444]"
+                                }
+                              >
+                                {Number(value).toFixed(2)}%
+                              </span>
+                            </p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+  
+                  {/* Bars with 3D Effect */}
+                  <Bar
+                    dataKey="changepct"
+                    cursor="pointer"
+                    onClick={(data) => handleBarClick(data)}
+                    radius={[2.5, 2.5, 0, 0]} // Rounded corners for the 3D look
                   >
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
-                        data={sectorData}
-                        margin={{ top: 20, right: 0, left: -10, bottom: 20 }}
-                        barSize={30}
-                        barGap={10} // Gap between bars
-                      >
-                        {/* Gradients for 3D Effect */}
-                        <defs>
-                          <linearGradient
-                            id="positiveGradient3D"
-                            x1="0"
-                            y1="0"
-                            x2="0"
-                            y2="1"
-                          >
-                            <stop
-                              offset="0%"
-                              stopColor="#22c55e"
-                              stopOpacity={1}
-                            />
-                            <stop
-                              offset="50%"
-                              stopColor="#16a34a"
-                              stopOpacity={0.9}
-                            />
-                            <stop
-                              offset="100%"
-                              stopColor="#15803d"
-                              stopOpacity={0.8}
-                            />
-                          </linearGradient>
-                          <linearGradient
-                            id="negativeGradient3D"
-                            x1="0"
-                            y1="0"
-                            x2="0"
-                            y2="1"
-                          >
-                            <stop
-                              offset="0%"
-                              stopColor="#ef4444"
-                              stopOpacity={1}
-                            />
-                            <stop
-                              offset="50%"
-                              stopColor="#dc2626"
-                              stopOpacity={0.9}
-                            />
-                            <stop
-                              offset="100%"
-                              stopColor="#b91c1c"
-                              stopOpacity={0.8}
-                            />
-                          </linearGradient>
-                        </defs>
+                    {sectorData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={`url(#${
+                          entry.changepct >= 0
+                            ? "positiveGradient3D"
+                            : "negativeGradient3D"
+                        })`}
+                        style={{
+                          filter:
+                            "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4))", // Shadow for depth
+                        }}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </div>
+        </CardContent>
+      </Card>
+  
+      {/* Sector Table and Index Tables */}
 
-                        {/* Chart Axes */}
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis
-                          dataKey="name"
-                          angle={-90}
-                          textAnchor="end"
-                          height={80}
-                          interval={0}
-                          tick={{ fontSize: 12 }}
-                        />
-                        <YAxis
-                          label={{
-                            angle: -90,
-                            position: "insideLeft",
-                            offset: -20,
-                          }}
-                          tick={{ fontSize: 14 }}
-                          domain={[minValue - 0.5, maxValue + 0.5]}
-                          tickFormatter={(value) => `${value.toFixed(2)}%`}
-                        />
-                        <ReferenceLine y={0} stroke="#666" strokeWidth={1} />
-
-                        {/* Tooltip */}
-                        <Tooltip
-                          content={({ active, payload, label }) => {
-                            if (active && payload && payload.length) {
-                              const value = payload[0].value as number;
-                              return (
-                                <div className="bg-white p-2 border border-gray-200 rounded shadow">
-                                  <p className="font-semibold">Nifty {label}</p>
-                                  <p>
-                                    Change{" "}
-                                    <span
-                                      className={
-                                        value >= 0
-                                          ? "font-semibold text-[#22c55e]"
-                                          : "font-semibold text-[#ef4444]"
-                                      }
-                                    >
-                                      {Number(value).toFixed(2)}%
-                                    </span>
-                                  </p>
-                                </div>
-                              );
-                            }
-                            return null;
-                          }}
-                        />
-
-                        {/* Bars with 3D Effect */}
-                        <Bar
-                          dataKey="changepct"
-                          cursor="pointer"
-                          onClick={(data) => handleBarClick(data)}
-                          radius={[2.5, 2.5, 0, 0]} // Rounded corners for the 3D look
-                        >
-                          {sectorData.map((entry, index) => (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={`url(#${
-                                entry.changepct >= 0
-                                  ? "positiveGradient3D"
-                                  : "negativeGradient3D"
-                              })`}
-                              style={{
-                                filter:
-                                  "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.4))", // Shadow for depth
-                              }}
-                            />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </ChartContainer>
-                </div>
-              </div>
-            </div>
-
-            {/* Sector Table */}
-            <div className="w-full lg:w-1/3">
-              <div className="h-[600px] overflow-hidden flex flex-col">
+      <div className="mt-8 grid grid-cols-1 gap-8">
+        {/* Row 1: Sector Table and First Index Table */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Sector Table */}
+          <div>
+            <Card>
+              <CardHeader>
+                <h2 className="text-2xl font-bold">Sector Performance</h2>
+              </CardHeader>
+              <CardContent className="h-[700px] overflow-hidden flex flex-col">
                 <div className="flex-none">
                   <Table>
                     <TableHeader className="bg-blue-200">
-                      <TableRow >
+                      <TableRow>
                         <TableHead className="sticky top-0 text-lg">Sector</TableHead>
                         <TableHead className="sticky top-0 text-lg z-10 text-right">
                           Change %
@@ -361,13 +342,13 @@ export default function Sectors() {
                       {sectorData.map((sector) => (
                         <TableRow
                           key={sector.sector}
-                          className={`cursor-pointer text-md hover:bg-gray-100 ${
+                          className={`cursor-pointer p-4 text-md hover:bg-gray-100 ${
                             selectedSector === sector.sector ? "bg-gray-100" : ""
                           }`}
-                           onClick={() => setSelectedSector(sector.sector)}
+                          onClick={() => setSelectedSector(sector.sector)}
                         >
                           <TableCell>{sector.name}</TableCell>
-                          <TableCell className="text-right  font-medium">
+                          <TableCell className="text-right font-medium">
                             <span
                               className={`inline-flex items-center rounded px-1 py-1 ${
                                 sector.changepct >= 0
@@ -390,18 +371,29 @@ export default function Sectors() {
                     </TableBody>
                   </Table>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Individual Index Tables */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {SECTORS.map((sector) => (
-          <IndexTable key={sector} sector={sector} stocks={sectorStocks[sector]} />
-        ))}
+          {/* First Index Table */}
+          <div>
+            {SECTORS.length > 0 && (
+              <IndexTable
+                sector={SECTORS[0]}
+                stocks={sectorStocks[SECTORS[0]]}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Row 2: Remaining Index Tables */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {SECTORS.slice(1).map((sector) => (
+            <IndexTable key={sector} sector={sector} stocks={sectorStocks[sector]} />
+          ))}
+        </div>
       </div>
+
       <StockModal
         stock={selectedStock}
         isOpen={isModalOpen}
@@ -409,4 +401,5 @@ export default function Sectors() {
       />
     </div>
   );
+  
 }
