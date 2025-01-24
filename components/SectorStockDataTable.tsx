@@ -4,7 +4,6 @@ import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { Stock } from '@/types/Stock'
  import { SortColumn, SortDirection } from '@/types/Stock';
 import { getStockBgColor } from '@/lib/getstockBgColor';
-import { Table, TableHeader, TableBody, TableCell, TableHead, TableRow  } from './ui/table';
 
 interface SectorStockDataTableProps {
   tableId: string;
