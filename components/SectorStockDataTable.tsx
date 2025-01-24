@@ -4,7 +4,7 @@ import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { Stock } from '@/types/Stock'
  import { SortColumn, SortDirection } from '@/types/Stock';
 import { getStockBgColor } from '@/lib/getstockBgColor';
-
+import { Table, TableHeader, TableBody, TableCell, TableHead, TableRow  } from './ui/table';
 
 interface SectorStockDataTableProps {
   tableId: string;
@@ -68,7 +68,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </th>
               <th 
-                className="p-4 text-left font-medium min-w-[200px] cursor-pointer"
+                className="p-2 text-left font-medium min-w-[200px] cursor-pointer"
                 onClick={() => onSort(tableId, 'companyname')}
               >
                 <div className="flex items-center gap-2">
@@ -77,7 +77,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </th>
               <th 
-                className="p-4 text-right font-medium min-w-[100px] cursor-pointer"
+                className="p-2 text-right font-medium min-w-[100px] cursor-pointer"
                 onClick={() => onSort(tableId, 'price')}
               >
                 <div className="flex items-center justify-end gap-2">
@@ -86,7 +86,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </th>
               <th 
-                className="p-4 text-right font-medium min-w-[100px] cursor-pointer"
+                className="p-2 text-right font-medium min-w-[100px] cursor-pointer"
                 onClick={() => onSort(tableId, 'change')}
               >
                 <div className="flex items-center justify-end gap-2">
@@ -95,7 +95,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </th>
               <th 
-                className="p-4 text-right font-medium min-w-[100px] cursor-pointer"
+                className="p-2 text-right font-medium min-w-[100px] cursor-pointer"
                 onClick={() => onSort(tableId, 'changepct')}
               >
                 <div className="flex items-center justify-end gap-2">
@@ -132,15 +132,15 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                     </div>
                   </div>
                 </td>
-                <td className="p-4 border-t max-w-[200px] md:max-w-[200px]">
+                <td className="p-2 border-t max-w-[200px] md:max-w-[200px]">
                   <span className="truncate block">
                     {stock.companyname}
                   </span>
                 </td>
-                <td className="p-4 border-t text-right">
+                <td className="p-2 border-t text-right">
                   ₹{Number(stock.price).toFixed(2)}
                 </td>
-                <td className="p-4 border-t text-right">
+                <td className="p-2 border-t text-right">
                   <span
                     className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                       stock.change >= 0
@@ -156,7 +156,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                     {Number(stock.change).toFixed(2)}
                   </span>
                 </td>
-                <td className="p-4 border-t text-right">
+                <td className="p-2 border-t text-right">
                   <span
                     className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                       stock.changepct >= 0

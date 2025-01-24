@@ -3,6 +3,7 @@ import { ArrowUp, ArrowDown, Flame, ArrowUpDown } from 'lucide-react';
 import Image from 'next/image';
 import { Stock } from '@/types/Stock';
 import { getStockBgColor } from '@/lib/getstockBgColor';
+import { Table, TableHeader, TableBody, TableCell, TableHead, TableRow  } from './ui/table';
 
 interface IntrabuzzStockDataTableProps {
   stocks: Stock[];
@@ -66,22 +67,22 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
   return (
     <div className="relative border border-gray-200 rounded-lg">
       <div className="overflow-auto max-h-[710px] bottom-b">
-        <table className="w-full border-collapse">
-          <thead className="sticky top-0 z-20 bg-blue-200">
-            <tr>
-              <th className="sticky left-0 z-30 min-w-[100px] bg-blue-200 p-4 text-left font-medium cursor-pointer" onClick={() => onSort('symbol')}>
+        <Table className="w-full border-collapse">
+          <TableHeader className="sticky top-0 z-20 bg-blue-200">
+            <TableRow>
+              <TableHead className="sticky left-0 z-30 min-w-[100px] bg-blue-200 p-4 text-left font-medium cursor-pointer" onClick={() => onSort('symbol')}>
                 <div className="flex items-center gap-2">
                   <span>Symbol</span>
                   {renderSortIcon('symbol')}
                 </div>
-              </th>
-              <th className="p-4 text-left font-medium min-w-[200px] cursor-pointer" onClick={() => onSort('companyname')}>
+              </TableHead>
+              <TableHead className="p-4 text-left font-medium min-w-[200px] cursor-pointer" onClick={() => onSort('companyname')}>
                 <div className="flex items-center gap-2">
                   <span>Company Name</span>
                   {renderSortIcon('companyname')}
                 </div>
-              </th>
-              <th 
+              </TableHead>
+              <TableHead 
                 className="p-4 text-right font-medium min-w-[150px] cursor-pointer"
                 onClick={() => onSort('closeyest')}
               >
@@ -89,8 +90,8 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                   <span>Previous Close</span>
                   {renderSortIcon('closeyest')}
                 </div>
-              </th>
-              <th 
+              </TableHead>
+              <TableHead 
                 className="p-4 text-right font-medium min-w-[150px] cursor-pointer"
                 onClick={() => onSort('price')}
               >
@@ -98,8 +99,8 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                   <span>Price</span>
                   {renderSortIcon('price')}
                 </div>
-              </th>
-              <th 
+              </TableHead>
+              <TableHead 
                 className="p-4 text-right font-medium min-w-[150px] cursor-pointer"
                 onClick={() => onSort('change')}
               >
@@ -107,8 +108,8 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                   <span>Change</span>
                   {renderSortIcon('change')}
                 </div>
-              </th>
-              <th 
+              </TableHead>
+              <TableHead 
                 className="p-4 text-right font-medium min-w-[150px] cursor-pointer"
                 onClick={() => onSort('changepct')}
               >
@@ -116,8 +117,8 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                   <span>Change %</span>
                   {renderSortIcon('changepct')}
                 </div>
-              </th>
-              <th 
+              </TableHead>
+              <TableHead 
                 className="p-4 text-right font-medium min-w-[150px] cursor-pointer"
                 onClick={() => onSort('volumespike')}
               >
@@ -125,15 +126,20 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                   <span>Spike</span>
                   {renderSortIcon('volumespike')}
                 </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {paginatedStocks.map((stock) => (
-              <tr key={stock.symbol} className="cursor-pointer hover:bg-gray-50" onClick={() => onStockClick && onStockClick(stock)}>
-                <td className="p-4 border-t sticky left-0 z-10 bg-white">
+              <TableRow key={stock.symbol} className="cursor-pointer hover:bg-gray-50" onClick={() => onStockClick && onStockClick(stock)}>
+                <TableCell className="p-2 border-t sticky left-0 z-10 bg-white">
                   <div className="flex items-center gap-2">
-                    <Image className="w-6 h-6 rounded-full" src={`/images/${stock.symbol}.svg`} alt={stock.companyname} width={20} height={20} />
+                    <Image className="w-6 h-6 rounded-full" 
+                      src={`/images/${stock.symbol}.svg`} 
+                      alt={stock.companyname} 
+                      width={20} 
+                      height={20} 
+                    />
                     <div 
                       className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
                       style={{ backgroundColor: getStockBgColor(stock.symbol), width: '7rem' }}
@@ -151,13 +157,13 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                       </span>
                     </div>
                   </div>
-                </td>
-                <td className="p-4 border-t truncate max-w-[200px]">{stock.companyname}</td>
-                <td className="p-4 border-t text-right">₹{Number(stock.closeyest).toFixed(2)}</td>
-                <td className="p-4 border-t text-right">
+                </TableCell>
+                <TableCell className="p-2 border-t truncate max-w-[200px]">{stock.companyname}</TableCell>
+                <TableCell className="p-2 border-t text-right">₹{Number(stock.closeyest).toFixed(2)}</TableCell>
+                <TableCell className="p-2 border-t text-right">
                   ₹{Number(stock.price).toFixed(2)}
-                </td>
-                <td className="p-4 border-t text-right">
+                </TableCell>
+                <TableCell className="p-2 border-t text-right">
                   <span
                     className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                       stock.change >= 0
@@ -172,8 +178,8 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                     )}
                     {Number(stock.change).toFixed(2)}
                   </span>
-                </td>
-                <td className="p-4 border-t text-right">
+                </TableCell>
+                <TableCell className="p-2 border-t text-right">
                   <span
                     className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                       stock.changepct >= 0
@@ -188,8 +194,8 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                     )}
                     {Number(stock.changepct).toFixed(2)}%
                   </span>
-                </td>
-                <td className="p-4 border-t text-right">
+                </TableCell>
+                <TableCell className="p-2 border-t text-right">
                   <span
                     className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                       (stock.volumespike ?? 0) >= 0
@@ -200,11 +206,11 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                     <Flame className="w-3.5 h-3.5 mr-0.5" />
                     {Number(stock.volumespike).toFixed(2)}X
                   </span>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       {/* Pagination Controls */}

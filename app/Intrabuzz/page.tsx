@@ -149,7 +149,7 @@ if (spikeFilterOn) {
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10; // 10, the number of rows per page
+  const rowsPerPage = 12; // 10, the number of rows per page
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
