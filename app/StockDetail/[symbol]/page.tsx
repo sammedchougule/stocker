@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import FinancialTables from "@/components/FinancialTables";
 import Link from "next/link";
 import CustomizedProgressBars from "@/components/CustomizedProgressBars";
+import Image from "next/image";
 
 export default function StockDetailPage() {
   const params = useParams();
@@ -53,9 +54,18 @@ export default function StockDetailPage() {
         <div>
           <div className="flex items-center gap-1">
             <Link href="/" className="text-md text-gray-600 hover:text-blue-500">Home</Link>
-            <span className="text-md text-gray-800"> &gt; {stockData.symbol} • {stockData.exchange}</span>
+            <span className="text-sm text-gray-800"> &gt; {stockData.symbol} • {stockData.exchange}</span>
           </div>
-          <h1 className="text-xl font-semibold ">{stockData.companyname}</h1>
+          <div className="flex items-center gap-2">
+            <Image 
+              className="w-8 h-8 rounded-full" 
+              src={`/images/${stockData.symbol}.svg`} 
+              alt={stockData.companyname} 
+              width={50} 
+              height={50} 
+            />
+            <p className="text-2xl font-semibold">{stockData.companyname}</p>
+          </div>
         </div>
       </div>
 
