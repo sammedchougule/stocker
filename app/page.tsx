@@ -1,6 +1,6 @@
 
 import './globals.css'
-import { StockProvider } from '@/context/StockContext'
+import { StockProvider } from '@/contexts/StockContext'
 import Indices from '@/components/Indices'
 import TodayNews from '@/components/TodayNews'
 import TodaysStocks from '@/components/TodayStocks'

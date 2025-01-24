@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useState, useMemo, Suspense } from 'react'
-import { useStockContext } from '@/context/StockContext'
+import { useStockContext } from '@/contexts/StockContext'
 import { Stock } from '@/types/Stock'
 import {
   Select,

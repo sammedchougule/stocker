@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from "react"
-import { useStockContext } from '@/context/StockContext'
+import { useStockContext } from '@/contexts/StockContext'
 import FastMarquee from 'react-fast-marquee'
 
 const nifty50Symbols = [

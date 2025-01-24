@@ -6,7 +6,7 @@ import { useSwipeable } from 'react-swipeable';
 import Skeleton from 'react-loading-skeleton';
 import Image from 'next/image';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { useStockContext } from '@/context/StockContext';
+import { useStockContext } from '@/contexts/StockContext';
 import { Stock } from '@/types/Stock';
 import { StockModal } from './StockModal';
 import { Button } from '@/components/ui/buttons';

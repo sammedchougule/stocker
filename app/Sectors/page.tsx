@@ -3,7 +3,7 @@
 "use client";
 
 import React, { useMemo, useState, useRef, useEffect } from "react";
-import { useStockContext } from "@/context/StockContext";
+import { useStockContext } from "@/contexts/StockContext";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import {
   Bar,

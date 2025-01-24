@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Stock } from "@/types/Stock";
-import { useStockContext } from "@/context/StockContext";
+import { useStockContext } from "@/contexts/StockContext";
 import { StockChart } from "@/components/StockChart";
 import StockCard from "@/components/StockCard";
 import { format } from "date-fns";

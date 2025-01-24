@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { StockProvider } from '@/context/StockContext'
+import { StockProvider } from '@/contexts/StockContext'
 import Navbar from '@/components/Navbar'
 import Marquee from '@/components/Marquee'
 import Head from 'next/head'

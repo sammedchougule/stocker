@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useStockContext } from "@/context/StockContext";
+import { useStockContext } from "@/contexts/StockContext";
 import { Stock } from "@/types/Stock";
 
 const StockInput: React.FC = () => {
