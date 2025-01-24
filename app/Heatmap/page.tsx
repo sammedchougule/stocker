@@ -369,7 +369,7 @@ export default function Heatmap() {
         </CardHeader>
 
         <CardContent>
-            <ResponsiveContainer width="100%" height={620}>
+            <ResponsiveContainer width="100%" height={650}>
                 <Treemap
                     data={formattedData}
                     dataKey="value"
