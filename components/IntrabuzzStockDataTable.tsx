@@ -34,21 +34,46 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
     return [...stocks].sort((a, b) => {
       let aValue = a[sortColumn];
       let bValue = b[sortColumn];
-
-      if (typeof aValue === 'string') {
-        aValue = aValue.toLowerCase();
-        if (aValue.includes('%')) aValue = parseFloat(aValue);
+  
+      // Remove currency symbols and parse to float for price-related columns
+      const parseCurrency = (value: string | null) => {
+        if (value && typeof value === 'string' && value.includes('₹')) {
+          return parseFloat(value.replace(/[^\d.-]/g, '')); // Remove any non-numeric characters (like ₹)
+        }
+        return value ? parseFloat(value) : 0; // Return 0 if value is null or undefined
+      };
+  
+      // If the column is percentage-based, ensure it is parsed as a float
+      const parsePercentage = (value: string | null) => {
+        if (value && typeof value === 'string' && value.includes('%')) {
+          return parseFloat(value.replace('%', ''));
+        }
+        return value ? parseFloat(value) : 0; // Return 0 if value is null or undefined
+      };
+  
+      // Handle specific columns and parse them correctly
+      if (sortColumn === 'price' || sortColumn === 'closeyest' || sortColumn === 'change') {
+        aValue = parseCurrency(aValue?.toString() ?? null);
+        bValue = parseCurrency(bValue?.toString() ?? null);
+      } else if (sortColumn === 'changepct') {
+        aValue = parsePercentage(aValue?.toString() ?? null);
+        bValue = parsePercentage(bValue?.toString() ?? null);
+      } else {
+        // Default to numeric values for other columns
+        aValue = aValue ? parseFloat(aValue.toString()) : 0;
+        bValue = bValue ? parseFloat(bValue.toString()) : 0;
       }
-      if (typeof bValue === 'string') {
-        bValue = bValue.toLowerCase();
-        if (bValue.includes('%')) bValue = parseFloat(bValue);
-      }
-
+  
+      // Perform the sorting logic for ascending/descending
       if ((aValue ?? 0) < (bValue ?? 0)) return sortDirection === 'asc' ? -1 : 1;
       if ((aValue ?? 0) > (bValue ?? 0)) return sortDirection === 'asc' ? 1 : -1;
-      return 0; 
+      return 0;
     });
   }, [stocks, sortColumn, sortDirection]);
+  
+  
+  
+
 
   // Pagination Logic
   const paginatedStocks = useMemo(() => {

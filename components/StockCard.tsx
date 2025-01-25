@@ -8,27 +8,29 @@ import { getStockBgColor } from '@/lib/getstockBgColor';
 
 interface StockCardProps {
   stock: Stock;
-  onClick?: (stock: Stock) => void; // Make it optional if not always needed
+  onClick?: (stock: Stock) => void;
+  spikeFilterOn: boolean; // Add this prop
 }
 
 const StockCard: React.FC<StockCardProps> = ({ 
   stock, 
-  onClick 
+  onClick, 
+  spikeFilterOn // Receive spikeFilterOn prop
 }) => (
   <Card
     className="relative flex flex-col cursor-pointer transition-transform duration-300 transform hover:scale-105"
-    onClick={() => onClick?.(stock)} // Optional chaining
+    onClick={() => onClick?.(stock)}
     style={{
       boxShadow: stock.changepct >= 0
-        ? '4px 4px 8px rgba(34, 197, 94, 0.5)' // green shadow
-        : '4px 4px 8px rgba(239, 68, 68, 0.5)' // red shadow
+        ? '4px 4px 8px rgba(34, 197, 94, 0.5)' 
+        : '4px 4px 8px rgba(239, 68, 68, 0.5)' 
     }}
   >
     <CardHeader>
       <div 
         className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
         style={{ backgroundColor: getStockBgColor(stock.symbol), width: '7rem' }}
-        >
+      >
         <span 
           className="whitespace-nowrap text-[14px] leading-none text-center block overflow-hidden text-ellipsis"
           style={{
@@ -36,8 +38,8 @@ const StockCard: React.FC<StockCardProps> = ({
             paddingRight: '4px',
             maxWidth: '100%',
             fontSize: (stock.symbol).length > 10 ? '12px' : '14px'
-            }}
-          >
+          }}
+        >
           {stock.symbol}
         </span>
       </div>
@@ -52,28 +54,32 @@ const StockCard: React.FC<StockCardProps> = ({
         <span>₹{Number(stock.price).toFixed(2)}</span>
       </div>
       <div className="flex justify-between items-center w-full">
-        <div
-          className={`flex items-center text-[15px] rounded px-1 py-1 font-medium ${
-            stock.changepct >= 0
-              ? 'text-green-500 bg-green-100 rounded-lg'
-              : 'text-red-500 bg-red-100 rounded-lg'
-          }`}
-        >
-          {stock.changepct >= 0 ? (
-            <ArrowUp className="w-3.5 h-3.5" />
-          ) : (
-            <ArrowDown className="w-3.5 h-3.5" />
-          )}
-          {Number(stock.changepct).toFixed(2)}%
-        </div> 
-        <div
-          className={`flex items-center px-1 py-1 rounded-md text-[15px] font-medium ${
-            (stock.volumespike ?? 0) >= 0 ? 'text-orange-700 bg-orange-100' : 'text-yellow-700 bg-yellow-100'
-          }`}
-        >
-          <Flame className="w-4 h-4" />
-          <span>{Number(stock.volumespike).toFixed(2) + 'X'}</span>
-        </div>
+        {/* Conditionally render changepct or volumespike */}
+        {spikeFilterOn ? (
+          <div
+            className={`flex items-center px-1 py-1 rounded-md text-[15px] font-medium ${
+              (stock.volumespike ?? 0) >= 0 ? 'text-orange-700 bg-orange-100' : 'text-yellow-700 bg-yellow-100'
+            }`}
+          >
+            <Flame className="w-4 h-4" />
+            <span>{Number(stock.volumespike).toFixed(2) + 'X'}</span>
+          </div>
+        ) : (
+          <div
+            className={`flex items-center text-[15px] rounded px-1 py-1 font-medium ${
+              stock.changepct >= 0
+                ? 'text-green-500 bg-green-100 rounded-lg'
+                : 'text-red-500 bg-red-100 rounded-lg'
+            }`}
+          >
+            {stock.changepct >= 0 ? (
+              <ArrowUp className="w-3.5 h-3.5" />
+            ) : (
+              <ArrowDown className="w-3.5 h-3.5" />
+            )}
+            {Number(stock.changepct).toFixed(2)}%
+          </div>
+        )}
       </div>
     </CardFooter>
   </Card>
