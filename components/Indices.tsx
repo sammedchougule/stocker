@@ -148,7 +148,7 @@ const Indices: React.FC = () => {
           <CardHeader className="p-2 pb-2">
             <div className="flex justify-between items-center border-b">
               <h2 className="text-xl font-medium">Sectoral Indices</h2>
-              <a href="/Sectors" className="text-md text-blue-500">
+              <a href="/sectors" className="text-md text-blue-500">
                 See All
               </a>
             </div>

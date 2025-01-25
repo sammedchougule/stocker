@@ -55,22 +55,22 @@ const Navbar = () => {
 
           {/* Links for Desktop */}
           <div className="hidden lg:flex space-x-6">
-            <Link href="/Intrabuzz" className="text-black hover:text-gray-600 flex items-center">
+            <Link href="/intrabuzz" className="text-black hover:text-gray-600 flex items-center">
               IntraBuzz
             </Link>
-            <Link href="/Sectors" className="text-black hover:text-gray-600 flex items-center">
+            <Link href="/sectors" className="text-black hover:text-gray-600 flex items-center">
               Sectors
             </Link>
-            <Link href="/Heatmap" className="text-black hover:text-gray-600 flex items-center">
+            <Link href="/heatmap" className="text-black hover:text-gray-600 flex items-center">
               Heatmap
             </Link>
-            <Link href="/Screener" className="text-black hover:text-gray-600 flex items-center">
+            <Link href="/screener" className="text-black hover:text-gray-600 flex items-center">
               Screener
             </Link>
-            <Link href="/News" className="text-black hover:text-gray-600 flex items-center">
+            <Link href="/news" className="text-black hover:text-gray-600 flex items-center">
               News
             </Link>
-            <Link href="/Account" className="text-black hover:text-gray-600 flex items-center">
+            <Link href="/account" className="text-black hover:text-gray-600 flex items-center">
               Account
               <User className="h-5 w-5 ml-2" />
             </Link>
@@ -87,7 +87,7 @@ const Navbar = () => {
           </div>
 
           {/* User Icon for Mobile */}
-          <Link href="/Account" className="md:hidden text-black hover:text-gray-600">
+          <Link href="/account" className="md:hidden text-black hover:text-gray-600">
             <User className="h-5 w-5" />
           </Link>
         </div>
@@ -113,7 +113,7 @@ const Navbar = () => {
         >
           <div className="px-4 py-4 space-y-4">
             <Link
-              href="/Intrabuzz"
+              href="/intrabuzz"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
             >
               <SquareActivity className="h-5 w-5 mr-3" />
@@ -121,35 +121,35 @@ const Navbar = () => {
             </Link>
             
             <Link
-              href="/Sectors"
+              href="/sectors"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
             >
               <Layers className="h-5 w-5 mr-3" />
               Sectors
             </Link>
             <Link
-              href="/Heatmap"
+              href="/heatmap"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
             >
               <LayoutGrid className="h-5 w-5 mr-3" />
               Heatmap
             </Link>
             <Link
-              href="/Screener"
+              href="/screener"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
             >
               <Sliders className="h-5 w-5 mr-3" />
               Screener
             </Link>
             <Link
-              href="/News"
+              href="/news"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
             >
               <Newspaper  className="h-5 w-5 mr-3" />
               News
             </Link>
             <Link
-              href="/Account"
+              href="/account"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
             >
               <User className="h-5 w-5 mr-3" />
@@ -172,39 +172,39 @@ const Navbar = () => {
             <span className="text-xs text-gray-600">Home</span>
           </Link>
           <Link
-            href="/Intrabuzz"
+            href="/intrabuzz"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive("/Intrabuzz") ? "bg-gray-200 rounded-md px-2 py-1" : ""
+              isActive("/intrabuzz") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <SquareActivity className={`h-6 w-6 ${isActive("/Intrabuzz") ? "text-blue-500" : "text-gray-700"}`} />
+            <SquareActivity className={`h-6 w-6 ${isActive("/intrabuzz") ? "text-blue-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">IntraBuzz</span>
           </Link>
           <Link
-            href="/Sectors"
+            href="/sectors"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive("/Sectors") ? "bg-gray-200 rounded-md px-2 py-1" : ""
+              isActive("/sectors") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Layers className={`h-6 w-6 ${isActive("/Sectors") ? "text-yellow-500" : "text-gray-700"}`} />
+            <Layers className={`h-6 w-6 ${isActive("/sectors") ? "text-yellow-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Sectors</span>
           </Link>
           <Link
-            href="/Heatmap"
+            href="/heatmap"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive("/Heatmap") ? "bg-gray-200 rounded-md px-2 py-1" : ""
+              isActive("/heatmap") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <LayoutGrid className={`h-6 w-6 ${isActive("/Heatmap") ? "text-orange-500" : "text-gray-700"}`} />
+            <LayoutGrid className={`h-6 w-6 ${isActive("/heatmap") ? "text-orange-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Heatmap</span>
           </Link>
           <Link
-            href="/News"
+            href="/news"
             className={`text-gray-700 flex flex-col items-center ${
-              isActive("/News") ? "bg-gray-200 rounded-md px-2 py-1" : ""
+              isActive("/news") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Newspaper  className={`h-6 w-6 ${isActive("/News") ? "text-green-700" : "text-gray-700"}`} />
+            <Newspaper  className={`h-6 w-6 ${isActive("/news") ? "text-green-700" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">News</span>
           </Link>
         </div>
