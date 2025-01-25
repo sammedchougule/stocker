@@ -342,13 +342,13 @@ export default function Sectors() {
                       {sectorData.map((sector) => (
                         <TableRow
                           key={sector.sector}
-                          className={`cursor-pointer p-4 text-md hover:bg-gray-100 ${
+                          className={`cursor-pointer font-medium p-4 text-md hover:bg-gray-100 ${
                             selectedSector === sector.sector ? "bg-gray-100" : ""
                           }`}
                           onClick={() => setSelectedSector(sector.sector)}
                         >
                           <TableCell>{sector.name}</TableCell>
-                          <TableCell className="text-right font-medium">
+                          <TableCell className="text-right">
                             <span
                               className={`inline-flex items-center rounded px-1 py-1 ${
                                 sector.changepct >= 0
@@ -361,7 +361,7 @@ export default function Sectors() {
                               ) : (
                                 <ArrowDown className="w-3.5 h-3.5 mr-0.5" />
                               )}
-                              <span className="text-md font-md">
+                              <span className="text-md">
                                 {sector.changepct}%
                               </span>
                             </span>
