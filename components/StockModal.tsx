@@ -61,7 +61,7 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
                 </Button>
               </Link>
 
-              <Link href={`/StockDetail/${stock.symbol}`}>
+              <Link href={`/stockdetail/${stock.symbol}`}>
                 <Button size="icon" className="h-10 w-10 bg-white/50 hover:bg-white/70 group">
                   <SquareArrowOutUpRight className="h-6 w-6 text-gray-700 group-hover:text-blue-600" />
                 </Button>
@@ -151,7 +151,7 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
                 </Button>
               </Link>
 
-              <Link href={`/StockDetail/${stock.symbol}`}>
+              <Link href={`/stockdetail/${stock.symbol}`}>
                 <Button size="icon" className="h-10 w-10 bg-white/50 hover:bg-white/70 group">
                   <SquareArrowOutUpRight className="h-6 w-6 text-gray-700 group-hover:text-blue-600" />
                 </Button>
