@@ -156,11 +156,13 @@ export default function StockDetailPage() {
             {similarStocks.length > 0 ? (
               similarStocks.map((stock) => (
                 <StockCard
-                  key={stock.symbol}
+                  key={stock.symbol} // Unique key for each StockCard
                   stock={stock}
+                  spikeFilterOn={true} // or false, based on your requirement
                   onClick={() => {
-                    window.location.href = `/StockDetail/${stock.symbol}`;
+                    window.location.href = `/stockdetail/${stock.symbol}`;
                   }}
+                  showChangePctOnly={true}  // Show only changepct
                 />
               ))
             ) : (
