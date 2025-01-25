@@ -28,21 +28,48 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
     return [...stocks].sort((a, b) => {
       let aValue = a[sortColumn];
       let bValue = b[sortColumn];
-
-      if (typeof aValue === 'string') {
+  
+      // Helper function to parse currency values
+      const parseCurrency = (value: string | number) => {
+        if (typeof value === 'string') {
+          if (value.includes('₹')) {
+            return parseFloat(value.replace(/[^\d.-]/g, '')); // Remove ₹ and parse as number
+          }
+          if (value.includes('%')) {
+            return parseFloat(value.replace('%', '')); // Remove % and parse as percentage
+          }
+        }
+        return parseFloat(value.toString()); // For numeric values, return as number
+      };
+  
+      // Handle sorting for price, change, changepct (numeric columns)
+      if (sortColumn === 'price' || sortColumn === 'change' || sortColumn === 'changepct') {
+        aValue = parseCurrency(aValue ?? 0);
+        bValue = parseCurrency(bValue ?? 0);
+      }
+  
+      // Handle sorting for symbol and companyname (alphabetical)
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
         aValue = aValue.toLowerCase();
-        if (aValue.includes('%')) aValue = parseFloat(aValue);
-      }
-      if (typeof bValue === 'string') {
         bValue = bValue.toLowerCase();
-        if (bValue.includes('%')) bValue = parseFloat(bValue);
+        return sortDirection === 'asc'
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
       }
-
-      if ((aValue ?? 0) < (bValue ?? 0)) return sortDirection === 'asc' ? -1 : 1;
-      if ((aValue ?? 0) > (bValue ?? 0)) return sortDirection === 'asc' ? 1 : -1;
-      return 0; 
+  
+      // Handle numeric sorting for other columns
+      return (aValue ?? 0) < (bValue ?? 0)
+        ? sortDirection === 'asc'
+          ? -1
+          : 1
+        : (aValue ?? 0) > (bValue ?? 0)
+        ? sortDirection === 'asc'
+          ? 1
+          : -1
+        : 0;
     });
-  }, [stocks, sortColumn, sortDirection]);
+  }, [stocks, sortColumn, sortDirection]);  
+  
 
   const renderSortIcon = (column: SortColumn) => {
     if (column === sortColumn) {
