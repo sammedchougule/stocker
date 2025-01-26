@@ -1,7 +1,7 @@
 'use client'
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/buttons"
+import { Button } from "@/components/ui/button"
 import { ArrowUpIcon, ArrowDownIcon, SquareArrowOutUpRight, Scan } from 'lucide-react'
 import Link from 'next/link'
 import { Stock } from '@/types/Stock'

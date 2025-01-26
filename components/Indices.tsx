@@ -9,7 +9,7 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { useStockContext } from '@/contexts/StockContext';
 import { Stock } from '@/types/Stock';
 import { StockModal } from './StockModal';
-import { Button } from '@/components/ui/buttons';
+import { Button } from '@/components/ui/button';
 
 const INDICES = [
     'NIFTY_50',

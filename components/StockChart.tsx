@@ -8,7 +8,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Stock } from "@/types/Stock";
-import { Button } from "@/components/ui/buttons";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 
 interface StockChartProps {

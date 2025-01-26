@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, Plus, ListFilter } from 'lucide-react'
-import { Button } from '@/components/ui/buttons'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { useStockContext } from '@/contexts/StockContext'
 import { Stock } from '@/types/Stock'
