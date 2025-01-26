@@ -1,18 +1,33 @@
 "use client"
 
 import Link from "next/link"
-import { Menu, X, User, Home, SquareActivity, Layers, Sliders, LayoutGrid, Newspaper  } from "lucide-react"
+import { Menu, X, Home, SquareActivity, Layers, Sliders, LayoutGrid, Newspaper } from "lucide-react"
 import { useState, useEffect } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { StockInput } from "./Input"
-import Image from 'next/image';
+import { supabase } from "@/lib/supabase"
+import SignInModal from "./SignInModal"
 
 const Navbar = () => {
   const pathname = usePathname()
-
+  const router = useRouter()
   const isActive = (path: string) => pathname === path
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => {
+      if (authListener && authListener.subscription) {
+        authListener.subscription.unsubscribe()
+      }
+    }
+  }, [])
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -29,6 +44,20 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  // SignOut logic
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    setUser(null) // Immediately set user to null after signout
+  }
+
+  const handleLinkClick = (path: string) => {
+    if (!user) {
+      setIsSignInModalOpen(true)
+    } else {
+      router.push(path) // Use next/navigation's router
+    }
+  }
+
   return (
     <>
       {/* Top Navbar */}
@@ -38,42 +67,65 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold text-black flex items-center">
               Stocker
-              <Image
-                src="/stocker.png"
-                alt="Stocker Logo"
-                width={30}
-                height={30}
-                className="ml-1"
-              />
             </Link>
           </div>
 
           {/* Search Input for Tablet and Desktop */}
-          <div className="hidden md:flex flex-grow max-w-md px-4 relative z-10">
+          <div className="hidden md:flex justify-center flex-grow max-w-lg px-4 relative z-10">
             <StockInput />
           </div>
 
           {/* Links for Desktop */}
+
           <div className="hidden lg:flex space-x-6">
-            <Link href="/intrabuzz" className="text-black hover:text-gray-600 flex items-center">
+            <Link
+              href="/intrabuzz"
+              className="text-black hover:text-gray-600 flex items-center"
+              onClick={() => handleLinkClick("/intrabuzz")}
+            >
               IntraBuzz
             </Link>
-            <Link href="/sectors" className="text-black hover:text-gray-600 flex items-center">
+
+            <Link
+              href="/sectors"
+              className="text-black hover:text-gray-600 flex items-center"
+              // onClick={() => handleLinkClick("/sectors")}
+            >
               Sectors
             </Link>
-            <Link href="/heatmap" className="text-black hover:text-gray-600 flex items-center">
+            <Link
+              href="/heatmap"
+              className="text-black hover:text-gray-600 flex items-center"
+              // onClick={() => handleLinkClick("/heatmap")}
+            >
               Heatmap
             </Link>
-            <Link href="/screener" className="text-black hover:text-gray-600 flex items-center">
+            <Link
+              href="/screener"
+              className="text-black hover:text-gray-600 flex items-center"
+              onClick={() => handleLinkClick("/screener")}
+            >
               Screener
             </Link>
-            <Link href="/news" className="text-black hover:text-gray-600 flex items-center">
+            <Link
+              href="/news"
+              className="text-black hover:text-gray-600 flex items-center"
+              onClick={() => handleLinkClick("/news")}
+            >
               News
             </Link>
-            <Link href="/account" className="text-black hover:text-gray-600 flex items-center">
-              Account
-              <User className="h-5 w-5 ml-2" />
-            </Link>
+            {user ? (
+              <button onClick={handleSignOut} className="text-black hover:text-gray-600 flex items-center">
+                Sign Out
+              </button>
+            ) : (
+              <button
+                onClick={() => setIsSignInModalOpen(true)}
+                className="text-black hover:text-gray-600 flex items-center"
+              >
+                Sign In
+              </button>
+            )}
           </div>
 
           {/* Hamburger Menu for Tablet */}
@@ -87,9 +139,6 @@ const Navbar = () => {
           </div>
 
           {/* User Icon for Mobile */}
-          <Link href="/account" className="md:hidden text-black hover:text-gray-600">
-            <User className="h-5 w-5" />
-          </Link>
         </div>
 
         {/* Search Input for Mobile */}
@@ -100,10 +149,7 @@ const Navbar = () => {
         </div>
 
         {isMenuOpen && (
-          <div
-            className="fixed inset-0  bg-opacity-100 z-40 hidden md:block lg:hidden"
-            onClick={toggleMenu}
-          ></div>
+          <div className="fixed inset-0  bg-opacity-100 z-40 hidden md:block lg:hidden" onClick={toggleMenu}></div>
         )}
         {/* Dropdown Menu for Tablet */}
         <div
@@ -115,14 +161,16 @@ const Navbar = () => {
             <Link
               href="/intrabuzz"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+              onClick={() => handleLinkClick("/intrabuzz")}
             >
               <SquareActivity className="h-5 w-5 mr-3" />
               IntraBuzz
             </Link>
-            
+
             <Link
               href="/sectors"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+              // onClick={() => handleLinkClick("/sectors")}
             >
               <Layers className="h-5 w-5 mr-3" />
               Sectors
@@ -130,6 +178,7 @@ const Navbar = () => {
             <Link
               href="/heatmap"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+              // onClick={() => handleLinkClick("/heatmap")}
             >
               <LayoutGrid className="h-5 w-5 mr-3" />
               Heatmap
@@ -137,6 +186,7 @@ const Navbar = () => {
             <Link
               href="/screener"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+              onClick={() => handleLinkClick("/screener")}
             >
               <Sliders className="h-5 w-5 mr-3" />
               Screener
@@ -144,17 +194,26 @@ const Navbar = () => {
             <Link
               href="/news"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+              onClick={() => handleLinkClick("/news")}
             >
-              <Newspaper  className="h-5 w-5 mr-3" />
+              <Newspaper className="h-5 w-5 mr-3" />
               News
             </Link>
-            <Link
-              href="/account"
-              className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
-            >
-              <User className="h-5 w-5 mr-3" />
-              Account
-            </Link>
+            {user ? (
+              <button
+                onClick={handleSignOut}
+                className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+              >
+                Sign Out
+              </button>
+            ) : (
+              <button
+                onClick={() => setIsSignInModalOpen(true)}
+                className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
+              >
+                Sign In
+              </button>
+            )}
           </div>
         </div>
       </nav>
@@ -171,44 +230,54 @@ const Navbar = () => {
             <Home className={`h-6 w-6 ${isActive("/") ? "text-blue-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Home</span>
           </Link>
-          <Link
-            href="/intrabuzz"
-            className={`text-gray-700 flex flex-col items-center ${
+          <div
+            onClick={() => handleLinkClick("/intrabuzz")}
+            className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/intrabuzz") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <SquareActivity className={`h-6 w-6 ${isActive("/intrabuzz") ? "text-blue-500" : "text-gray-700"}`} />
+            <SquareActivity className={`h-6 w-6 ${isActive("/intrabuzz") ? "text-yellow-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">IntraBuzz</span>
-          </Link>
-          <Link
-            href="/sectors"
-            className={`text-gray-700 flex flex-col items-center ${
+          </div>
+          <div
+            // onClick={() => handleLinkClick("/sectors")}
+            className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/sectors") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
             <Layers className={`h-6 w-6 ${isActive("/sectors") ? "text-yellow-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Sectors</span>
-          </Link>
-          <Link
-            href="/heatmap"
-            className={`text-gray-700 flex flex-col items-center ${
+          </div>
+          <div
+            // onClick={() => handleLinkClick("/heatmap")}
+            className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/heatmap") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
             <LayoutGrid className={`h-6 w-6 ${isActive("/heatmap") ? "text-orange-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Heatmap</span>
-          </Link>
+          </div>
+          <div
+            onClick={() => handleLinkClick("/screener")}
+            className={`text-gray-700 flex flex-col items-center cursor-pointer ${
+              isActive("/screener") ? "bg-gray-200 rounded-md px-2 py-1" : ""
+            }`}
+          >
+            <Sliders className={`h-6 w-6 ${isActive("/screener") ? "text-orange-500" : "text-gray-700"}`} />
+            <span className="text-xs text-gray-600">Screener</span>
+          </div>
           <Link
             href="/news"
             className={`text-gray-700 flex flex-col items-center ${
               isActive("/news") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Newspaper  className={`h-6 w-6 ${isActive("/news") ? "text-green-700" : "text-gray-700"}`} />
+            <Newspaper className={`h-6 w-6 ${isActive("/news") ? "text-green-700" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">News</span>
           </Link>
         </div>
       </nav>
+      <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
     </>
   )
 }

@@ -30,6 +30,7 @@ import {
 import SectorStockDataTable from "@/components/SectorStockDataTable";
 import { StockModal } from '@/components/StockModal';
 import { SortColumn, SortDirection } from "@/types/Stock";
+import AuthWrapper from "@/components/AuthWrapper";
 
 // Define available sectors
 const SECTORS = [
@@ -183,7 +184,8 @@ export default function Sectors() {
   };
 
   return (
-    <div className="container mx-auto mt-4">
+    <AuthWrapper>
+      <div className="container mx-auto mt-4">
       {/* Sector Performance Chart */}
       <Card>
         <CardHeader>
@@ -400,6 +402,8 @@ export default function Sectors() {
         onClose={() => setIsModalOpen(false)}
       />
     </div>
+    </AuthWrapper>
+    
   );
   
 }

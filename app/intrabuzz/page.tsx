@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect, useState, useMemo, Suspense } from 'react'
@@ -13,11 +12,12 @@ import {
 } from "@/components/ui/select"
 import { ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from 'lucide-react'
 import { StockModal } from '@/components/StockModal';
-import { Button } from '@/components/ui/buttons'
+import { Button } from '@/components/ui/button'
 import { useSearchParams } from 'next/navigation'
 import StockCard from '@/components/StockCard';
 import IntrabuzzStockDataTable from "@/components/IntrabuzzStockDataTable";
 import CustomizedProgressBars from '@/components/CustomizedProgressBars'
+import AuthWrapper from "@/components/AuthWrapper"
 
 type SortOption = 
   | 'changepct_desc' 
@@ -271,8 +271,11 @@ if (spikeFilterOn) {
 
 export default function Intrabuzz() {
   return (
-    <Suspense>
-      <IntrabuzzContent />
-    </Suspense>
+    <AuthWrapper>
+      <Suspense>
+        <IntrabuzzContent />
+      </Suspense>
+    </AuthWrapper>
   )
 }
+
