@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { StockInput } from "./Input"
 import { supabase } from "@/lib/supabase"
 import SignInModal from "./SignInModal"
+import type { User } from "@/types/user"
 
 const Navbar = () => {
   const pathname = usePathname()
@@ -14,7 +15,7 @@ const Navbar = () => {
   const isActive = (path: string) => pathname === path
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
   useEffect(() => {
