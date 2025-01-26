@@ -21,9 +21,6 @@ const Navbar = () => {
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null)
-      if (event === "SIGNED_IN") {
-        router.push(pathname)
-      }
     })
 
     return () => {
@@ -52,7 +49,6 @@ const Navbar = () => {
   const handleSignOut = async () => {
     await supabase.auth.signOut()
     setUser(null) // Immediately set user to null after signout
-    router.push("/") // Redirect to home page after signout
   }
 
   const handleLinkClick = (path: string) => {

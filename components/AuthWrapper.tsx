@@ -19,7 +19,7 @@ export default function AuthWrapper({ children }: { children: React.ReactNode })
 
     checkAuth()
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(( session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       setIsAuthenticated(!!session)
     })
 
