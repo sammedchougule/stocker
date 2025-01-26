@@ -73,7 +73,7 @@
 import { useState } from "react"
 import { Dialog } from "@headlessui/react"
 import { supabase } from "@/lib/supabase"
-import { useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 
 interface SignInModalProps {
   isOpen: boolean
@@ -85,7 +85,8 @@ const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
-  const router = useRouter()
+  // const router = useRouter()
+  const pathname = usePathname()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -96,7 +97,7 @@ const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: window.location.href,
+          emailRedirectTo: `${window.location.origin}${pathname}`,
         },
       })
 
