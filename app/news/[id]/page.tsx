@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
 
+
 interface NewsArticle {
   id: string
   title: string
@@ -24,11 +25,12 @@ async function getNewsArticle(id: string): Promise<NewsArticle | null> {
   return data
 }
 
-interface PageProps {
+type Props = {
   params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = await getNewsArticle(params.id)
 
   if (!article) {
@@ -54,7 +56,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function NewsArticlePage({ params }: PageProps) {
+export default async function NewsArticlePage({ params }: Props) {
   const article = await getNewsArticle(params.id)
 
   if (!article) {
@@ -84,4 +86,5 @@ export default async function NewsArticlePage({ params }: PageProps) {
     </div>
   )
 }
+
 
