@@ -90,14 +90,14 @@ const Navbar = () => {
             <Link
               href="/sectors"
               className="text-black hover:text-gray-600 flex items-center"
-              // onClick={() => handleLinkClick("/sectors")}
+              onClick={() => handleLinkClick("/sectors")}
             >
               Sectors
             </Link>
             <Link
               href="/heatmap"
               className="text-black hover:text-gray-600 flex items-center"
-              // onClick={() => handleLinkClick("/heatmap")}
+              onClick={() => handleLinkClick("/heatmap")}
             >
               Heatmap
             </Link>
@@ -171,7 +171,7 @@ const Navbar = () => {
             <Link
               href="/sectors"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
-              // onClick={() => handleLinkClick("/sectors")}
+              onClick={() => handleLinkClick("/sectors")}
             >
               <Layers className="h-5 w-5 mr-3" />
               Sectors
@@ -179,7 +179,7 @@ const Navbar = () => {
             <Link
               href="/heatmap"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
-              // onClick={() => handleLinkClick("/heatmap")}
+              onClick={() => handleLinkClick("/heatmap")}
             >
               <LayoutGrid className="h-5 w-5 mr-3" />
               Heatmap
@@ -241,7 +241,7 @@ const Navbar = () => {
             <span className="text-xs text-gray-600">IntraBuzz</span>
           </div>
           <div
-            // onClick={() => handleLinkClick("/sectors")}
+            onClick={() => handleLinkClick("/sectors")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/sectors") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
@@ -250,7 +250,7 @@ const Navbar = () => {
             <span className="text-xs text-gray-600">Sectors</span>
           </div>
           <div
-            // onClick={() => handleLinkClick("/heatmap")}
+            onClick={() => handleLinkClick("/heatmap")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/heatmap") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
