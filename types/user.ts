@@ -2,10 +2,10 @@ export type User = {
     id: string
     email?: string
     user_metadata?: {
-      [key: string]: any
+      [key: string]: string
     }
     app_metadata?: {
-      [key: string]: any
+      [key: string]: string
     }
     aud: string
     created_at: string
