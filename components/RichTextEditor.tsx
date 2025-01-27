@@ -12,8 +12,8 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
   const [linkUrl, setLinkUrl] = useState("")
 
   // Font options
-  const fontSizes = ["12px", "14px", "16px", "18px", "20px", "24px", "28px", "32px"]
-  const fontFamilies = ["Arial", "Times New Roman", "Helvetica", "Georgia", "Courier New", "Verdana"]
+  // const fontSizes = ["12px", "14px", "16px", "18px", "20px", "24px", "28px", "32px"]
+  // const fontFamilies = ["Arial", "Times New Roman", "Helvetica", "Georgia", "Courier New", "Verdana"]
 
   useEffect(() => {
     if (editorRef.current) {
@@ -81,19 +81,19 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
     }
   }
 
-  const setFontSize = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const size = e.target.value
-    if (editorRef.current) {
-      document.execCommand("styleWithCSS", false, "true")
-      document.execCommand("fontSize", false, "7") // Temporarily set to the largest size
-      const fontElements = editorRef.current.querySelectorAll("font[size='7']")
-      fontElements.forEach((el) => {
-        const htmlElement = el as HTMLElement
-        htmlElement.removeAttribute("size")
-        htmlElement.style.fontSize = size
-      })
-    }
-  }
+  // const setFontSize = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const size = e.target.value
+  //   if (editorRef.current) {
+  //     document.execCommand("styleWithCSS", false, "true")
+  //     document.execCommand("fontSize", false, "7") // Temporarily set to the largest size
+  //     const fontElements = editorRef.current.querySelectorAll("font[size='7']")
+  //     fontElements.forEach((el) => {
+  //       const htmlElement = el as HTMLElement
+  //       htmlElement.removeAttribute("size")
+  //       htmlElement.style.fontSize = size
+  //     })
+  //   }
+  // }
 
   return (
     <div className="border rounded-md overflow-hidden">
