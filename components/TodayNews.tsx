@@ -10,28 +10,28 @@ import type { NewsData, NewsItem } from "./TodayNewsData"
 // Mock data for earnings calendar
 const earningsData = [
   {
-    date: "JAN 16",
-    company: "Reliance Industries",
+    date: "JAN 27",
+    company: "Bajaj Housing Finance Ltd",
     time: "Jan 16, 2025, 12:08 PM"
   },
   {
-    date: "JAN 16",
-    company: "Axis Bank",
+    date: "JAN 27",
+    company: "Adani Wilmar Ltd",
     time: "Jan 16, 2025, 12:08 PM"
   },
   {
-    date: "JAN 16",
-    company: "Infosys",
+    date: "JAN 27",
+    company: "Aditya Birla Sun Life AMC Ltd",
     time: "Jan 16, 2025, 12:08 PM"
   },
   {
-    date: "JAN 18",
-    company: "Kotak Mahindra Bank",
+    date: "JAN 27",
+    company: "360 One Wam Ltd",
     time: "Jan 18, 2025, 09:15 AM"
   },
   {
-    date: "JAN 22",
-    company: "Persistent",
+    date: "JAN 27",
+    company: "New India Assurance Company Ltd",
     time: "Jan 22, 2025, 12:08 PM"
   }
 ]
