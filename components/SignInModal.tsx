@@ -28,7 +28,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
     if (error) {
       setMessage(error.message)
     } else {
-      setMessage("Check your email for the login link!")
+      setMessage("Check Email For Link!")
     }
 
     setLoading(false)
@@ -60,7 +60,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
             />
           </div>
           <Button type="submit" disabled={loading} className="w-full bg-gray-700 text-white text-md">
-            {loading ? "Loading" : "Send Link"}
+            {loading ? "Sending Link" : "Send Link"}
           </Button>
         </form>
         {message && <p className="mt-4 text-center text-sm text-gray-500">{message}</p>}
