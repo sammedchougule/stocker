@@ -3,7 +3,6 @@ import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
 
-
 interface NewsArticle {
   id: string
   title: string
@@ -25,12 +24,11 @@ async function getNewsArticle(id: string): Promise<NewsArticle | null> {
   return data
 }
 
-type Props = {
+interface PageProps {
   params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const article = await getNewsArticle(params.id)
 
   if (!article) {
@@ -56,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function NewsArticlePage({ params }: Props) {
+export default async function NewsArticlePage({ params }: PageProps) {
   const article = await getNewsArticle(params.id)
 
   if (!article) {
@@ -76,15 +74,13 @@ export default async function NewsArticlePage({ params }: Props) {
           height={400}
           className="w-full h-64 object-cover"
         />
-        <div className="p-6">
+        <div className="p-6 mx-10">
           <span className="text-sm font-semibold text-blue-600">{article.category}</span>
-          <h1 className="text-3xl font-bold mt-2 mb-4">{article.title}</h1>
-          <p className="text-gray-500 text-sm mb-4">{new Date(article.date).toLocaleDateString()}</p>
-          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: article.description }} />
+          <h1 className="text-4xl font-bold mt-2 mb-4">{article.title}</h1>
+          <p className="text-gray-500 text-sm mb-2">{new Date(article.date).toLocaleDateString()}</p>
+          <div className="prose max-w-none mx-20" dangerouslySetInnerHTML={{ __html: article.description }} />
         </div>
       </article>
     </div>
   )
 }
-
-
