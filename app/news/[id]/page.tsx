@@ -121,7 +121,6 @@ interface NewsArticle {
   image_path: string
 }
 
-// Fetching the article inside the component itself
 async function getNewsArticle(id: string): Promise<NewsArticle | null> {
   const { data, error } = await supabase.from("news").select("*").eq("id", id).single()
 
@@ -133,11 +132,11 @@ async function getNewsArticle(id: string): Promise<NewsArticle | null> {
 }
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>  // Ensure this is a Promise that resolves to { id: string }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = await getNewsArticle(params.id)
+  const article = await getNewsArticle((await params).id)  // Resolve the Promise
 
   if (!article) {
     return {
@@ -162,8 +161,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+type PageProps = {
+  article: NewsArticle
+}
+
 export default async function NewsArticlePage({ params }: Props) {
-  const article = await getNewsArticle(params.id)
+  const article = await getNewsArticle((await params).id)  // Resolve the Promise
 
   if (!article) {
     return <div>Article not found</div>
