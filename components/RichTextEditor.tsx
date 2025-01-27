@@ -127,7 +127,7 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
         </div>
 
         {/* Font size and family */}
-        <div className="flex gap-2 border-r pr-2">
+        {/* <div className="flex gap-2 border-r pr-2">
           <select onChange={setFontSize} className="px-2 py-1 rounded border bg-white" title="Font Size">
             <option value="">Font Size</option>
             {fontSizes.map((size) => (
@@ -148,7 +148,7 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         {/* Insert options */}
         <div className="flex gap-1">
