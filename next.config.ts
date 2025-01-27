@@ -5,6 +5,7 @@ const nextConfig: import('next').NextConfig = {
     domains: [
       'dims.apnews.com',  // Example domain 1
       'via.placeholder.com',  // Example domain 2
+      'ntygljtdndrdabgeldsf.supabase.co',  // supabase image URL
     ],
   },
 };

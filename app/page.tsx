@@ -4,6 +4,7 @@ import { StockProvider } from '@/contexts/StockContext'
 import Indices from '@/components/Indices'
 import TodayNews from '@/components/TodayNews'
 import TodaysStocks from '@/components/TodayStocks'
+import TodayNewsData from '@/components/TodayNewsData'
 // import { SubscriptionPlans } from '@/components/SubscriptionPlans'
 
 export const revalidate = 60 // Revalidate every 60 seconds
@@ -26,7 +27,7 @@ export default async function Home() {
     <StockProvider initialData={initialData}>
         <Indices />
         <TodaysStocks />
-        <TodayNews />
+        <TodayNewsData>{({ newsData }) => <TodayNews newsData={newsData} />}</TodayNewsData>
         {/* <SubscriptionPlans /> */}
     </StockProvider>
   )
