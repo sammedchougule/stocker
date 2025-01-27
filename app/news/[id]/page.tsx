@@ -161,9 +161,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-type PageProps = {
-  article: NewsArticle
-}
 
 export default async function NewsArticlePage({ params }: Props) {
   const article = await getNewsArticle((await params).id)  // Resolve the Promise
