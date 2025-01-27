@@ -15,9 +15,13 @@ interface NewsArticle {
 }
 
 async function getNewsArticle(id: string): Promise<NewsArticle | null> {
-  const { data, error } = await supabase.from("news").select("*").eq("id", id).single();
+  const { data, error } = await supabase
+    .from("news")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-  if (error || !data) {
+  if (error) {
     console.error("Error fetching news article:", error);
     return null;
   }
@@ -25,7 +29,7 @@ async function getNewsArticle(id: string): Promise<NewsArticle | null> {
 }
 
 interface PageProps {
-  params: { id: string }; // Dynamic route params
+  params: { id: string }; // Ensure this matches Next.js's expectations
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -77,8 +81,13 @@ export default async function NewsArticlePage({ params }: PageProps) {
         <div className="p-6 mx-10">
           <span className="text-sm font-semibold text-blue-600">{article.category}</span>
           <h1 className="text-4xl font-bold mt-2 mb-4">{article.title}</h1>
-          <p className="text-gray-500 text-sm mb-2">{new Date(article.date).toLocaleDateString()}</p>
-          <div className="prose max-w-none mx-20" dangerouslySetInnerHTML={{ __html: article.description }} />
+          <p className="text-gray-500 text-sm mb-2">
+            {new Date(article.date).toLocaleDateString()}
+          </p>
+          <div
+            className="prose max-w-none mx-20"
+            dangerouslySetInnerHTML={{ __html: article.description }}
+          />
         </div>
       </article>
     </div>
