@@ -1,6 +1,8 @@
+// app/admin/page.tsx
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase"
 import RichTextEditor from "@/components/RichTextEditor"
 
@@ -12,6 +14,23 @@ export default function AdminPage() {
   const [description, setDescription] = useState("")
   const [excerpt, setExcerpt] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null) // Set to null initially to indicate loading state
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: user } = await supabase.auth.getUser()
+
+      if (!user) {
+        // If not authenticated, redirect to login page
+        router.push("/admin/login")
+      } else {
+        setIsAuthenticated(true)
+      }
+    }
+
+    checkAuth()
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,16 +56,14 @@ export default function AdminPage() {
       } = supabase.storage.from("news-images").getPublicUrl(fileName)
 
       // Insert news article
-      const { error: insertError } = await supabase.from("news").insert([
-        {
-          title,
-          category,
-          sub_category: subCategory,
-          image_path: publicUrl,
-          description,
-          excerpt,
-        },
-      ])
+      const { error: insertError } = await supabase.from("news").insert([{
+        title,
+        category,
+        sub_category: subCategory,
+        image_path: publicUrl,
+        description,
+        excerpt,
+      }])
 
       if (insertError) {
         throw new Error("Failed to add news article: " + insertError.message)
@@ -68,9 +85,32 @@ export default function AdminPage() {
     }
   }
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push("/admin/login")
+  }
+
+  if (isAuthenticated === null) {
+    // Show loading spinner or placeholder while checking authentication
+    return <div>Loading...</div>
+  }
+
+  if (!isAuthenticated) {
+    // If not authenticated, the user is already redirected in useEffect
+    return null
+  }
+
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6">Add News Article</h1>
+      <div className="flex">
+      <h1 className="flex flex-auto text-2xl font-bold mb-6">Add News Article</h1>
+      <button
+        onClick={handleLogout}
+        className="px-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+        Logout
+      </button>
+      
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="title" className="block mb-1">
@@ -158,7 +198,7 @@ export default function AdminPage() {
           {isSubmitting ? "Adding News..." : "Add News"}
         </button>
       </form>
-    </div>
+      </div>
   )
 }
 
