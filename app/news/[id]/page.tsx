@@ -1,44 +1,41 @@
-import { supabase } from "@/lib/supabase";
-import Image from "next/image";
-import Link from "next/link";
-import type { Metadata } from "next";
+import type { Metadata } from "next"
+import { supabase } from "../../../lib/supabase"
+import Image from "next/image"
+import Link from "next/link"
 
 interface NewsArticle {
-  id: string;
-  title: string;
-  excerpt: string;
-  description: string;
-  category: string;
-  sub_category: string;
-  date: string;
-  image_path: string;
+  id: string
+  title: string
+  excerpt: string
+  description: string
+  category: string
+  sub_category: string
+  date: string
+  image_path: string
 }
 
 async function getNewsArticle(id: string): Promise<NewsArticle | null> {
-  const { data, error } = await supabase
-    .from("news")
-    .select("*")
-    .eq("id", id)
-    .single();
+  const { data, error } = await supabase.from("news").select("*").eq("id", id).single()
 
   if (error) {
-    console.error("Error fetching news article:", error);
-    return null;
+    console.error("Error fetching news article:", error)
+    return null
   }
-  return data;
+  return data
 }
 
-interface PageProps {
-  params: { id: string }; // Ensure this matches Next.js's expectations
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const article = await getNewsArticle(params.id);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const article = await getNewsArticle(params.id)
 
   if (!article) {
     return {
       title: "Article Not Found",
-    };
+    }
   }
 
   return {
@@ -55,14 +52,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: article.excerpt,
       images: [article.image_path],
     },
-  };
+  }
 }
 
-export default async function NewsArticlePage({ params }: PageProps) {
-  const article = await getNewsArticle(params.id);
+export default async function NewsArticlePage({ params }: Props) {
+  const article = await getNewsArticle(params.id)
 
   if (!article) {
-    return <div>Article not found</div>;
+    return <div>Article not found</div>
   }
 
   return (
@@ -71,25 +68,17 @@ export default async function NewsArticlePage({ params }: PageProps) {
         ← Back to News
       </Link>
       <article className="bg-white rounded-lg shadow-md overflow-hidden">
-        <Image
-          src={article.image_path || "/placeholder.svg"}
-          alt={article.title}
-          width={800}
-          height={400}
-          className="w-full h-64 object-cover"
-        />
-        <div className="p-6 mx-10">
+        <div className="relative h-96">
+          <Image src={article.image_path || "/placeholder.svg"} alt={article.title} fill className="object-cover" />
+        </div>
+        <div className="p-6">
           <span className="text-sm font-semibold text-blue-600">{article.category}</span>
           <h1 className="text-4xl font-bold mt-2 mb-4">{article.title}</h1>
-          <p className="text-gray-500 text-sm mb-2">
-            {new Date(article.date).toLocaleDateString()}
-          </p>
-          <div
-            className="prose max-w-none mx-20"
-            dangerouslySetInnerHTML={{ __html: article.description }}
-          />
+          <p className="text-gray-500 text-sm mb-4">{new Date(article.date).toLocaleDateString()}</p>
+          <div className="prose max-w-none mx-20" dangerouslySetInnerHTML={{ __html: article.description }} />
         </div>
       </article>
     </div>
-  );
+  )
 }
+
