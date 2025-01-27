@@ -21,7 +21,7 @@ export default function NewsCard({ title, category, subCategory, imagePath, exce
           <span className="text-xs text-gray-500">{subCategory}</span>
         </div>
         <h2 className="text-xl font-bold mb-2 line-clamp-2">{title}</h2>
-        <p className="text-gray-600 text-sm mb-2 line-clamp-2 flex-grow">{excerpt}</p>
+        <p className="text-gray-600 text-sm mb-2 line-clamp-2 overflow-hidden">{excerpt}</p>
         <p className="text-gray-500 text-xs">{new Date(date).toLocaleDateString()}</p>
       </div>
     </div>
