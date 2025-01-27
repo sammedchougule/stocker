@@ -1,9 +1,20 @@
 import { supabase } from "@/lib/supabase"
 import Image from "next/image"
 import Link from "next/link"
-import type { Metadata, ResolvingMetadata } from "next"
+import type { Metadata } from "next"
 
-async function getNewsArticle(id: string) {
+interface NewsArticle {
+  id: string
+  title: string
+  excerpt: string
+  description: string
+  category: string
+  sub_category: string
+  date: string
+  image_path: string
+}
+
+async function getNewsArticle(id: string): Promise<NewsArticle | null> {
   const { data, error } = await supabase.from("news").select("*").eq("id", id).single()
 
   if (error) {
@@ -13,11 +24,11 @@ async function getNewsArticle(id: string) {
   return data
 }
 
-type Props = {
+interface PageProps {
   params: { id: string }
 }
 
-export async function generateMetadata({ params }: Props, _parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const article = await getNewsArticle(params.id)
 
   if (!article) {
@@ -43,7 +54,7 @@ export async function generateMetadata({ params }: Props, _parent: ResolvingMeta
   }
 }
 
-export default async function NewsArticlePage({ params }: { params: { id: string } }) {
+export default async function NewsArticlePage({ params }: PageProps) {
   const article = await getNewsArticle(params.id)
 
   if (!article) {
@@ -60,8 +71,8 @@ export default async function NewsArticlePage({ params }: { params: { id: string
           src={article.image_path || "/placeholder.svg"}
           alt={article.title}
           width={800}
-          height={600}
-          className="w-full h-96 object-cover"
+          height={400}
+          className="w-full h-64 object-cover"
         />
         <div className="p-6">
           <span className="text-sm font-semibold text-blue-600">{article.category}</span>
