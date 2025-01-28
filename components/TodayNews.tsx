@@ -47,9 +47,9 @@ export default function TodayNews({ newsData }: TodayNewsProps) {
         <Link key={news.id} href={`/news/${news.id}`}>
           <div className="flex gap-4 items-start border-b pb-2 hover:bg-gray-100 rounded-lg p-2 cursor-pointer">
             <div className="flex-1 min-w-0">
-              <h3 className="font-medium leading-snug">{news.title}</h3>
+              <h3 className="font-medium text-[16px] leading-snug line-clamp-2">{news.title}</h3>
               <p className="text-sm text-gray-600 mt-1 line-clamp-2">{news.excerpt}</p>
-              <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+              <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
                 <span>{news.sub_category}</span>
                 <span>•</span>
                 <span>{new Date(news.date).toLocaleDateString()}</span>
@@ -59,9 +59,9 @@ export default function TodayNews({ newsData }: TodayNewsProps) {
               <Image
                 src={news.image_path || "/placeholder.svg"}
                 alt={news.title}
-                width={120}
+                width={140}
                 height={80}
-                className="rounded-lg object-cover"
+                className="rounded-lg "
               />
             </div>
           </div>
