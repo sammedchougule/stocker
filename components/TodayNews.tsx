@@ -10,29 +10,40 @@ import type { NewsData, NewsItem } from "./TodayNewsData"
 // Mock data for earnings calendar
 const earningsData = [
   {
-    date: "JAN 27",
-    company: "Bajaj Housing Finance Ltd",
-    time: "Jan 16, 2025, 12:08 PM"
+    date: "28 Jan 2025",
+    company: "Technichem Organics Ltd"
   },
   {
-    date: "JAN 27",
-    company: "Adani Wilmar Ltd",
-    time: "Jan 16, 2025, 12:08 PM"
+    date: "	28 Jan 2025",
+    company: "JSW Infrastructure Ltd"
   },
   {
-    date: "JAN 27",
-    company: "Aditya Birla Sun Life AMC Ltd",
-    time: "Jan 16, 2025, 12:08 PM"
+    date: "28 Jan 2025",
+    company: "Piramal Pharma Ltd"
   },
   {
-    date: "JAN 27",
-    company: "360 One Wam Ltd",
-    time: "Jan 18, 2025, 09:15 AM"
+    date: "28 Jan 2025",
+    company: "UTI Asset Management Company Ltd"
   },
   {
-    date: "JAN 27",
-    company: "New India Assurance Company Ltd",
-    time: "Jan 22, 2025, 12:08 PM"
+    date: "	28 Jan 2025",
+    company: "SBI Cards & Payment Services Ltd"
+  },
+  {
+    date: "	28 Jan 2025",
+    company: "IIFL Capital Services Ltd"
+  },
+  {
+    date: "	28 Jan 2025",
+    company: "Rites Ltd"
+  },
+  {
+    date: "	28 Jan 2025",
+    company: "Mahanagar Gas Ltd"
+  },
+  {
+    date: "	28 Jan 2025",
+    company: "Suzlon Energy Ltd"
   }
 ]
 
@@ -45,23 +56,25 @@ export default function TodayNews({ newsData }: TodayNewsProps) {
     <div className="space-y-4">
       {items.map((news) => (
         <Link key={news.id} href={`/news/${news.id}`}>
-          <div className="flex gap-4 items-start border-b pb-2 hover:bg-gray-100 rounded-lg p-2 cursor-pointer">
+          <div className="flex flex-row gap-4 items-start border-b pb-2 hover:bg-gray-100 rounded-lg p-2 cursor-pointer">
+            {/* News Section */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-medium text-[16px] leading-snug line-clamp-2">{news.title}</h3>
-              <p className="text-sm text-gray-600 mt-1 line-clamp-2">{news.excerpt}</p>
+            <p className="font-medium text-[16px] md:text-[18px] leading-snug line-clamp-2">{news.title}</p>
+              <p className="text-sm text-gray-600 mt-1 line-clamp-2 hidden sm:block md:line-clamp-2">{news.excerpt}</p>
               <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
                 <span>{news.sub_category}</span>
                 <span>•</span>
                 <span>{new Date(news.date).toLocaleDateString()}</span>
               </div>
             </div>
+            {/* Image Section */}
             <div className="flex-none w-1/5">
               <Image
                 src={news.image_path || "/placeholder.svg"}
                 alt={news.title}
                 width={140}
                 height={80}
-                className="rounded-lg "
+                className="rounded-lg object-cover w-full h-full"
               />
             </div>
           </div>
@@ -75,10 +88,19 @@ export default function TodayNews({ newsData }: TodayNewsProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* News Section */}
         <div className="lg:col-span-2">
-          <Card className="h-[500px]">
-            <CardHeader className="sticky top-0 bg-white z-10">
-              <CardTitle>Today&apos;s financial news</CardTitle>
-            </CardHeader>
+          <Card className="h-[700px]">
+          <CardHeader className="sticky top-0 bg-white z-10">
+            <div className="flex justify-between items-center">
+              {/* Left side: Title */}
+              <CardTitle>Today&apos;s News</CardTitle>
+
+              {/* Right side: Link */}
+              <Link href="/news" className="text-blue-500 hover:underline text-md">
+                See All
+              </Link>
+            </div>
+          </CardHeader>
+
             <Tabs defaultValue="top-stories" className="w-full">
               <TabsList className="grid w-full grid-cols-3 mb-4 sticky top-[50px] bg-white z-10">
                 <TabsTrigger value="top-stories">Top stories</TabsTrigger>
@@ -96,13 +118,13 @@ export default function TodayNews({ newsData }: TodayNewsProps) {
 
         {/* Earnings Calendar Section */}
         <div className="lg:col-span-1">
-          <Card className="h-[500px]">
+          <Card className="h-[700px]">
             <CardHeader>
-              <CardTitle>Earnings calendar</CardTitle>
+              <CardTitle>Earnings Calendar</CardTitle>
               {/* <p className="text-sm text-gray-500">Based on popular stocks</p> */}
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {earningsData.map((earning, index) => (
                   <div
                   key={index}
@@ -110,13 +132,11 @@ export default function TodayNews({ newsData }: TodayNewsProps) {
                   >
                     <div className="flex flex-col items-center gap-1 min-w-[100px]">
                       <CalendarDays className="h-7 w-7 text-blue-500" /> {/* Larger icon */}
-                      <span className="text-sm font-medium">{earning.date}</span>
                     </div>
                     <div className="flex-1">
                       <h4 className="font-medium text-md">{earning.company}</h4>
                       <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <CalendarClock className="h-4 w-4" />
-                        <span>{earning.time}</span>
+                        <span className="text-sm font-medium">{earning.date}</span>
                       </div>
                     </div>
                   </div>                
