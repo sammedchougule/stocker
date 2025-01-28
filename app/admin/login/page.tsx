@@ -1,4 +1,3 @@
-// app/admin/login.tsx
 "use client"
 
 import { useState } from "react"
@@ -20,31 +19,34 @@ export default function LoginPage() {
       // Query Supabase for the admin username and hashed password
       const { data, error } = await supabase
         .from("admin")
-        .select("id, username, password")
-        .eq("username", username)
-        .single()
+        .select("id, username, password")  // Fetch username and password from the admin table
+        .eq("username", username)  // Check for the provided username
+        .single()  // Only expect a single record
 
       if (error || !data) {
         throw new Error("Invalid username or password")
       }
 
-      // Verify the password using the `verify_password` function in Supabase
-      const { data: passwordMatch } = await supabase.rpc("verify_password", {
-        hashed: data.password,
-        plain: password,
-      })
+      // Now, verify the password using the `verify_password` function
+      const { data: passwordMatch, error: passwordError } = await supabase.rpc(
+        "verify_password",  // Call the verify_password function
+        {
+          hashed: data.password,  // Pass the hashed password from the database
+          plain: password,        // Pass the plain password entered by the user
+        }
+      )
 
-      if (!passwordMatch) {
+      if (passwordError || !passwordMatch) {
         throw new Error("Invalid username or password")
       }
 
-      // Store session and redirect to admin page
-      await supabase.auth.setSession(data.id) // You can also store in cookies or localStorage if needed
-      router.push("/admin") // Redirect to admin page after login
+      // If password matches, set session and redirect to the admin page
+      await supabase.auth.setSession(data.id) // Set the session for the user
+      router.push("/admin")  // Redirect to admin page after successful login
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error")
     } finally {
-      setIsLoading(false)
+      setIsLoading(false)  // Stop loading state after operation completes
     }
   }
 
