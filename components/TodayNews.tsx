@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CalendarDays, CalendarClock } from 'lucide-react'
+import { CalendarDays } from 'lucide-react'
 import Image from 'next/image'
 import Link from "next/link"
 import type { NewsData, NewsItem } from "./TodayNewsData"
