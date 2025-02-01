@@ -73,7 +73,7 @@ export default async function Home() {
       <TodayNewsData>{({ newsData }) => <TodayNews newsData={newsData} />}</TodayNewsData>
 
       {/* Add the StockPriceTracker Component and pass stock data */}
-      <StockPriceTracker newStockData={initialData.stocks} />
+      {/* <StockPriceTracker newStockData={initialData.stocks} /> */}
     </StockProvider>
   );
 }
