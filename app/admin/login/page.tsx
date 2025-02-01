@@ -4,91 +4,95 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase"
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("")
+export default function AdminLoginPage() {
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
+    setError(null)
 
     try {
-      // Query Supabase for the admin username and hashed password
-      const { data, error } = await supabase
-        .from("admin")
-        .select("id, username, password")  // Fetch username and password from the admin table
-        .eq("username", username)  // Check for the provided username
-        .single()  // Only expect a single record
+      const { data, error } = await supabase.rpc("check_admin_password", {
+        p_email: email,
+        p_password: password,
+      })
 
-      if (error || !data) {
-        throw new Error("Invalid username or password")
+      if (error) {
+        console.error("RPC Error:", error)
+        throw new Error(`Login failed: ${error.message}`)
       }
 
-      // Now, verify the password using the `verify_password` function
-      const { data: passwordMatch, error: passwordError } = await supabase.rpc(
-        "verify_password",  // Call the verify_password function
-        {
-          hashed: data.password,  // Pass the hashed password from the database
-          plain: password,        // Pass the plain password entered by the user
-        }
-      )
-
-      if (passwordError || !passwordMatch) {
-        throw new Error("Invalid username or password")
+      if (data) {
+        localStorage.setItem("adminLoggedIn", "true")
+        router.push("/admin")
+      } else {
+        setError("Invalid email or password")
       }
-
-      // If password matches, set session and redirect to the admin page
-      await supabase.auth.setSession(data.id) // Set the session for the user
-      router.push("/admin")  // Redirect to admin page after successful login
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error")
-    } finally {
-      setIsLoading(false)  // Stop loading state after operation completes
+    } catch (error) {
+      console.error("Error:", error)
+      setError(error instanceof Error ? error.message : "An unknown error occurred")
     }
   }
 
   return (
-    <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6">Admin Login</h1>
-      <form onSubmit={handleLogin} className="space-y-4">
-        {error && <div className="text-red-500">{error}</div>}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
         <div>
-          <label htmlFor="username" className="block mb-1">
-            Username:
-          </label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            className="w-full px-3 py-2 border rounded-md"
-          />
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Admin Login</h2>
         </div>
-        <div>
-          <label htmlFor="password" className="block mb-1">
-            Password:
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-3 py-2 border rounded-md"
-          />
-        </div>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-blue-300"
-          disabled={isLoading}
-        >
-          {isLoading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+          <input type="hidden" name="remember" value="true" />
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <label htmlFor="email-address" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="email-address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {error && <div className="text-red-500 text-sm">{error}</div>}
+
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Sign in
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
+
