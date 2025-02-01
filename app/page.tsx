@@ -47,7 +47,7 @@ import Indices from '@/components/Indices';
 import TodayNews from '@/components/TodayNews';
 import TodaysStocks from '@/components/TodayStocks';
 import TodayNewsData from '@/components/TodayNewsData';
-import StockPriceTracker from '@/components/StockPriceTracker'; // Import the StockPriceTracker
+// import StockPriceTracker from '@/components/StockPriceTracker'; // Import the StockPriceTracker
 
 // Revalidate every 60 seconds
 export const revalidate = 60;
