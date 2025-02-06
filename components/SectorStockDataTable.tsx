@@ -4,6 +4,7 @@ import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { Stock } from '@/types/Stock'
  import { SortColumn, SortDirection } from '@/types/Stock';
 import { getStockBgColor } from '@/lib/getstockBgColor';
+import Image from 'next/image';
 
 interface SectorStockDataTableProps {
   tableId: string;
@@ -94,11 +95,11 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </th>
               <th 
-                className="p-2 text-left font-medium min-w-[200px] cursor-pointer"
+                className="p-2 text-left font-medium cursor-pointer"
                 onClick={() => onSort(tableId, 'companyname')}
               >
                 <div className="flex items-center gap-2">
-                  <span>Company</span>
+                  <span>Close Yst.</span>
                   {renderSortIcon('companyname')}
                 </div>
               </th>
@@ -125,7 +126,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 onClick={() => onSort(tableId, 'changepct')}
               >
                 <div className="flex items-center justify-end gap-2">
-                  <span>Change %</span>
+                  <span>Chg %</span>
                   {renderSortIcon('changepct')}
                 </div>
               </th>
@@ -140,10 +141,16 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
               >
                 <td className="sticky left-0 z-10 bg-white p-4 border-t">
                   <div className="flex items-center gap-2">
+                    <Image className="w-6 h-6 rounded-full" 
+                      src={`/images/${stock.symbol}.svg`} 
+                      alt={stock.companyname} 
+                      width={20} 
+                      height={20} 
+                    />
                     <div 
                       className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
                       style={{ backgroundColor: getStockBgColor(stock.symbol), width: '7rem' }}
-                    >
+                      >
                       <span 
                         className="whitespace-nowrap text-[14px] leading-none text-center block overflow-hidden text-ellipsis"
                         style={{
@@ -158,9 +165,9 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                     </div>
                   </div>
                 </td>
-                <td className="p-2 border-t max-w-[200px] md:max-w-[200px]">
+                <td className="p-2 border-t text-left">
                   <span className="truncate block">
-                    {stock.companyname}
+                  ₹{stock.closeyest}
                   </span>
                 </td>
                 <td className="p-2 border-t text-right">
@@ -168,7 +175,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </td>
                 <td className="p-2 border-t text-right">
                   <span
-                    className={`inline-flex items-center rounded px-1 py-1 font-medium ${
+                    className={`inline-flex items-center rounded px-1 py-1 font-medium text-md ${
                       stock.change >= 0
                         ? 'text-green-500 bg-green-50 rounded-lg'
                         : 'text-red-500 bg-red-50 rounded-lg'
