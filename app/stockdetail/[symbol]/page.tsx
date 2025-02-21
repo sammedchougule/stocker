@@ -159,6 +159,7 @@ export default function StockDetailPage() {
                 <StockCard
                   key={stock.symbol} // Unique key for each StockCard
                   stock={stock}
+                  highLowFilterOn={false} // or true, based on your requirement
                   spikeFilterOn={true} // or false, based on your requirement
                   onClick={() => {
                     window.location.href = `/stockdetail/${stock.symbol}`;
