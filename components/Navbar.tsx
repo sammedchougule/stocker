@@ -3,32 +3,32 @@
 import Link from "next/link"
 import { Menu, X, Home, SquareActivity, Layers, Sliders, LayoutGrid, Newspaper } from "lucide-react"
 import { useState, useEffect } from "react"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { StockInput } from "./Input"
-import { supabase } from "@/lib/supabase"
+// import { supabase } from "@/lib/supabase"
 import SignInModal from "./SignInModal"
-import type { User } from "@/types/user"
+// import type { User } from "@/types/user"
 
 const Navbar = () => {
   const pathname = usePathname()
-  const router = useRouter()
+  // const router = useRouter()
   const isActive = (path: string) => pathname === path
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
+  // const [user, setUser] = useState<User | null>(null)
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
-  useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
-    })
+  // useEffect(() => {
+  //   const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+  //     setUser(session?.user ?? null)
+  //   })
 
-    return () => {
-      if (authListener && authListener.subscription) {
-        authListener.subscription.unsubscribe()
-      }
-    }
-  }, [])
+  //   return () => {
+  //     if (authListener && authListener.subscription) {
+  //       authListener.subscription.unsubscribe()
+  //     }
+  //   }
+  // }, [])
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
