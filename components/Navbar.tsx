@@ -46,18 +46,18 @@ const Navbar = () => {
   }, [])
 
   // SignOut logic
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    setUser(null) // Immediately set user to null after signout
-  }
+  // const handleSignOut = async () => {
+  //   await supabase.auth.signOut()
+  //   setUser(null) // Immediately set user to null after signout
+  // }
 
-  const handleLinkClick = (path: string) => {
-    if (!user) {
-      setIsSignInModalOpen(true)
-    } else {
-      router.push(path) // Use next/navigation's router
-    }
-  }
+  // const handleLinkClick = (path: string) => {
+  //   if (!user) {
+  //     setIsSignInModalOpen(true)
+  //   } else {
+  //     router.push(path) // Use next/navigation's router
+  //   }
+  // }
 
   return (
     <>
@@ -82,7 +82,7 @@ const Navbar = () => {
             <Link
               href="/intrabuzz"
               className="text-black hover:text-gray-600 flex items-center"
-              onClick={() => handleLinkClick("/intrabuzz")}
+              // onClick={() => handleLinkClick("/intrabuzz")}
             >
               IntraBuzz
             </Link>
@@ -90,32 +90,32 @@ const Navbar = () => {
             <Link
               href="/sectors"
               className="text-black hover:text-gray-600 flex items-center"
-              onClick={() => handleLinkClick("/sectors")}
+              // onClick={() => handleLinkClick("/sectors")}
             >
               Sectors
             </Link>
             <Link
               href="/heatmap"
               className="text-black hover:text-gray-600 flex items-center"
-              onClick={() => handleLinkClick("/heatmap")}
+              // onClick={() => handleLinkClick("/heatmap")}
             >
               Heatmap
             </Link>
             <Link
               href="/screener"
               className="text-black hover:text-gray-600 flex items-center"
-              onClick={() => handleLinkClick("/screener")}
+              // onClick={() => handleLinkClick("/screener")}
             >
               Screener
             </Link>
             <Link
               href="/news"
               className="text-black hover:text-gray-600 flex items-center"
-              onClick={() => handleLinkClick("/news")}
+              // onClick={() => handleLinkClick("/news")}
             >
               News
             </Link>
-            {user ? (
+            {/* {user ? (
               <button onClick={handleSignOut} className="text-black hover:text-gray-600 flex items-center">
                 Sign Out
               </button>
@@ -126,7 +126,7 @@ const Navbar = () => {
               >
                 Sign In
               </button>
-            )}
+            )} */}
           </div>
 
           {/* Hamburger Menu for Tablet */}
@@ -162,7 +162,7 @@ const Navbar = () => {
             <Link
               href="/intrabuzz"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
-              onClick={() => handleLinkClick("/intrabuzz")}
+              // onClick={() => handleLinkClick("/intrabuzz")}
             >
               <SquareActivity className="h-5 w-5 mr-3" />
               IntraBuzz
@@ -171,7 +171,7 @@ const Navbar = () => {
             <Link
               href="/sectors"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
-              onClick={() => handleLinkClick("/sectors")}
+              // onClick={() => handleLinkClick("/sectors")}
             >
               <Layers className="h-5 w-5 mr-3" />
               Sectors
@@ -179,7 +179,7 @@ const Navbar = () => {
             <Link
               href="/heatmap"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
-              onClick={() => handleLinkClick("/heatmap")}
+              // onClick={() => handleLinkClick("/heatmap")}
             >
               <LayoutGrid className="h-5 w-5 mr-3" />
               Heatmap
@@ -187,7 +187,7 @@ const Navbar = () => {
             <Link
               href="/screener"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
-              onClick={() => handleLinkClick("/screener")}
+              // onClick={() => handleLinkClick("/screener")}
             >
               <Sliders className="h-5 w-5 mr-3" />
               Screener
@@ -195,12 +195,12 @@ const Navbar = () => {
             <Link
               href="/news"
               className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
-              onClick={() => handleLinkClick("/news")}
+              // onClick={() => handleLinkClick("/news")}
             >
               <Newspaper className="h-5 w-5 mr-3" />
               News
             </Link>
-            {user ? (
+            {/* {user ? (
               <button
                 onClick={handleSignOut}
                 className="flex items-center py-2 text-gray-800 hover:bg-gray-200 rounded-md px-2 transition-colors duration-200"
@@ -214,7 +214,7 @@ const Navbar = () => {
               >
                 Sign In
               </button>
-            )}
+            )} */}
           </div>
         </div>
       </nav>
@@ -232,7 +232,7 @@ const Navbar = () => {
             <span className="text-xs text-gray-600">Home</span>
           </Link>
           <div
-            onClick={() => handleLinkClick("/intrabuzz")}
+            // onClick={() => handleLinkClick("/intrabuzz")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/intrabuzz") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
@@ -241,7 +241,7 @@ const Navbar = () => {
             <span className="text-xs text-gray-600">IntraBuzz</span>
           </div>
           <div
-            onClick={() => handleLinkClick("/sectors")}
+            // onClick={() => handleLinkClick("/sectors")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/sectors") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
@@ -250,7 +250,7 @@ const Navbar = () => {
             <span className="text-xs text-gray-600">Sectors</span>
           </div>
           <div
-            onClick={() => handleLinkClick("/heatmap")}
+            // onClick={() => handleLinkClick("/heatmap")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/heatmap") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
@@ -259,7 +259,7 @@ const Navbar = () => {
             <span className="text-xs text-gray-600">Heatmap</span>
           </div>
           <div
-            onClick={() => handleLinkClick("/screener")}
+            // onClick={() => handleLinkClick("/screener")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/screener") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}

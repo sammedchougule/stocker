@@ -17,7 +17,7 @@ import { useSearchParams } from 'next/navigation'
 import StockCard from '@/components/StockCard';
 import IntrabuzzStockDataTable from "@/components/IntrabuzzStockDataTable";
 import CustomizedProgressBars from '@/components/CustomizedProgressBars'
-import AuthWrapper from "@/components/AuthWrapper"
+// import AuthWrapper from "@/components/AuthWrapper"
 
 type SortOption = 
   | 'changepct_desc' 
@@ -271,11 +271,9 @@ if (spikeFilterOn) {
 
 export default function Intrabuzz() {
   return (
-    <AuthWrapper>
       <Suspense>
         <IntrabuzzContent />
       </Suspense>
-    </AuthWrapper>
   )
 }
 

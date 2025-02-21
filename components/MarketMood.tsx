@@ -63,7 +63,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
 
   return (
     <Card className="h-full">
-      <CardContent className="pt-6 px-2 sm:px-4">
+      <CardContent className="pt-4 px-2 sm:px-4">
         <div className="text-center">
           <h3 className="text-2xl font-bold">Market Mood Index</h3>
           <p className="text-md text-gray-500">Know what&apos;s the sentiment on the street today</p>
@@ -159,7 +159,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
           </div>
 
           {moodInfo && (
-            <p className="text-sm text-gray-500 mx-10">
+            <p className="text-sm text-gray-500 mx-8">
               MMI is in the <span 
                 style={{ color: moodInfo.color, fontWeight: 'bold', fontSize: '1.1rem' }}>
                 {moodInfo.text} Zone.

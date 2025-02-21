@@ -36,11 +36,13 @@ export interface Stock {
   volume: number | null;
   volumeavg: number | null;
   volumespike: number | null;
-  hlCross: string | null;
+  today_hlCross: string | null;
   month_high: number;
   month_low: number;
+  month_hlCross: string | null;
   high52: number;
   low52: number;
+  year_hlCross: string | null;
   marketcap: number | null;
   eps: number | null;
   pe: number | null;
