@@ -21,7 +21,7 @@ function GradientCircularProgress() {
 
 export default function CustomizedProgressBars() {
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
       <GradientCircularProgress />
     </Box>
   );
