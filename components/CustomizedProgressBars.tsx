@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
-// From https://github.com/mui/material-ui/issues/9496#issuecomment-959408221
 function GradientCircularProgress() {
   return (
     <React.Fragment>
@@ -22,7 +21,7 @@ function GradientCircularProgress() {
 
 export default function CustomizedProgressBars() {
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
       <GradientCircularProgress />
     </Box>
   );
