@@ -65,9 +65,9 @@ function IntrabuzzContent() {
   const [filterBy, setFilterBy] = useState<FilterOption>(() => {
     if (typeof window !== "undefined") {
       const savedFilter = localStorage.getItem("filterBy")
-      return (savedFilter as FilterOption) || searchParams.get("filter") || "Nifty FnO"
+      return (savedFilter as FilterOption) || searchParams.get("filter") || "Nifty 50"
     }
-    return "Nifty FnO" // Default value for SSR
+    return "Nifty 50" // Default value for SSR
   })
 
   const [viewMode, setViewMode] = useState<"card" | "table">("card")
