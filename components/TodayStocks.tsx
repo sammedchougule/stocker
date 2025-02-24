@@ -127,7 +127,7 @@ const TodaysStocks = () => {
                 <ListFilter className="h-4 w-4" />
               </button>
             </div>
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="overflow-x-auto whitespace-nowrap flex gap-2 mt-4">
               <Button 
                 variant={activeFilter === 'gainers' ? 'default' : 'outline'}
                 onClick={() => setActiveFilter('gainers')}
