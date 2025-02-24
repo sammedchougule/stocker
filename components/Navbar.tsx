@@ -231,16 +231,17 @@ const Navbar = () => {
             <Home className={`h-6 w-6 ${isActive("/") ? "text-blue-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Home</span>
           </Link>
-          <div
-            // onClick={() => handleLinkClick("/intrabuzz")}
+          <Link
+            href="/intrabuzz"            // onClick={() => handleLinkClick("/intrabuzz")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/intrabuzz") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
             <SquareActivity className={`h-6 w-6 ${isActive("/intrabuzz") ? "text-yellow-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">IntraBuzz</span>
-          </div>
-          <div
+          </Link>
+          <Link
+            href="/sectors"  
             // onClick={() => handleLinkClick("/sectors")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/sectors") ? "bg-gray-200 rounded-md px-2 py-1" : ""
@@ -248,8 +249,9 @@ const Navbar = () => {
           >
             <Layers className={`h-6 w-6 ${isActive("/sectors") ? "text-yellow-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Sectors</span>
-          </div>
-          <div
+          </Link>
+          <Link
+            href="/heatmap"  
             // onClick={() => handleLinkClick("/heatmap")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/heatmap") ? "bg-gray-200 rounded-md px-2 py-1" : ""
@@ -257,8 +259,9 @@ const Navbar = () => {
           >
             <LayoutGrid className={`h-6 w-6 ${isActive("/heatmap") ? "text-orange-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Heatmap</span>
-          </div>
-          <div
+          </Link>
+          <Link
+            href="/screener"  
             // onClick={() => handleLinkClick("/screener")}
             className={`text-gray-700 flex flex-col items-center cursor-pointer ${
               isActive("/screener") ? "bg-gray-200 rounded-md px-2 py-1" : ""
@@ -266,7 +269,7 @@ const Navbar = () => {
           >
             <Sliders className={`h-6 w-6 ${isActive("/screener") ? "text-orange-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Screener</span>
-          </div>
+          </Link>
           <Link
             href="/news"
             className={`text-gray-700 flex flex-col items-center ${
