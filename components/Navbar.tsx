@@ -81,38 +81,43 @@ const Navbar = () => {
           <div className="hidden lg:flex space-x-6">
             <Link
               href="/intrabuzz"
-              className="text-black hover:text-gray-600 flex items-center"
+              className={`flex items-center gap-1  ${isActive("/intrabuzz") ? "text-yellow-500 font-semibold" : "text-gray-700"}`}
               // onClick={() => handleLinkClick("/intrabuzz")}
             >
+              <SquareActivity className={`h-5 w-5 ${isActive("/intrabuzz") ? "text-yellow-500" : "text-gray-700"}`} /> 
               IntraBuzz
             </Link>
 
             <Link
               href="/sectors"
-              className="text-black hover:text-gray-600 flex items-center"
+              className={`flex items-center gap-1  ${isActive("/sectors") ? "text-red-500 font-semibold" : "text-gray-700"}`}
               // onClick={() => handleLinkClick("/sectors")}
             >
+              <Layers className={`h-5 w-5 ${isActive("/sectors") ? "text-red-500 " : "text-gray-700"}`} />
               Sectors
             </Link>
             <Link
               href="/heatmap"
-              className="text-black hover:text-gray-600 flex items-center"
+              className={`flex items-center gap-1 ${isActive("/heatmap") ? "text-orange-500 font-semibold" : "text-gray-700"}`}
               // onClick={() => handleLinkClick("/heatmap")}
             >
+              <LayoutGrid className={`h-5 w-5 ${isActive("/heatmap") ? "text-orange-500" : "text-gray-700"}`} />
               Heatmap
             </Link>
             <Link
               href="/screener"
-              className="text-black hover:text-gray-600 flex items-center"
+              className={`flex items-center gap-1 ${isActive("/screener") ? "text-green-500 font-semibold" : "text-gray-700"}`}
               // onClick={() => handleLinkClick("/screener")}
             >
+              <Sliders className={`h-5 w-5 ${isActive("/screener") ? "text-green-500" : "text-gray-700"}`} />
               Screener
             </Link>
             <Link
               href="/news"
-              className="text-black hover:text-gray-600 flex items-center"
+              className={`flex items-center gap-1 ${isActive("/news") ? "text-blue-500 font-semibold" : "text-gray-700"}`}
               // onClick={() => handleLinkClick("/news")}
             >
+              <Newspaper className={`h-5 w-5 ${isActive("/news") ? "text-blue-700" : "text-gray-700"}`} />
               News
             </Link>
             {/* {user ? (
@@ -247,7 +252,7 @@ const Navbar = () => {
               isActive("/sectors") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Layers className={`h-6 w-6 ${isActive("/sectors") ? "text-yellow-500" : "text-gray-700"}`} />
+            <Layers className={`h-6 w-6 ${isActive("/sectors") ? "text-red-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Sectors</span>
           </Link>
           <Link
@@ -267,7 +272,7 @@ const Navbar = () => {
               isActive("/screener") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Sliders className={`h-6 w-6 ${isActive("/screener") ? "text-orange-500" : "text-gray-700"}`} />
+            <Sliders className={`h-6 w-6 ${isActive("/screener") ? "text-green-500" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">Screener</span>
           </Link>
           <Link
@@ -276,7 +281,7 @@ const Navbar = () => {
               isActive("/news") ? "bg-gray-200 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Newspaper className={`h-6 w-6 ${isActive("/news") ? "text-green-700" : "text-gray-700"}`} />
+            <Newspaper className={`h-6 w-6 ${isActive("/news") ? "text-blue-700" : "text-gray-700"}`} />
             <span className="text-xs text-gray-600">News</span>
           </Link>
         </div>
