@@ -51,7 +51,6 @@ import TodaysStocks from '@/components/TodayStocks';
 // Revalidate every 60 seconds
 export const revalidate = 60;
 
-// fetching stocks data
 async function fetchStockData() {
   const res = await fetch(
     'https://script.google.com/macros/s/AKfycbwa3ZVL20X9vlqFfpi6KSteUsEecC9QpkY3V45sxVAmEQ5xeBBKSaCUyQejxrRbwE6wGw/exec'
@@ -63,31 +62,14 @@ async function fetchStockData() {
   };
 }
 
-// fetching stocks data
-async function fetchStockNews() {
-  const apiKey = process.env.NEXT_PUBLIC_NEWS_API_KEY
-  const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
-
-  const url = `https://newsapi.org/v2/everything?q=stock+market+india&from=${twoWeeksAgo}&sortBy=publishedAt&pageSize=20&apiKey=${apiKey}`
-  const response = await fetch(url)
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch stock news")
-  }
-
-  const data = await response.json()
-  return data.articles
-}
-
 export default async function Home() {
   const initialData = await fetchStockData();
-  const stockNews = await fetchStockNews()
 
   return (
     <StockProvider initialData={initialData}>
       <Indices />
       <TodaysStocks />
-      <TodayNews stockNews={stockNews} />
+      <TodayNews />
 
       {/* Add the StockPriceTracker Component and pass stock data */}
       {/* <StockPriceTracker newStockData={initialData.stocks} /> */}

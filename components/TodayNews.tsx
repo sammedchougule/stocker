@@ -1,8 +1,6 @@
-
-"use client"
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CalendarDays } from "lucide-react"
+import Link from "next/link"
 import StockNewsCard from "./StockNewsCard"
 
 // Mock data for earnings calendar
@@ -24,11 +22,24 @@ interface NewsItem {
   publishedAt: string
 }
 
-interface TodayNewsProps {
-  stockNews: NewsItem[]
+async function fetchStockNews() {
+  const apiKey = process.env.NEXT_PUBLIC_NEWS_API_KEY
+  const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
+
+  const url = `https://newsapi.org/v2/everything?q=stock+market+india&from=${twoWeeksAgo}&sortBy=publishedAt&pageSize=20&apiKey=${apiKey}`
+  const response = await fetch(url)
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch stock news")
+  }
+
+  const data = await response.json()
+  return data.articles as NewsItem[]
 }
 
-export default function TodayNews({ stockNews }: TodayNewsProps) {
+export default async function TodayNews() {
+  const stockNews = await fetchStockNews()
+
   return (
     <div className="container mt-4 mx-auto sm:px-6 lg:px-8 items-stretch">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -37,7 +48,10 @@ export default function TodayNews({ stockNews }: TodayNewsProps) {
           <Card className="h-[calc(100vh-200px)] max-h-[620px]">
             <CardHeader className="sticky top-0 bg-white z-10">
               <div className="flex justify-between items-center">
-                <CardTitle>Market News</CardTitle>
+                <CardTitle>Today&apos;s News</CardTitle>
+                <Link href="/all-news" className="text-blue-500 hover:underline text-md">
+                  See All
+                </Link>
               </div>
             </CardHeader>
             <CardContent className="overflow-y-auto h-[calc(100%-80px)] pr-4 scrollbar-hide">
