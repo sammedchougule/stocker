@@ -1,13 +1,18 @@
 /** @type {import('next').NextConfig} */
-const nextConfig: import('next').NextConfig = {
+const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      'dims.apnews.com',  // Example domain 1
-      'via.placeholder.com',  // Example domain 2
-      'ntygljtdndrdabgeldsf.supabase.co',  // supabase image URL
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
   },
-};
+  env: {
+    NEXT_PUBLIC_NEWS_API_KEY: process.env.NEXT_PUBLIC_NEWS_API_KEY,
+  },
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
+
