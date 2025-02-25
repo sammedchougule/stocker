@@ -474,33 +474,7 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
       </span>
     )
   }
-
-  const renderPaginationButtons = () => {
-    const buttons = []
-    const maxVisiblePages = 5
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
-    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1)
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      buttons.push(
-        <Button
-          key={i}
-          variant={i === currentPage ? "default" : "outline"}
-          size="sm"
-          onClick={() => onPageChange(i)}
-          className="mx-1"
-        >
-          {i}
-        </Button>,
-      )
-    }
-
-    return buttons
-  }
+  
 
   return (
     <div className="relative border border-gray-200 dark:border-gray-700 rounded-lg">
