@@ -171,7 +171,7 @@ function IntrabuzzContent() {
   }
 
   return (
-    <div className="container mx-auto px-4 ">
+    <div className="container mx-auto px-4 mt-8 sm:mt-4">
       <div className="overflow-x-auto whitespace-nowrap flex items-center gap-4 mb-6">
         <Select value={filterBy} onValueChange={(value: FilterOption) => setFilterBy(value)}>
           <SelectTrigger className="w-[120px]">
