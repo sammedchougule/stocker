@@ -429,7 +429,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import SectorStockDataTable from "@/components/SectorStockDataTable"
 import { StockModal } from "@/components/StockModal"
 import type { SortColumn, SortDirection } from "@/types/Stock"
-import Link from "next/link"
+
 // import AuthWrapper from "@/components/AuthWrapper";
 
 // Define available sectors
