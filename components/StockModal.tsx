@@ -428,7 +428,7 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
                 </Button>
               </Link>
 
-              <Link href={`/StockDetail/${stock.symbol}`}>
+              <Link href={`/stockdetail/${stock.symbol}`}>
                 <Button
                   size="icon"
                   className="h-10 w-10 bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 group"

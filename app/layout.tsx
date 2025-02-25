@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: 'Stocker',
     images: [
       {
-        url: '@/public/stocker.png', // Replace with your image URL
+        url: '/stocker.png', // Replace with your image URL
         width: 800,
         height: 600,
         alt: 'Stocker - Stock Data',
@@ -35,20 +35,20 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
-        href: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
+        url: "/stocker.png",
+        href: "/stocker.png",
       },
     ],
     shortcut: [
       {
-        url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
-        href: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
+        url: "/stocker.png",
+        href: "/stocker.png",
       },
     ],
     apple: [
       {
-        url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
-        href: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
+        url: "/stocker.png",
+        href: "/stocker.png",
       },
     ],
   },

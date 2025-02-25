@@ -20,6 +20,7 @@ import {
   ChartPie,
 } from "lucide-react";
 import { getStockBgColor } from "@/lib/getstockBgColor";
+import CustomizedProgressBars from "./CustomizedProgressBars";
 
 interface FinancialData {
   [key: string]: {
@@ -50,7 +51,7 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
   }, []);
 
   if (!financialData) {
-    return <div className="text-center py-4 text-gray-500">Loading..</div>;
+    return <div className="text-center py-4 text-gray-500"><CustomizedProgressBars/></div>;
   }
 
   const currentStockData = financialData[stockName];
@@ -92,81 +93,90 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
 
   return (
     <div className="container mx-auto lg:px-8 sm:px-0">
+  {tableSections.map((section) => {
+    const tableData = prepareTableData(section);
+    const isOpen = openSection === section;
 
-      {tableSections.map((section) => {
-        const tableData = prepareTableData(section);
-        const isOpen = openSection === section;
-
-                return (
-                    <div key={section} className="mb-8">
-                        <div
-                            className="flex items-center cursor-pointer mb-4 border-b"
-                            onClick={() => setOpenSection(isOpen ? "" : section)}
-                        >
-                            <h3 className="text-xl font-medium text-gray-800 mr-4 flex items-center">
-                                {sectionIcons[section]} {section}
-                            </h3>
-                            
-                            <div>
-                                {isOpen ? <ChevronUp /> : <ChevronDown />}
-                            </div>
-                        </div>
-                        {isOpen ? (
-                            tableData ? (
-                                <>
-                                    <h4 className="text-gray-500 mb-4">Consolidated Figures in Rs. Crores</h4>
-                                    <div className="overflow-x-auto max-h-[600px]">
-                                        <Table className="min-w-full border-collapse shadow-lg rounded-lg">
-                                            <TableHeader className="text-white"
-                                              style={{ backgroundColor: getStockBgColor(stockName) }}
-                                            >
-                                                <TableRow>
-                                                    <TableHead className="sticky left-0 z-10 font-semibold text-left text-white px-4 py-2"
-                                                    style={{ backgroundColor: getStockBgColor(stockName) }}>
-                                                        Financial Year
-                                                    </TableHead>
-                                                    {tableData.header.slice(1).map((header, index) => (
-                                                        <TableHead
-                                                            key={index}
-                                                            className="text-left font-semibold px-4 py-2"
-                                                        >
-                                                            {header}
-                                                        </TableHead>
-                                                    ))}
-                                                </TableRow>
-                                            </TableHeader>
-                                            <TableBody className="bg-white">
-                                                {tableData.rows.map((row, rowIndex) => (
-                                                    <TableRow key={rowIndex} className="hover:bg-gray-200 transition-colors cursor-pointer duration-200">
-                                                        <TableCell
-                                                            className="sticky left-0 z-10 bg-gray-100 px-4 py-2 font-medium text-gray-800 whitespace-nowrap"
-                                                        >
-                                                            {row[tableData.header[0]]}
-                                                        </TableCell>
-                                                        {tableData.header.slice(1).map((header, colIndex) => (
-                                                            <TableCell
-                                                                key={colIndex}
-                                                                className="px-4 py-2 text-gray-700 whitespace-nowrap"
-                                                            >
-                                                                {row[header]}
-                                                            </TableCell>
-                                                        ))}
-                                                    </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </div>
-                                </>
-                            ) : (
-                                <div className="text-center py-4 text-gray-500">
-                                    No data available for {section}
-                                </div>
-                            )
-                        ) : null}
-                    </div>
-                );
-            })}
+    return (
+      <div key={section} className="mb-8">
+        {/* Section Header */}
+        <div
+          className="flex items-center cursor-pointer mb-4 border-b dark:border-gray-700"
+          onClick={() => setOpenSection(isOpen ? "" : section)}
+        >
+          <h3 className="text-xl font-medium text-gray-800 dark:text-gray-200 mr-4 flex items-center">
+            {sectionIcons[section]} {section}
+          </h3>
+          <div>{isOpen ? <ChevronUp /> : <ChevronDown />}</div>
         </div>
+
+        {/* Table Content */}
+        {isOpen ? (
+          tableData ? (
+            <>
+              <h4 className="text-gray-500 dark:text-gray-400 mb-4">
+                Consolidated Figures in Rs. Crores
+              </h4>
+              <div className="overflow-x-auto max-h-[600px]">
+                <Table className="min-w-full border-collapse shadow-lg rounded-lg">
+                  {/* Table Header */}
+                  <TableHeader
+                    className="text-white"
+                    style={{ backgroundColor: getStockBgColor(stockName) }}
+                  >
+                    <TableRow>
+                      <TableHead
+                        className="sticky left-0 z-10 font-semibold text-left text-white px-4 py-2"
+                        style={{ backgroundColor: getStockBgColor(stockName) }}
+                      >
+                        Financial Year
+                      </TableHead>
+                      {tableData.header.slice(1).map((header, index) => (
+                        <TableHead
+                          key={index}
+                          className="text-left font-semibold px-4 py-2"
+                        >
+                          {header}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+
+                  {/* Table Body */}
+                  <TableBody className="bg-white dark:bg-[#151719]">
+                    {tableData.rows.map((row, rowIndex) => (
+                      <TableRow
+                        key={rowIndex}
+                        className="hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors cursor-pointer duration-200"
+                      >
+                        <TableCell className="sticky left-0 z-10 bg-gray-100 dark:bg-gray-900 px-4 py-2 font-medium text-gray-800 dark:text-gray-300 whitespace-nowrap">
+                          {row[tableData.header[0]]}
+                        </TableCell>
+                        {tableData.header.slice(1).map((header, colIndex) => (
+                          <TableCell
+                            key={colIndex}
+                            className="px-4 py-2 text-gray-700 dark:text-gray-300 whitespace-nowrap"
+                          >
+                            {row[header]}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+              No data available for {section}
+            </div>
+          )
+        ) : null}
+      </div>
+    );
+  })}
+</div>
+
     );
 };
 

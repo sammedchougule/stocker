@@ -64,7 +64,7 @@ const Navbar = () => {
             <Link href="/" className="text-2xl font-bold text-black dark:text-white flex items-center gap-1">
               Stocker
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png"
+                src="/stocker.png"
                 alt="Stocker Logo"
                 width={24}
                 height={24}

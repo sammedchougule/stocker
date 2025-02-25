@@ -173,7 +173,7 @@ export default function StockMarquee() {
 
   if (showGreeting) {
     return (
-      <div className="fixed top-0 left-0 right-0 z-50 h-8 backdrop-blur-md bg-white dark:bg-[#151719] border-b dark:border-gray-700">
+      <div className="fixed top-0 left-0 right-0 z-50 h-8 backdrop-blur-md bg-white dark:bg-black border-b dark:border-gray-700">
         <p className="flex items-center justify-center h-full text-gray-900 dark:text-gray-100">{greeting}</p>
       </div>
     )
@@ -181,14 +181,14 @@ export default function StockMarquee() {
 
   if (filteredStocks.length === 0) {
     return (
-      <div className="fixed top-0 left-0 right-0 z-50 h-8 backdrop-blur-md bg-white dark:bg-[#151719] border-b dark:border-gray-700">
+      <div className="fixed top-0 left-0 right-0 z-50 h-8 backdrop-blur-md bg-white dark:bg-black border-b dark:border-gray-700">
         <p className="flex items-center justify-center h-full text-gray-900 dark:text-gray-100">No stocks available</p>
       </div>
     )
   }
 
   return (
-    <div className="fixed flex items-center justify-center top-0 left-0 right-0 z-50 h-8 overflow-hidden backdrop-blur-sm bg-white dark:bg-[#151719] border-b border-gray-200 dark:border-gray-700">
+    <div className="fixed flex items-center justify-center top-0 left-0 right-0 z-50 h-8 overflow-hidden backdrop-blur-sm bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700">
       <Marquee speed={80} gradient={false} pauseOnHover={true}>
         {filteredStocks.map((stock) => (
           <span key={stock.symbol} className="inline-block mx-1">

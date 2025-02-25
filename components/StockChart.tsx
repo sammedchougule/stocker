@@ -95,7 +95,7 @@ export function StockChart({ stock }: StockChartProps) {
   const chartColor = isPositive ? "#22c55e" : "#ef4444"; // green-500 : red-500
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 bg-white dark:bg-[#151719]">
       <div className="flex gap-2 mt-2">
         {timeFrameButtons.map((frame) => (
           <Button
