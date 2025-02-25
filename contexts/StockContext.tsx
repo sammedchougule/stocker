@@ -1,14 +1,23 @@
-'use client'
+"use client"
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
-import { Stock, StockData } from '@/types/Stock'
+import type React from "react"
+import { createContext, useContext, useState, useEffect, useCallback } from "react"
+import type { Stock } from "@/types/Stock"
 
 interface StockContextType {
   stocks: Stock[]
   loading: boolean
-  error: string | null // Explicitly specify the type here
+  error: string | null
   setPollingInterval: (interval: number) => void
-  lastUpdated: Date | null
+  isLoading: boolean // Add this line
+}
+
+interface StockProviderProps {
+  children: React.ReactNode
+  initialData?: {
+    stocks: Stock[]
+    lastUpdated: string
+  }
 }
 
 const StockContext = createContext<StockContextType | undefined>(undefined)
@@ -16,58 +25,51 @@ const StockContext = createContext<StockContextType | undefined>(undefined)
 export function useStockContext() {
   const context = useContext(StockContext)
   if (context === undefined) {
-    throw new Error('useStockContext must be used within a StockProvider')
+    throw new Error("useStockContext must be used within a StockProvider")
   }
   return context
 }
 
-export function StockProvider({
-  children,
-  initialData,
-}: {
-  children: React.ReactNode
-  initialData?: { stocks: Stock[]; lastUpdated: string }
-}) {
+export function StockProvider({ children, initialData }: StockProviderProps) {
   const [stocks, setStocks] = useState<Stock[]>(initialData?.stocks || [])
   const [loading, setLoading] = useState(!initialData)
-  const [error, setError] = useState<string | null>(null) // Explicitly specify the type here
-  const [pollingInterval, setPollingInterval] = useState(60000) // Default to 1 minute
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(
-    initialData?.lastUpdated ? new Date(initialData.lastUpdated) : null
-  )
+  const [error, setError] = useState<string | null>(null)
+  const [pollingInterval, setPollingInterval] = useState(600000) // Default to 10 minutes
+  const [isLoading, setIsLoading] = useState(!initialData) // Add this line
 
   const fetchStocks = useCallback(async () => {
+    setIsLoading(true) // Set isLoading to true when fetching starts
     try {
       const res = await fetch(
-        'https://script.google.com/macros/s/AKfycbwa3ZVL20X9vlqFfpi6KSteUsEecC9QpkY3V45sxVAmEQ5xeBBKSaCUyQejxrRbwE6wGw/exec'
+        "https://script.google.com/macros/s/AKfycbzK8oDQse4ERT_jddWwlK9iTLz3TNhiVAyb0Jp5L4U3q-XOyplps-HLNY0uLcNiNn0ERg/exec",
       )
+
       if (!res.ok) {
-        throw new Error('Failed to fetch data')
+        throw new Error("Failed to fetch data")
       }
-      const stockData: StockData = await res.json()
-      setStocks(stockData.data)
-      setLastUpdated(new Date())
+
+      const data = await res.json()
+      setStocks(data.data)
       setLoading(false)
       setError(null)
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message) // Ensure the error is an instance of Error
-      } else {
-        setError('An unknown error occurred')
-      }
+    } catch (error) {
+      setError("Failed to fetch stock data")
       setLoading(false)
+    } finally {
+      setIsLoading(false) // Set isLoading to false when fetching ends
     }
   }, [])
 
   useEffect(() => {
     if (!initialData) {
-      fetchStocks() // Initial fetch only if no initial data is provided
+      fetchStocks() // Initial fetch only if no initialData
     }
 
     const intervalId = setInterval(() => {
       fetchStocks()
     }, pollingInterval)
 
+    // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId)
   }, [fetchStocks, pollingInterval, initialData])
 
@@ -76,12 +78,9 @@ export function StockProvider({
     loading,
     error,
     setPollingInterval,
-    lastUpdated,
+    isLoading, // Add this line
   }
 
-  return (
-    <StockContext.Provider value={contextValue}>
-      {children}
-    </StockContext.Provider>
-  )
+  return <StockContext.Provider value={contextValue}>{children}</StockContext.Provider>
 }
+

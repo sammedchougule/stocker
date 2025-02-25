@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useMemo, Suspense } from "react"
-import { StockProvider, useStockContext } from "@/contexts/StockContext"
+import { useStockContext } from "@/contexts/StockContext"
 import type { Stock } from "@/types/Stock"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from "lucide-react"
@@ -51,7 +51,7 @@ type TableSortColumn =
 type TableSortDirection = "asc" | "desc"
 
 function IntrabuzzContent() {
-  const { stocks } = useStockContext()
+  const { stocks, isLoading } = useStockContext()
   const searchParams = useSearchParams()
 
   const [sortBy, setSortBy] = useState<SortOption>(() => {
@@ -162,6 +162,14 @@ function IntrabuzzContent() {
     setCurrentPage(page)
   }
 
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 mt-10 sm:mt-4">
+        <CustomizedProgressBars />
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto px-4 mt-10 sm:mt-4">
       <div className="overflow-x-auto whitespace-nowrap flex items-center gap-4 mb-6">
@@ -227,7 +235,6 @@ function IntrabuzzContent() {
             className={`flex items-center gap-2 rounded-lg ${highLowFilterOn ? "text-blue-700 bg-blue-200" : "bg-gray-100 text-gray-500"}`}
           >
             <span className="text-sm font-semibold">High-Low</span>
-            
           </Button>
 
           <Button variant="outline" size="icon" onClick={() => setViewMode(viewMode === "card" ? "table" : "card")}>
@@ -280,11 +287,9 @@ function IntrabuzzContent() {
 
 export default function Intrabuzz() {
   return (
-    <StockProvider>
-      <Suspense>
-        <IntrabuzzContent />
-      </Suspense>
-    </StockProvider>
+    <Suspense fallback={<CustomizedProgressBars />}>
+      <IntrabuzzContent />
+    </Suspense>
   )
 }
 

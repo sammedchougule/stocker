@@ -7,6 +7,7 @@ import Marquee from '@/components/Marquee'
 import Head from 'next/head'
 import { Footer } from '@/components/Footer'
 import { Analytics } from '@vercel/analytics/next';
+import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -61,6 +62,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <StockProvider initialData={initialData}>
           <div className="min-h-screen pt-20">
             <Marquee />
@@ -72,6 +74,7 @@ export default async function RootLayout({
             <Footer />
           </div>
         </StockProvider>
+      </ThemeProvider>
 
         {/* Use the Head component to add themeColor */}
         <Head>
