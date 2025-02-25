@@ -356,8 +356,8 @@ const Indices: React.FC = () => {
   )
 
   return (
-    <div className="container mx-auto sm:px-6 lg:px-8">
-      <Card className="bg-white dark:bg-[#151719] dark:dark-noise overflow-hidden">
+    <div className="container mx-auto lg:mt-4 mt-10 ">
+      <Card className="bg-white dark:bg-[#151719] overflow-hidden">
         <CardHeader>
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Sectoral Indices</h2>
@@ -382,9 +382,9 @@ const Indices: React.FC = () => {
                 transform: `translateX(-${activeCard * 100}%)`,
               }}
             >
-              <div className="w-full flex-shrink-0 px-1">{loading ? renderSkeleton() : renderCard(0, 3)}</div>
-              <div className="w-full flex-shrink-0 px-1">{loading ? renderSkeleton() : renderCard(3, 6)}</div>
-              <div className="w-full flex-shrink-0 px-1">{loading ? renderSkeleton() : renderCard(6, 9)}</div>
+              <div className="w-full flex-shrink-0 ">{loading ? renderSkeleton() : renderCard(0, 3)}</div>
+              <div className="w-full flex-shrink-0 ">{loading ? renderSkeleton() : renderCard(3, 6)}</div>
+              <div className="w-full flex-shrink-0 ">{loading ? renderSkeleton() : renderCard(6, 9)}</div>
             </div>
             <div className="flex justify-center mt-6">
               <div className="flex space-x-2">

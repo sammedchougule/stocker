@@ -46,6 +46,7 @@ import { StockProvider } from '@/contexts/StockContext';
 import Indices from '@/components/Indices';
 import TodayNews from '@/components/TodayNews';
 import TodaysStocks from '@/components/TodayStocks';
+// import { SubscriptionPlans } from '@/components/SubscriptionPlans';
 // import StockPriceTracker from '@/components/StockPriceTracker'; // Import the StockPriceTracker
 
 // Revalidate every 60 seconds
@@ -67,12 +68,12 @@ export default async function Home() {
 
   return (
     <StockProvider initialData={initialData}>
-      <Indices />
-      <TodaysStocks />
-      <TodayNews />
-
-      {/* Add the StockPriceTracker Component and pass stock data */}
-      {/* <StockPriceTracker newStockData={initialData.stocks} /> */}
+      <div className="bg-white dark:bg-black">
+        <Indices />
+        <TodaysStocks />
+        <TodayNews />
+        {/* <SubscriptionPlans /> */}
+      </div>
     </StockProvider>
   );
 }

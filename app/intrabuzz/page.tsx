@@ -156,7 +156,7 @@ function IntrabuzzContent() {
   }
 
   const [currentPage, setCurrentPage] = useState(1)
-  const rowsPerPage = 12
+  const rowsPerPage = 14
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)

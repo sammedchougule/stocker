@@ -271,7 +271,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, Plus, ListFilter } from "lucide-react"
+import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, ListFilter } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useStockContext } from "@/contexts/StockContext"
@@ -281,6 +281,7 @@ import "react-loading-skeleton/dist/skeleton.css"
 import Image from "next/image"
 import MarketMood from "./MarketMood"
 import { StockModal } from "@/components/StockModal"
+import { getStockBgColor } from "@/lib/getstockBgColor"
 
 type FilterType = "gainers" | "losers" | "most-active" | "52w-high" | "52w-low"
 
@@ -391,7 +392,7 @@ const TodaysStocks = () => {
     <div className="container mt-4 mx-auto sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4">
       {/* Today's Stocks Section - 60% width on large screens */}
       <div className="w-full lg:w-4/6 flex flex-col">
-        <Card className="bg-white dark:bg-[#151719] dark:dark-noise overflow-hidden">
+        <Card className="bg-white dark:bg-[#151719]  overflow-hidden">
           <CardHeader className="pb-4 px-2 sm:px-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold dark:text-white">Today&apos;s stocks</h2>
@@ -403,7 +404,7 @@ const TodaysStocks = () => {
                 <ListFilter className="h-4 w-4" />
               </button>
             </div>
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="flex overflow-x-auto gap-2 mt-4">
               <Button
                 variant={activeFilter === "gainers" ? "default" : "outline"}
                 onClick={() => setActiveFilter("gainers")}
@@ -506,15 +507,18 @@ const TodaysStocks = () => {
                     <div className="col-span-1 sm:col-span-1 flex items-center justify-center">
                       <Image
                         className="rounded-full"
-                        width={32}
-                        height={32}
+                        width={36}
+                        height={36}
                         src={`/images/${stock.symbol}.svg`}
                         alt={stock.companyname}
                       />
                     </div>
                     <div className="col-span-3 sm:col-span-3 min-w-0">
-                      <div className="font-medium max-w-[120px] dark:text-white">{stock.symbol}</div>
-                      <div className="text-sm text-gray-700 dark:text-gray-300 truncate">{stock.companyname}</div>
+                      <div className="font-normal text-sm max-w-[120px] rounded-md text-white flex items-center justify-center"
+                        style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6.5rem" }}
+                      >
+                        {stock.symbol}
+                      </div>
                     </div>
                     {/* Adjusted price and change col span */}
                     <div className="col-span-4 sm:col-span-4 text-right">
@@ -535,9 +539,9 @@ const TodaysStocks = () => {
                         )}
                         <span className="text-sm">{Number(stock.changepct).toFixed(2)}%</span>
                       </span>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                      {/* <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Plus className="h-4 w-4" />
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                 ))}

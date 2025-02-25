@@ -440,13 +440,13 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
             </svg>
           </div>
 
-          <p className="text-sm text-gray-500 dark:text-gray-400 mx-10">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mx-8">
             MMI is in the{" "}
             <span style={{ color: moodInfo.color, fontWeight: "bold", fontSize: "1.1rem" }}>{moodInfo.text} Zone.</span>{" "}
             {moodInfo.explanation}
           </p>
 
-          <button className="text-blue-600 dark:text-blue-400 mt-2" onClick={() => setShowModal(true)}>
+          <button className="text-blue-600 dark:text-blue-400" onClick={() => setShowModal(true)}>
             See All Zones
           </button>
         </div>

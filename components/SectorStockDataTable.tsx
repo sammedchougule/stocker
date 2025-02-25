@@ -299,13 +299,13 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
   }
 
   return (
-    <div className="relative border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-background">
+    <div className="relative border bg-white dark:bg-[#151719] rounded-lg">
       <div className="overflow-auto max-h-[700px]">
         <table className="w-full border-collapse">
-          <thead className="sticky top-0 z-20 bg-white dark:bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-background/60">
+          <thead className="sticky top-0 z-20  backdrop-blur bg-blue-200 dark:bg-blue-900 ">
             <tr>
               <th
-                className="sticky left-0 z-30 bg-white dark:bg-background min-w-[100px] px-8 py-3 text-left font-medium cursor-pointer border-b dark:border-gray-700"
+                className="sticky left-0 z-30  min-w-[100px] px-8 py-3 text-left font-medium cursor-pointer border-b bg-blue-200 dark:bg-blue-900 dark:border-gray-700"
                 onClick={() => onSort(tableId, "symbol")}
               >
                 <div className="flex items-center gap-2">
@@ -351,14 +351,14 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-background">
+          <tbody className="bg-white dark:bg-[#151719]">
             {sortedStocks.map((stock) => (
               <tr
                 key={stock.symbol}
-                className="cursor-pointer hover:bg-gray-50 dark:hover:bg-muted/50 transition-colors"
+                className="cursor-pointer bg-white dark:bg-[#151719] hover:bg-gray-500 dark:hover:bg-muted/100 transition-colors"
                 onClick={() => onStockClick(stock)}
               >
-                <td className="sticky left-0 z-10 bg-white dark:bg-background p-4 border-t dark:border-gray-800">
+                <td className="sticky left-0 z-10  p-4 border-t dark:border-gray-800">
                   <div className="flex items-center gap-2">
                     <Image
                       className="w-6 h-6 rounded-full"

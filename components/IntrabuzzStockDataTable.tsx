@@ -351,11 +351,12 @@
 
 import type React from "react"
 import { useMemo } from "react"
-import { ArrowUp, ArrowDown, Flame, ArrowUpDown } from "lucide-react"
+import { ArrowUp, ArrowDown, Flame, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import type { Stock } from "@/types/Stock"
 import { getStockBgColor } from "@/lib/getstockBgColor"
 import { Table, TableHeader, TableBody, TableCell, TableHead, TableRow } from "./ui/table"
+import { Button } from "./ui/button"
 
 interface IntrabuzzStockDataTableProps {
   stocks: Stock[]
@@ -453,6 +454,8 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
     return sortedStocks.slice(startIndex, endIndex)
   }, [sortedStocks, currentPage, rowsPerPage])
 
+  const totalPages = Math.ceil(sortedStocks.length / rowsPerPage)
+
   const renderSortIcon = (column: SortColumn) => {
     if (column === sortColumn) {
       return sortDirection === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
@@ -470,6 +473,33 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
         {value}
       </span>
     )
+  }
+
+  const renderPaginationButtons = () => {
+    const buttons = []
+    const maxVisiblePages = 5
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1)
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <Button
+          key={i}
+          variant={i === currentPage ? "default" : "outline"}
+          size="sm"
+          onClick={() => onPageChange(i)}
+          className="mx-1"
+        >
+          {i}
+        </Button>,
+      )
+    }
+
+    return buttons
   }
 
   return (
@@ -580,10 +610,10 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
             {paginatedStocks.map((stock) => (
               <TableRow
                 key={stock.symbol}
-                className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 border rounded-md bg-white dark:bg-[#151719]"
+                className="cursor-pointer border rounded-md bg-white dark:bg-[#151719] hover:bg-gray-500 dark:hover:bg-muted/100"
                 onClick={() => onStockClick && onStockClick(stock)}
               >
-                <TableCell className="p-2 border-t sticky left-0 z-10 bg-white dark:bg-[#151719]">
+                <TableCell className="p-2 border-t sticky left-0 z-10 ">
                   <div className="flex items-center gap-2">
                     <Image
                       className="w-6 h-6 rounded-full"
@@ -678,23 +708,23 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
         </Table>
       </div>
 
-      {/* Pagination Controls */}
-      <div className="flex justify-between p-4 bg-white dark:bg-gray-800">
-        <button
-          onClick={() => onPageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md"
-        >
-          Previous
-        </button>
-        <span className="text-gray-800 dark:text-gray-200">Page {currentPage}</span>
-        <button
+      {/* Updated Pagination Controls */}
+      <div className="flex justify-between items-center p-4 bg-white dark:bg-gray-800">
+        <Button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1} variant="outline" size="sm">
+          <ChevronLeft className="w-4 h-4 mr-2" />Previous
+        </Button>
+        <div className="flex items-center space-x-2">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            {currentPage} / {totalPages}
+          </span>
+        </div>
+        <Button
           onClick={() => onPageChange(currentPage + 1)}
-          disabled={currentPage * rowsPerPage >= sortedStocks.length}
-          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md"
-        >
-          Next
-        </button>
+          disabled={currentPage === totalPages}
+          variant="outline"
+          size="sm"
+        >Next<ChevronRight className="w-4 h-4 ml-2" />
+        </Button>
       </div>
     </div>
   )

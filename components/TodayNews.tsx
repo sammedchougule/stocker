@@ -113,6 +113,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CalendarDays } from "lucide-react"
+import Link from "next/link"
 import StockNewsCard from "./StockNewsCard"
 import { unstable_noStore as noStore } from "next/cache"
 
@@ -136,7 +137,6 @@ interface NewsItem {
 }
 
 async function fetchStockNews(): Promise<NewsItem[]> {
-  // Opt out of static rendering and cache
   noStore()
 
   try {
@@ -166,8 +166,7 @@ export default async function TodayNews() {
   const stockNews = await fetchStockNews()
 
   return (
-    <div className="bg-white dark:bg-[#151719] min-h-screen">
-      <div className="container mx-auto py-6">
+      <div className="container mx-auto py-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* News Section */}
           <div className="lg:col-span-2">
@@ -175,9 +174,9 @@ export default async function TodayNews() {
               <CardHeader className="sticky top-0 bg-white dark:bg-[#151719] z-10">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-gray-900 dark:text-white">Today&apos;s News</CardTitle>
-                  {/* <Link href="/all-news" className="text-blue-500 hover:underline text-md">
+                  <Link href="/all-news" className="text-blue-500 hover:underline text-md">
                     See All
-                  </Link> */}
+                  </Link>
                 </div>
               </CardHeader>
               <CardContent className="overflow-y-auto h-[calc(100%-80px)] pr-4 scrollbar-hide">
@@ -224,7 +223,7 @@ export default async function TodayNews() {
           </div>
         </div>
       </div>
-    </div>
+
   )
 }
 

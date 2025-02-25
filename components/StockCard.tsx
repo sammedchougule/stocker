@@ -200,7 +200,7 @@ const StockCard: React.FC<StockCardProps> = ({
 
   return (
     <Card
-      className="relative flex flex-col cursor-pointer transition-transform duration-300 transform hover:scale-105 bg-white dark:bg-gray-800"
+      className="relative flex flex-col cursor-pointer transition-transform duration-300 transform hover:scale-105 bg-white dark:bg-[#151719]"
       onClick={() => onClick?.(stock)}
       style={{
         boxShadow: stock.changepct >= 0 ? "4px 4px 8px rgba(34, 197, 94, 0.5)" : "4px 4px 8px rgba(239, 68, 68, 0.5)",

@@ -4,10 +4,10 @@ import { Inter } from 'next/font/google'
 import { StockProvider } from '@/contexts/StockContext'
 import Navbar from '@/components/Navbar'
 import Marquee from '@/components/Marquee'
-import Head from 'next/head'
 import { Footer } from '@/components/Footer'
 import { Analytics } from '@vercel/analytics/next';
 import { ThemeProvider } from "@/components/theme-provider"
+import PageLayout from '@/components/PageLayout'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -64,22 +64,18 @@ export default async function RootLayout({
       <body className={inter.className}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <StockProvider initialData={initialData}>
-          <div className="min-h-screen pt-20">
+          <div className=" bg-white dark:bg-black">
             <Marquee />
             <Navbar />
-            <div className="content-container mb-20">
+            <PageLayout>
               {children}
               <Analytics />
-            </div>
+            </PageLayout> 
             <Footer />
           </div>
         </StockProvider>
       </ThemeProvider>
 
-        {/* Use the Head component to add themeColor */}
-        <Head>
-          <meta name="theme-color" content="#000000" /> {/* Replace with your desired theme color */}
-        </Head>
       </body>
     </html>
   )

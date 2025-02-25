@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 
 export function Footer() {
   return (
-    <footer className="bg-white dark:bg-[#151719] dark:dark-noise text-gray-800 dark:text-white">
-      <div className="container mx-auto px-6 py-6 mt-4">
+    <footer className="bg-white dark:bg-black text-gray-800 dark:text-white">
+      <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">About StockDataTable</h3>
@@ -64,7 +64,7 @@ export function Footer() {
               <li>123 Finance Street</li>
               <li>Market City, ST 12345</li>
               <li>Phone: (123) 456-7890</li>
-              <li>Email: info@stockdatatable.com</li>
+              <li>Email: info@stocker.co.in</li>
             </ul>
           </div>
           <div>
@@ -81,7 +81,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-600 dark:text-gray-300 text-sm">© 2025 StockDataTable. All rights reserved.</p>
+          <p className="text-gray-600 dark:text-gray-300 text-sm">© 2025 Stocker. All rights reserved.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <a
               href="#"

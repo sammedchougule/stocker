@@ -558,13 +558,13 @@ export default function Sectors() {
 
     return (
       <Card
-        className={`mt-8 m-2 transition-all duration-300 ${selectedSector === sector ? "ring-2 ring-blue-500" : ""}`}
+        className={`mt-8 m-2 transition-all duration-300 bg-white dark:bg-[#151719] ${selectedSector === sector ? "ring-2 ring-blue-500" : ""}`}
         ref={(el: HTMLDivElement | null) => {
           sectorRefs.current[sector] = el
         }}
       >
         <CardHeader>
-          <h3 className="text-xl font-semibold">{sector.replace("NIFTY_", "").replace("_", " ")} Stocks</h3>
+          <h3 className="text-xl font-semibold ">{sector.replace("NIFTY_", "").replace("_", " ")} Stocks</h3>
         </CardHeader>
         <CardContent className="p-0">
           <SectorStockDataTable
@@ -642,7 +642,7 @@ export default function Sectors() {
                       if (active && payload && payload.length) {
                         const value = payload[0].value as number
                         return (
-                          <div className="bg-white p-2 border border-gray-200 rounded shadow">
+                          <div className="bg-white dark:bg-[#151719] p-2 border border-gray-200 rounded shadow">
                             <p className="font-semibold">Nifty {label}</p>
                             <p>
                               Change{" "}
