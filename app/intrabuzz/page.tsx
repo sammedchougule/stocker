@@ -171,13 +171,13 @@ function IntrabuzzContent() {
   }
 
   return (
-    <div className="container mx-auto px-4 mt-10 sm:mt-4">
+    <div className="container mx-auto px-4 ">
       <div className="overflow-x-auto whitespace-nowrap flex items-center gap-4 mb-6">
         <Select value={filterBy} onValueChange={(value: FilterOption) => setFilterBy(value)}>
           <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="Filter by Index" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="">
             <SelectItem value="Nifty FnO">All</SelectItem>
             <SelectItem value="Nifty 50">Nifty 50</SelectItem>
             <SelectItem value="Nifty Auto">Auto</SelectItem>
@@ -196,51 +196,65 @@ function IntrabuzzContent() {
         </Select>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-1"
-            onClick={() => setSortBy(sortBy === "changepct_desc" ? "changepct_asc" : "changepct_desc")}
-          >
-            {" "}
-            Chg
-            <Percent className="w-4 h-4" />
-            {sortBy.startsWith("changepct") &&
-              (sortBy === "changepct_desc" ? (
-                <ArrowUp className="w-4 h-4 font-extrabold text-green-500" />
-              ) : (
-                <ArrowDown className="w-4 h-4 font-extrabold text-red-500" />
-              ))}
-            {!sortBy.startsWith("changepct") && <ArrowUp className="w-4 h-4 text-gray-400" />}
-          </Button>
+  {/* Change Percentage Sorting */}
+  <Button
+    variant="outline"
+    size="sm"
+    className="flex items-center gap-1"
+    onClick={() => setSortBy(sortBy === "changepct_desc" ? "changepct_asc" : "changepct_desc")}
+  >
+    Chg
+    <Percent className="w-4 h-4" />
+    {sortBy.startsWith("changepct") ? (
+      sortBy === "changepct_desc" ? (
+        <ArrowUp className="w-4 h-4 text-green-500" />
+      ) : (
+        <ArrowDown className="w-4 h-4 text-red-500" />
+      )
+    ) : (
+      <ArrowUp className="w-4 h-4 text-gray-400" />
+    )}
+  </Button>
 
-          <Button
-            variant="outline"
-            onClick={() => {
-              setSpikeFilterOn(!spikeFilterOn)
-              setHighLowFilterOn(false)
-            }}
-            className={`flex items-center gap-2 rounded-lg ${spikeFilterOn ? "text-orange-700 bg-orange-200" : "bg-gray-100 text-gray-500"}`}
-          >
-            <span className="text-sm font-semibold">Spike</span>
-            <Flame className="w-4 h-4" />
-          </Button>
+  {/* Spike Button */}
+  <Button
+    variant="outline"
+    onClick={() => {
+      setSpikeFilterOn(!spikeFilterOn);
+      setHighLowFilterOn(false);
+    }}
+    className={`flex items-center gap-2 rounded-lg ${
+      spikeFilterOn
+        ? "text-orange-700 bg-orange-200 dark:bg-orange-600 dark:text-white"
+        : "bg-gray-100 text-gray-500 dark:bg-[#151719] dark:text-gray-300"
+    }`}
+  >
+    <span className="text-sm font-semibold">Spike</span>
+    <Flame className="w-4 h-4" />
+  </Button>
 
-          <Button
-            variant="outline"
-            onClick={() => {
-              setHighLowFilterOn(!highLowFilterOn)
-              setSpikeFilterOn(false)
-            }}
-            className={`flex items-center gap-2 rounded-lg ${highLowFilterOn ? "text-blue-700 bg-blue-200" : "bg-gray-100 text-gray-500"}`}
-          >
-            <span className="text-sm font-semibold">High-Low</span>
-          </Button>
+  {/* High-Low Button */}
+  <Button
+    variant="outline"
+    onClick={() => {
+      setHighLowFilterOn(!highLowFilterOn);
+      setSpikeFilterOn(false);
+    }}
+    className={`flex items-center gap-2 rounded-lg ${
+      highLowFilterOn
+        ? "text-blue-700 bg-blue-200 dark:bg-blue-600 dark:text-white"
+        : "bg-gray-100 text-gray-500 dark:bg-[#151719] dark:text-gray-300"
+    }`}
+  >
+    <span className="text-sm font-semibold">High-Low</span>
+  </Button>
 
-          <Button variant="outline" size="icon" onClick={() => setViewMode(viewMode === "card" ? "table" : "card")}>
-            {viewMode === "card" ? <TableIcon className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
-          </Button>
-        </div>
+  {/* View Mode Toggle */}
+  <Button variant="outline" size="icon" onClick={() => setViewMode(viewMode === "card" ? "table" : "card")}>
+    {viewMode === "card" ? <TableIcon className="h-4 w-4" /> : <LayoutGrid className="h-4 w-4" />}
+  </Button>
+</div>
+
       </div>
 
       {stocks?.length === 0 ? (

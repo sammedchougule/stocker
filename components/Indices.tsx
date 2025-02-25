@@ -324,13 +324,13 @@ const Indices: React.FC = () => {
                 height={30}
                 className="rounded-full border border-gray-200"
               />
-            <span className="text-md font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[120px]">
+            <span className="text-md font-medium text-gray-800 dark:text-gray-200 truncate max-w-[120px]">
               {sector.companyname}
             </span>
           </div>
 
           <div className="text-right">
-            <span className="text-md font-semibold text-gray-900 dark:text-gray-100">
+            <span className="text-md font-medium text-gray-900 dark:text-gray-100">
               {Number(sector.price).toFixed(2)}
             </span>
             <div className="flex items-center justify-end mt-0.5">
@@ -346,7 +346,7 @@ const Indices: React.FC = () => {
                 ) : (
                   <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
                 )}
-                <span className="text-sm font-semibold">{Number(sector.changepct).toFixed(2)}%</span>
+                <span className="text-sm font-medium">{Number(sector.changepct).toFixed(2)}%</span>
               </span>
             </div>
           </div>

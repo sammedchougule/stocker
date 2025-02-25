@@ -287,9 +287,8 @@ const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) =
   if (active && payload && payload.length) {
     const data = payload[0].payload
     return (
-      <div className="custom-tooltip bg-white p-2 border border-gray-200 rounded shadow">
+      <div className="custom-tooltip bg-white dark:bg-[#151719] p-2 border border-gray-200 rounded shadow">
         <p className="font-semibold">{data.companyname}</p>
-        <p>Symbol: {data.name}</p>
         <p>Price: ₹{Number(data.price).toFixed(2)}</p>
         <p>
           {sortOptionLabels[data.selectedSort as SortOption]}: {Number(data[data.selectedSort]).toFixed(2)}

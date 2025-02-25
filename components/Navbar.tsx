@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { StockInput } from "./Input"
 import { useTheme } from "next-themes"
+import Image from "next/image"
 
 const Navbar = () => {
   const pathname = usePathname()
@@ -60,8 +61,15 @@ const Navbar = () => {
         <div className="container mx-auto px-4 flex justify-between items-center py-1">
           {/* Website Name, Eye Animation, and Mobile Theme Toggle */}
           <div className="flex items-center justify-between w-full md:w-auto">
-            <Link href="/" className="text-2xl font-bold text-black dark:text-white flex items-center">
+            <Link href="/" className="text-2xl font-bold text-black dark:text-white flex items-center gap-1">
               Stocker
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png"
+                alt="Stocker Logo"
+                width={24}
+                height={24}
+                className="w-8 h-8"
+              />
             </Link>
             <button
               onClick={toggleTheme}

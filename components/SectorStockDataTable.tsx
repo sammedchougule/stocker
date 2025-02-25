@@ -318,7 +318,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 onClick={() => onSort(tableId, "companyname")}
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-900 dark:text-gray-100">Close Yst.</span>
+                  <span className="text-gray-900 dark:text-gray-100">Pre Close</span>
                   {renderSortIcon("companyname")}
                 </div>
               </th>
@@ -409,7 +409,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </td>
                 <td className="p-3 border-t dark:border-gray-800 text-right">
                   <span
-                    className={`inline-flex items-center rounded px-2 py-1 font-medium ${
+                    className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                       stock.changepct >= 0
                         ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50"
                         : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50"

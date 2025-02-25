@@ -685,9 +685,9 @@ export default function Sectors() {
 
       {/* Sector Table and Index Tables */}
 
-      <div className="mt-8 grid grid-cols-1 gap-8">
+      <div className="mt-8 grid grid-cols-1 gap-2">
         {/* Row 1: Sector Table and First Index Table */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
           {/* Sector Table */}
           <div>
             <Card className="bg-white dark:bg-[#151719]">
@@ -749,7 +749,7 @@ export default function Sectors() {
         </div>
 
         {/* Row 2: Remaining Index Tables */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
           {SECTORS.slice(1).map((sector) => (
             <IndexTable key={sector} sector={sector} stocks={sectorStocks[sector]} />
           ))}

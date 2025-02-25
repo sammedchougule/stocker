@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: 'Stocker',
     images: [
       {
-        url: '/images/stock-image.png', // Replace with your image URL
+        url: '@/public/stocker.png', // Replace with your image URL
         width: 800,
         height: 600,
         alt: 'Stocker - Stock Data',
@@ -33,10 +33,25 @@ export const metadata: Metadata = {
     type: 'website',
   },
   icons: {
-    icon: '/favicon.ico', // Replace with your favicon URL
-    apple: '/apple-icon.png', // Replace with your apple icon URL
+    icon: [
+      {
+        url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
+        href: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
+      },
+    ],
+    shortcut: [
+      {
+        url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
+        href: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
+      },
+    ],
+    apple: [
+      {
+        url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
+        href: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/stocker-e7t7Xlm1RJmJl1G0cDVxJiL3L55KLa.png",
+      },
+    ],
   },
-  // Removed themeColor from here
 }
 
 export const revalidate = 60 // Revalidate every 60 seconds
@@ -64,7 +79,7 @@ export default async function RootLayout({
       <body className={inter.className}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <StockProvider initialData={initialData}>
-          <div className=" bg-white dark:bg-black">
+          <div className=" bg-white dark:bg-black min-h-screen">
             <Marquee />
             <Navbar />
             <PageLayout>
