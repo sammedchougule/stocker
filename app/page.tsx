@@ -39,59 +39,45 @@
 
 //TODO: Price history checking code
 
-// // app/page.tsx
-
-// import './globals.css';
-// import { StockProvider } from '@/contexts/StockContext';
-// import Indices from '@/components/Indices';
-// import TodayNews from '@/components/TodayNews';
-// import TodaysStocks from '@/components/TodayStocks';
-// // import { SubscriptionPlans } from '@/components/SubscriptionPlans';
-// // import StockPriceTracker from '@/components/StockPriceTracker'; // Import the StockPriceTracker
-
-// // Revalidate every 60 seconds
-// export const revalidate = 60;
-
-// async function fetchStockData() {
-//   const res = await fetch(
-//     'https://script.google.com/macros/s/AKfycbwa3ZVL20X9vlqFfpi6KSteUsEecC9QpkY3V45sxVAmEQ5xeBBKSaCUyQejxrRbwE6wGw/exec'
-//   );
-//   const stockData = await res.json();
-//   return {
-//     stocks: stockData.data,
-//     lastUpdated: new Date().toISOString(),
-//   };
-// }
-
-// export default async function Home() {
-//   const initialData = await fetchStockData();
-
-//   return (
-//     <StockProvider initialData={initialData}>
-//       <div className="bg-white dark:bg-black min-h-screen flex flex-col gap-y-4">
-//         <Indices />
-//         <TodaysStocks />
-//         <TodayNews />
-//         {/* <SubscriptionPlans /> */}
-//       </div>
-//     </StockProvider>
-//   );
-// }
-
-
-
-
 // app/page.tsx
-import Indices from '@/components/Indices'
-import TodayNews from '@/components/TodayNews'
-import TodaysStocks from '@/components/TodayStocks'
 
-export default function Home() {
-  return (
-    <div className="bg-white dark:bg-black min-h-screen flex flex-col gap-y-4">
-      <Indices />
-      <TodaysStocks />
-      <TodayNews />
-    </div>
-  )
+import './globals.css';
+import { StockProvider } from '@/contexts/StockContext';
+import Indices from '@/components/Indices';
+import TodayNews from '@/components/TodayNews';
+import TodaysStocks from '@/components/TodayStocks';
+// import { SubscriptionPlans } from '@/components/SubscriptionPlans';
+// import StockPriceTracker from '@/components/StockPriceTracker'; // Import the StockPriceTracker
+
+// Revalidate every 60 seconds
+export const revalidate = 60;
+
+async function fetchStockData() {
+  const res = await fetch(
+    'https://script.google.com/macros/s/AKfycbwa3ZVL20X9vlqFfpi6KSteUsEecC9QpkY3V45sxVAmEQ5xeBBKSaCUyQejxrRbwE6wGw/exec'
+  );
+  const stockData = await res.json();
+  return {
+    stocks: stockData.data,
+    lastUpdated: new Date().toISOString(),
+  };
 }
+
+export default async function Home() {
+  const initialData = await fetchStockData();
+
+  return (
+    <StockProvider initialData={initialData}>
+      <div className="bg-white dark:bg-black min-h-screen flex flex-col gap-y-4">
+        <Indices />
+        <TodaysStocks />
+        <TodayNews />
+        {/* <SubscriptionPlans /> */}
+      </div>
+    </StockProvider>
+  );
+}
+
+
+
+
