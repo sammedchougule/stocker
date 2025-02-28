@@ -228,7 +228,7 @@ import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react"
 import type { Stock } from "@/types/Stock"
 import type { SortColumn, SortDirection } from "@/types/Stock"
 import { getStockBgColor } from "@/lib/getstockBgColor"
-import Image from "next/image"
+import { Table, TableHeader, TableBody, TableCell, TableHead, TableRow } from "./ui/table"
 
 interface SectorStockDataTableProps {
   tableId: string
@@ -300,11 +300,11 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
 
   return (
     <div className="relative border bg-white dark:bg-[#151719] rounded-lg">
-      <div className="overflow-auto max-h-[700px]">
-        <table className="w-full border-collapse">
-          <thead className="sticky top-0 z-20  backdrop-blur bg-blue-200 dark:bg-blue-900 ">
-            <tr>
-              <th
+      <div className="overflow-auto max-h-[730px]">
+        <Table className="w-full border-collapse">
+          <TableHeader className="sticky top-0 z-20  backdrop-blur bg-blue-200 dark:bg-blue-900 ">
+            <TableRow>
+              <TableHead
                 className="sticky left-0 z-30  min-w-[100px] px-8 py-3 text-left font-medium cursor-pointer border-b bg-blue-200 dark:bg-blue-900 dark:border-gray-700"
                 onClick={() => onSort(tableId, "symbol")}
               >
@@ -312,8 +312,8 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                   <span className="text-gray-900 dark:text-gray-100">Symbol</span>
                   {renderSortIcon("symbol")}
                 </div>
-              </th>
-              <th
+              </TableHead>
+              <TableHead
                 className="p-3 text-left font-medium cursor-pointer border-b dark:border-gray-700"
                 onClick={() => onSort(tableId, "companyname")}
               >
@@ -321,8 +321,8 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                   <span className="text-gray-900 dark:text-gray-100">Pre Close</span>
                   {renderSortIcon("companyname")}
                 </div>
-              </th>
-              <th
+              </TableHead>
+              <TableHead
                 className="p-3 text-right font-medium min-w-[100px] cursor-pointer border-b dark:border-gray-700"
                 onClick={() => onSort(tableId, "price")}
               >
@@ -330,8 +330,8 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                   <span className="text-gray-900 dark:text-gray-100">Price</span>
                   {renderSortIcon("price")}
                 </div>
-              </th>
-              <th
+              </TableHead>
+              <TableHead
                 className="p-3 text-right font-medium min-w-[100px] cursor-pointer border-b dark:border-gray-700"
                 onClick={() => onSort(tableId, "change")}
               >
@@ -339,8 +339,8 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                   <span className="text-gray-900 dark:text-gray-100">Change</span>
                   {renderSortIcon("change")}
                 </div>
-              </th>
-              <th
+              </TableHead>
+              <TableHead
                 className="p-3 text-right font-medium min-w-[100px] cursor-pointer border-b dark:border-gray-700"
                 onClick={() => onSort(tableId, "changepct")}
               >
@@ -348,50 +348,42 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                   <span className="text-gray-900 dark:text-gray-100">Chg %</span>
                   {renderSortIcon("changepct")}
                 </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-[#151719]">
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody className="bg-white dark:bg-[#151719]">
             {sortedStocks.map((stock) => (
-              <tr
+              <TableRow
                 key={stock.symbol}
-                className="cursor-pointer bg-white dark:bg-[#151719] hover:bg-gray-500 dark:hover:bg-muted/100 transition-colors"
+                className="cursor-pointer bg-white dark:bg-[#151719] hover:bg-gray-200 dark:hover:bg-muted/100 transition-colors"
                 onClick={() => onStockClick(stock)}
               >
-                <td className="sticky left-0 z-10  p-4 border-t dark:border-gray-800">
-                  <div className="flex items-center gap-2">
-                    <Image
-                      className="w-6 h-6 rounded-full"
-                      src={`/images/${stock.symbol}.svg`}
-                      alt={stock.companyname}
-                      width={20}
-                      height={20}
-                    />
+                <TableCell className="sticky left-0 z-10  p-4 border-t dark:border-gray-800">
+                  
                     <div
                       className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
-                      style={{ backgroundColor: getStockBgColor(stock.symbol), width: "7rem" }}
+                      style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
                     >
                       <span
-                        className="whitespace-nowrap text-[14px] leading-none text-center block overflow-hidden text-ellipsis"
+                        className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
                         style={{
-                          paddingLeft: "4px",
-                          paddingRight: "4px",
+                          paddingLeft: "2px",
+                          paddingRight: "2px",
                           maxWidth: "100%",
-                          fontSize: stock.symbol.length > 10 ? "12px" : "14px",
+                          fontSize: stock.symbol.length > 10 ? "10px" : "12px",
                         }}
                       >
                         {stock.symbol}
                       </span>
-                    </div>
                   </div>
-                </td>
-                <td className="p-3 border-t dark:border-gray-800 text-left text-gray-900 dark:text-gray-100">
+                </TableCell>
+                <TableCell className="p-3 border-t dark:border-gray-800 text-left text-gray-900 dark:text-gray-100">
                   <span className="truncate block">₹{stock.closeyest}</span>
-                </td>
-                <td className="p-3 border-t dark:border-gray-800 text-right text-gray-900 dark:text-gray-100">
+                </TableCell>
+                <TableCell className="p-3 border-t dark:border-gray-800 text-right text-gray-900 dark:text-gray-100">
                   ₹{Number(stock.price).toFixed(2)}
-                </td>
-                <td className="p-3 border-t dark:border-gray-800 text-right">
+                </TableCell>
+                <TableCell className="p-3 border-t dark:border-gray-800 text-right">
                   <span
                     className={`inline-flex items-center rounded px-2 py-1 font-medium text-md ${
                       stock.change >= 0
@@ -406,8 +398,8 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                     )}
                     {Number(stock.change).toFixed(2)}
                   </span>
-                </td>
-                <td className="p-3 border-t dark:border-gray-800 text-right">
+                </TableCell>
+                <TableCell className="p-3 border-t dark:border-gray-800 text-right">
                   <span
                     className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                       stock.changepct >= 0
@@ -422,11 +414,11 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                     )}
                     {Number(stock.changepct).toFixed(2)}%
                   </span>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   )
