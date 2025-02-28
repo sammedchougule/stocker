@@ -35,7 +35,7 @@ export const CustomTreemapContent: React.FC<CustomTreemapContentProps> = ({
         fill: color,
         stroke: "#fff",
         cursor: "pointer",
-        transition: "fill 0.3s ease-out",
+        transition: "fill 0.4s ease-out",
       }}
       onClick={() => onClick(name)}
     />
