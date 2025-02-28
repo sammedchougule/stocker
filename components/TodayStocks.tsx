@@ -271,7 +271,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, ListFilter } from "lucide-react"
+import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, ListFilter, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useStockContext } from "@/contexts/StockContext"
@@ -450,7 +450,7 @@ const TodaysStocks = () => {
                     onClick={() => handleStockClick(stock)}
                   >
                     {/* Adjusted Stock Info  col span */}
-                    <div className="col-span-1 sm:col-span-1 flex items-center justify-center">
+                    <div className="hidden sm:flex col-span-1 sm:col-span-1 items-center justify-center">
                       <Image
                         className="rounded-full"
                         width={30}
@@ -476,15 +476,15 @@ const TodaysStocks = () => {
                           {stock.symbol}
                         </span>
                       </div>
-                      <div className="text-sm mt-2 text-gray-700 dark:text-gray-300 truncate">
+                      <div className="text-sm mt-1 text-gray-700 dark:text-gray-300 truncate">
                         {stock.companyname}
                       </div>
                     </div>
                     
                     <div className="col-span-4 sm:col-span-4 text-right">
-                      <span className="font-normal text-sm dark:text-white">₹{Number(stock.price).toFixed(2)}</span>
+                      <span className="font-medium text-md dark:text-white">₹{Number(stock.price).toFixed(2)}</span>
                     </div>
-                    <div className="col-span-4 sm:col-span-4 flex items-center justify-end gap-2 pr-2">
+                    <div className="col-span-4 sm:col-span-4 flex items-center justify-end gap-2">
                       <span
                         className={`inline-flex items-center rounded p-1 ${
                           stock.changepct >= 0
@@ -497,13 +497,14 @@ const TodaysStocks = () => {
                         ) : (
                           <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
                         )}
-                        <span className="font-normal text-sm">{Number(stock.changepct).toFixed(2)}%</span>
+                        <span className="font-medium text-sm">{Number(stock.changepct).toFixed(2)}%</span>
                       </span>
-                      {/* <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Plus className="h-4 w-4" />
-                      </Button> */}
+                      </Button>
                     </div>
                   </div>
+                  
                 ))}
               </div>
             )}
