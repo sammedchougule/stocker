@@ -70,7 +70,7 @@ function IntrabuzzContent() {
     return "Nifty 50" // Default value for SSR
   })
 
-  const [viewMode, setViewMode] = useState<"card" | "table">("card")
+  const [viewMode, setViewMode] = useState<"card" | "table">("table")
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [tableSortColumn, setTableSortColumn] = useState<TableSortColumn>("symbol")
