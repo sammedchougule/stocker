@@ -270,11 +270,15 @@ const Indices: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
-    if (stocks.length > 0) {
-      const sectorsData = stocks.filter((stock) => INDICES.includes(stock.symbol)).slice(0, 9)
-      setFilteredSectors(sectorsData)
+    if (loading) {
+      setFilteredSectors([]);
+    } else if (stocks.length > 0) {
+      const sectorsData = stocks
+        .filter((stock) => INDICES.includes(stock.symbol))
+        .slice(0, 9);
+      setFilteredSectors(sectorsData);
     }
-  }, [stocks])
+  }, [stocks, loading]);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setActiveCard((prev) => Math.min(prev + 1, 2)),
@@ -308,60 +312,66 @@ const Indices: React.FC = () => {
     </div>
   )
 
-  const renderCard = (startIndex: number, endIndex: number) => (
-    <div className="grid grid-cols-1 gap-5">
-      {filteredSectors.slice(startIndex, endIndex).map((sector) => (
-        <div
-          key={sector.symbol}
-          className="flex justify-between items-start px-1 cursor-pointer"
-          onClick={() => handleStockClick(sector)}
-        >
-          <div className="flex items-center space-x-2">
-            <Image
+  const renderCard = (startIndex: number, endIndex: number) => {
+    if (loading || filteredSectors.length === 0) {
+      return renderSkeleton();
+    }
+  
+    return (
+      <div className="grid grid-cols-1 gap-8">
+        {filteredSectors.slice(startIndex, endIndex).map((sector) => (
+          <div
+            key={sector.symbol}
+            className="flex justify-between items-start px-1 cursor-pointer"
+            onClick={() => handleStockClick(sector)}
+          >
+            <div className="flex items-center space-x-2">
+              <Image
                 src={`/images/${sector.symbol}.svg`}
                 alt={sector.companyname}
                 width={30}
                 height={30}
                 className="rounded-full border border-gray-200"
               />
-            <span className="text-md font-medium text-gray-800 dark:text-gray-200 truncate max-w-[120px]">
-              {sector.companyname}
-            </span>
-          </div>
-
-          <div className="text-right">
-            <span className="text-md font-medium text-gray-900 dark:text-gray-100">
-              {Number(sector.price).toFixed(2)}
-            </span>
-            <div className="flex items-center justify-end mt-0.5">
-              <span
-                className={`inline-flex items-center rounded px-1.5 py-1 ${
-                  sector.changepct >= 0
-                    ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50 rounded-lg"
-                    : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50 rounded-lg"
-                }`}
-              >
-                {sector.changepct >= 0 ? (
-                  <ArrowUpIcon className="w-3.5 h-3.5 mr-0.5" />
-                ) : (
-                  <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
-                )}
-                <span className="text-sm font-medium">{Number(sector.changepct).toFixed(2)}%</span>
+              <span className="text-md font-medium text-gray-800 dark:text-gray-200 truncate max-w-[120px]">
+                {sector.companyname}
               </span>
             </div>
+  
+            <div className="text-right">
+              <span className="text-md font-medium text-gray-900 dark:text-gray-100">
+                {Number(sector.price).toFixed(2)}
+              </span>
+              <div className="flex items-center justify-end mt-0.5">
+                <span
+                  className={`inline-flex items-center rounded px-1.5 py-1 ${
+                    sector.changepct >= 0
+                      ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50 rounded-lg"
+                      : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50 rounded-lg"
+                  }`}
+                >
+                  {sector.changepct >= 0 ? (
+                    <ArrowUpIcon className="w-3.5 h-3.5 mr-0.5" />
+                  ) : (
+                    <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
+                  )}
+                  <span className="text-sm font-medium">{Number(sector.changepct).toFixed(2)}%</span>
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-  )
+        ))}
+      </div>
+    );
+  };
 
   return (
-    <div className="container mx-auto lg:mt-4 mt-10 ">
+    <div className="container mx-auto">
       <Card className="bg-white dark:bg-[#151719] overflow-hidden">
         <CardHeader>
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Sectoral Indices</h2>
-            <a href="#" className="text-sm text-blue-500 dark:text-blue-400">
+            <a href="/sectors" className="text-sm text-blue-500 dark:text-blue-400">
               See All
             </a>
           </div>

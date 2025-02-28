@@ -68,7 +68,7 @@ export default async function Home() {
 
   return (
     <StockProvider initialData={initialData}>
-      <div className="bg-white dark:bg-black min-h-screen">
+      <div className="bg-white dark:bg-black min-h-screen flex flex-col gap-y-4">
         <Indices />
         <TodaysStocks />
         <TodayNews />

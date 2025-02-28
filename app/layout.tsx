@@ -77,20 +77,19 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-        <StockProvider initialData={initialData}>
-          <div className=" bg-white dark:bg-black min-h-screen">
-            <Marquee />
-            <Navbar />
-            <PageLayout>
-              {children}
-              <Analytics />
-            </PageLayout> 
-            <Footer />
-          </div>
-        </StockProvider>
-      </ThemeProvider>
-
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <StockProvider initialData={initialData}>
+            <div className=" bg-white dark:bg-black min-h-screen">
+              <Marquee />
+              <Navbar />
+                <PageLayout>
+                  {children}
+                  <Analytics />
+                </PageLayout> 
+              <Footer />
+            </div>
+          </StockProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

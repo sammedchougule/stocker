@@ -389,13 +389,13 @@ const TodaysStocks = () => {
   }
 
   return (
-    <div className="container mt-4 mx-auto sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-4">
+    <div className="container mx-auto flex flex-col lg:flex-row gap-4">
       {/* Today's Stocks Section - 60% width on large screens */}
       <div className="w-full lg:w-4/6 flex flex-col">
         <Card className="bg-white dark:bg-[#151719]  overflow-hidden">
           <CardHeader className="pb-4 px-2 sm:px-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold dark:text-white">Today&apos;s stocks</h2>
+              <h2 className="text-xl font-semibold dark:text-white">Today&apos;s Stocks</h2>
               <button
                 onClick={cycleLargeCapFilter}
                 className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 bg-transparent border-none cursor-pointer"
@@ -405,82 +405,28 @@ const TodaysStocks = () => {
               </button>
             </div>
             <div className="flex overflow-x-auto gap-2 mt-4">
-              <Button
-                variant={activeFilter === "gainers" ? "default" : "outline"}
-                onClick={() => setActiveFilter("gainers")}
-                className={`flex items-center gap-2 ${
-                  activeFilter === "gainers"
-                    ? "bg-gray-700 text-white"
-                    : "bg-white text-gray-900 border border-gray-300"
-                }`}
-              >
-                {activeFilter === "gainers" ? (
-                  <ArrowUpIcon className="h-4 w-4 text-white" />
-                ) : (
-                  <ArrowUpIcon className="h-4 w-4 text-green-500" />
-                )}
+              <Button variant={activeFilter === "gainers" ? "default" : "outline"} onClick={() => setActiveFilter("gainers")}>
+                <ArrowUpIcon className="h-4 w-4" />
                 Gainers
               </Button>
-              <Button
-                variant={activeFilter === "losers" ? "default" : "outline"}
-                onClick={() => setActiveFilter("losers")}
-                className={`flex items-center gap-2 ${
-                  activeFilter === "losers" ? "bg-gray-700 text-white" : "bg-white text-gray-900 border-gray-300 "
-                }`}
-              >
-                {activeFilter === "losers" ? (
-                  <ArrowDownIcon className="h-4 w-4 text-white" />
-                ) : (
-                  <ArrowDownIcon className="h-4 w-4 text-red-500" />
-                )}
+              
+              <Button variant={activeFilter === "losers" ? "default" : "outline"} onClick={() => setActiveFilter("losers")}>
+                <ArrowDownIcon className="h-4 w-4" />
                 Losers
               </Button>
-              <Button
-                variant={activeFilter === "most-active" ? "default" : "outline"}
-                onClick={() => setActiveFilter("most-active")}
-                className={`flex items-center gap-2 w-[180px] ${
-                  activeFilter === "most-active"
-                    ? "bg-gray-700 text-white "
-                    : "bg-white text-gray-900  border-gray-300 "
-                }`}
-              >
-                {activeFilter === "most-active" ? (
-                  <Activity className="h-4 w-4 text-white" />
-                ) : (
-                  <Activity className="h-4 w-4" />
-                )}
+              
+              <Button variant={activeFilter === "most-active" ? "default" : "outline"} onClick={() => setActiveFilter("most-active")}>
+                <Activity className="h-4 w-4" />
                 Most Active
               </Button>
-              <Button
-                variant={activeFilter === "52w-high" ? "default" : "outline"}
-                onClick={() => setActiveFilter("52w-high")}
-                className={`flex items-center gap-2 ${
-                  activeFilter === "52w-high"
-                    ? "bg-gray-700 text-white "
-                    : "bg-white text-gray-900  border border-gray-300 "
-                }`}
-              >
-                {activeFilter === "52w-high" ? (
-                  <TrendingUp className="h-4 w-4 text-white" />
-                ) : (
-                  <TrendingUp className="h-4 w-4" />
-                )}
+              
+              <Button variant={activeFilter === "52w-high" ? "default" : "outline"} onClick={() => setActiveFilter("52w-high")}>
+                <TrendingUp className="h-4 w-4" />
                 52W High
               </Button>
-              <Button
-                variant={activeFilter === "52w-low" ? "default" : "outline"}
-                onClick={() => setActiveFilter("52w-low")}
-                className={`flex items-center gap-2 ${
-                  activeFilter === "52w-low"
-                    ? "bg-gray-700 text-white  "
-                    : "bg-white text-gray-900 border border-gray-300"
-                }`}
-              >
-                {activeFilter === "52w-low" ? (
-                  <TrendingDown className="h-4 w-4 text-white" />
-                ) : (
-                  <TrendingDown className="h-4 w-4" />
-                )}
+              
+              <Button variant={activeFilter === "52w-low" ? "default" : "outline"} onClick={() => setActiveFilter("52w-low")}>
+                <TrendingDown className="h-4 w-4" />
                 52W Low
               </Button>
             </div>
@@ -507,22 +453,36 @@ const TodaysStocks = () => {
                     <div className="col-span-1 sm:col-span-1 flex items-center justify-center">
                       <Image
                         className="rounded-full"
-                        width={36}
-                        height={36}
+                        width={30}
+                        height={30}
                         src={`/images/${stock.symbol}.svg`}
                         alt={stock.companyname}
                       />
                     </div>
-                    <div className="col-span-3 sm:col-span-3 min-w-0">
-                      <div className="font-normal text-sm max-w-[120px] rounded-md text-white flex items-center justify-center"
-                        style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6.5rem" }}
+                    <div className="col-span-3 sm:col-span-3 ">
+                      <div
+                        className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
+                        style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
                       >
-                        {stock.symbol}
+                        <span
+                          className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
+                          style={{
+                            paddingLeft: "2px",
+                            paddingRight: "2px",
+                            maxWidth: "100%",
+                            fontSize: stock.symbol.length > 10 ? "10px" : "12px",
+                          }}
+                        >
+                          {stock.symbol}
+                        </span>
+                      </div>
+                      <div className="text-sm mt-2 text-gray-700 dark:text-gray-300 truncate">
+                        {stock.companyname}
                       </div>
                     </div>
-                    {/* Adjusted price and change col span */}
+                    
                     <div className="col-span-4 sm:col-span-4 text-right">
-                      <span className="font-medium dark:text-white">{Number(stock.price).toFixed(2)}</span>
+                      <span className="font-normal text-sm dark:text-white">₹{Number(stock.price).toFixed(2)}</span>
                     </div>
                     <div className="col-span-4 sm:col-span-4 flex items-center justify-end gap-2 pr-2">
                       <span
@@ -537,7 +497,7 @@ const TodaysStocks = () => {
                         ) : (
                           <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
                         )}
-                        <span className="text-sm">{Number(stock.changepct).toFixed(2)}%</span>
+                        <span className="font-normal text-sm">{Number(stock.changepct).toFixed(2)}%</span>
                       </span>
                       {/* <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Plus className="h-4 w-4" />

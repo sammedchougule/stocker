@@ -1,6 +1,4 @@
 import { Facebook, Twitter, Instagram, Linkedin, Mail } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 
 export function Footer() {
   return (
@@ -66,18 +64,6 @@ export function Footer() {
               <li>Phone: (123) 456-7890</li>
               <li>Email: info@stocker.co.in</li>
             </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Newsletter</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-2">Stay updated with our latest news and offers.</p>
-            <form className="flex space-x-2">
-              <Input
-                type="email"
-                placeholder="Your email"
-                className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-800 dark:text-white"
-              />
-              <Button type="submit">Subscribe</Button>
-            </form>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center">
