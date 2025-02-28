@@ -438,7 +438,7 @@ const TodaysStocks = () => {
               <Button
                 variant={activeFilter === "most-active" ? "default" : "outline"}
                 onClick={() => setActiveFilter("most-active")}
-                className={`flex items-center gap-2 ${
+                className={`flex items-center gap-2 w-[180px] ${
                   activeFilter === "most-active"
                     ? "bg-gray-700 text-white "
                     : "bg-white text-gray-900  border-gray-300 "

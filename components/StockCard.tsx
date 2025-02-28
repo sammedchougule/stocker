@@ -209,15 +209,15 @@ const StockCard: React.FC<StockCardProps> = ({
       <CardHeader>
         <div
           className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
-          style={{ backgroundColor: getStockBgColor(stock.symbol), width: "7rem" }}
+          style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
         >
           <span
-            className="whitespace-nowrap text-[14px] leading-none text-center block overflow-hidden text-ellipsis"
+            className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
             style={{
-              paddingLeft: "4px",
-              paddingRight: "4px",
+              paddingLeft: "2px",
+              paddingRight: "2px",
               maxWidth: "100%",
-              fontSize: stock.symbol.length > 10 ? "12px" : "14px",
+              fontSize: stock.symbol.length > 10 ? "10px" : "12px",
             }}
           >
             {stock.symbol}
