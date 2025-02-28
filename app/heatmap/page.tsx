@@ -303,7 +303,7 @@ const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) =
 export default function Heatmap() {
   const { stocks } = useStockContext()
   const [heatmapData, setHeatmapData] = useState<Stock[]>([])
-  const [selectedIndex, setSelectedIndex] = useState<FilterOption>("Nifty FnO")
+  const [selectedIndex, setSelectedIndex] = useState<FilterOption>("Nifty 50")
   const [selectedSort, setSelectedSort] = useState<SortOption>("changepct")
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -366,17 +366,14 @@ export default function Heatmap() {
   }))
 
   return (
-    <div className="container mx-auto bg-white dark:bg-[#151719]">
-      <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-        {selectedIndex.replace("_", " ")} Heatmap
-      </h2>
+    <div className="container mx-auto bg-white dark:bg-[#151719] mt-0 ">
       
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 py-4">
         <div className="relative">
           <Select value={selectedIndex} onValueChange={(value) => setSelectedIndex(value as FilterOption)}>
-            <SelectTrigger className="w-[180px] bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <SelectTrigger className=" bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
               <div className="flex items-center justify-between">
-                <span className="text-gray-700 dark:text-gray-300">Index : {selectedIndex.replace("_", " ")}</span>
+                <span className="text-gray-700 dark:text-gray-300">{selectedIndex.replace("_", " ")}</span>
               </div>
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-gray-800">
@@ -391,9 +388,9 @@ export default function Heatmap() {
 
         <div className="relative">
           <Select value={selectedSort} onValueChange={(value) => setSelectedSort(value as SortOption)}>
-            <SelectTrigger className="w-[180px] bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <SelectTrigger className=" bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
               <div className="flex items-center justify-between">
-                <span className="text-gray-700 dark:text-gray-300">Sort By : {sortOptionLabels[selectedSort]}</span>
+                <span className="text-gray-700 dark:text-gray-300">{sortOptionLabels[selectedSort]}</span>
               </div>
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-gray-800">
