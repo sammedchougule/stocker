@@ -113,7 +113,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CalendarDays } from "lucide-react"
-import Link from "next/link"
 import StockNewsCard from "./StockNewsCard"
 import { unstable_noStore as noStore } from "next/cache"
 
@@ -138,22 +137,16 @@ interface NewsItem {
 
 async function fetchStockNews(): Promise<NewsItem[]> {
   noStore()
-
   try {
     const apiKey = process.env.NEXT_PUBLIC_NEWS_API_KEY
     const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
-
     const url = `https://newsapi.org/v2/everything?q=stock+market+india&from=${twoWeeksAgo}&sortBy=publishedAt&pageSize=20&apiKey=${apiKey}`
+
     const response = await fetch(url, {
-      next: {
-        revalidate: 300, // Revalidate every 5 minutes
-      },
+      next: { revalidate: 300 }, // Revalidate every 5 minutes
     })
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch stock news")
-    }
-
+    if (!response.ok) throw new Error("Failed to fetch stock news")
     const data = await response.json()
     return data.articles as NewsItem[]
   } catch (error) {
@@ -163,10 +156,16 @@ async function fetchStockNews(): Promise<NewsItem[]> {
 }
 
 export default async function TodayNews() {
-  const stockNews = await fetchStockNews()
+  let stockNews: NewsItem[] = []
+  try {
+    stockNews = await fetchStockNews()
+  } catch (error) {
+    console.error("Error in TodayNews component:", error)
+  }
 
   return (
-      <div className="container mx-auto">
+    <div className="">
+      <div className="container mx-auto py-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* News Section */}
           <div className="lg:col-span-2">
@@ -174,9 +173,7 @@ export default async function TodayNews() {
               <CardHeader className="sticky top-0 bg-white dark:bg-[#151719] z-10">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-gray-900 dark:text-white">Today&apos;s News</CardTitle>
-                  <Link href="/all-news" className="text-blue-500 hover:underline text-md">
-                    See All
-                  </Link>
+                  {/* Removed the "See All" link */}
                 </div>
               </CardHeader>
               <CardContent className="overflow-y-auto h-[calc(100%-80px)] pr-4 scrollbar-hide">
@@ -223,7 +220,7 @@ export default async function TodayNews() {
           </div>
         </div>
       </div>
-
+    </div>
   )
 }
 

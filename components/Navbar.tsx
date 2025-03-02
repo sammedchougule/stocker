@@ -91,7 +91,7 @@ const Navbar = () => {
               className={`flex items-center gap-1 ${isActive("/intrabuzz") ? "text-yellow-500 font-semibold" : "text-gray-700 dark:text-gray-300"}`}
             >
               <SquareActivity
-                className={`h-5 w-5 ${isActive("/intrabuzz") ? "text-yellow-500" : "text-gray-700 dark:text-gray-300"}`}
+                className={`h-5 w-5  ${isActive("/intrabuzz") ? "text-yellow-500" : "text-gray-700 dark:text-gray-300"}`}
               />
               IntraBuzz
             </Link>

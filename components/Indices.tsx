@@ -296,18 +296,19 @@ const Indices: React.FC = () => {
       {Array(3)
         .fill(null)
         .map((_, idx) => (
-          <div key={idx} className="flex justify-between items-start px-1">
+          <div key={idx} className="flex justify-between items-start py-4 px-1">
             <div className="flex items-center space-x-2">
-              <Skeleton circle width={32} height={32} />
-              <Skeleton width={100} height={20} />
+              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
+              <div className="w-24 h-5 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
             </div>
             <div className="text-right">
-              <Skeleton width={80} height={20} />
+              <div className="w-20 h-5 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
               <div className="flex items-center justify-end mt-0.5">
-                <Skeleton width={40} height={16} style={{ marginLeft: "0.5rem" }} />
+                <div className="w-10 h-4 bg-gray-300 dark:bg-gray-700 rounded animate-pulse ml-2"></div>
               </div>
             </div>
           </div>
+
         ))}
     </div>
   )

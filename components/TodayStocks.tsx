@@ -359,19 +359,19 @@ const TodaysStocks = () => {
         .fill(null)
         .map((_, idx) => (
           <div key={idx} className="grid grid-cols-12 gap-4 items-center px-2 py-3">
-            <div className="col-span-1 sm:col-span-1">
-              <Skeleton circle width={32} height={32} />
+            <div className="hidden sm:flex col-span-1 sm:col-span-1">
+              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
             </div>
             <div className="col-span-5 sm:col-span-4 flex flex-col">
-              <Skeleton width={100} height={20} />
-              <Skeleton width={60} height={16} />
+              <div className="w-28 h-5 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="w-20 h-4 bg-gray-300 dark:bg-gray-700 rounded animate-pulse mt-1"></div>
             </div>
             <div className="col-span-3 sm:col-span-3 text-right">
-              <Skeleton width={60} height={20} />
+              <div className="w-20 h-6 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
             </div>
             <div className="col-span-3 sm:col-span-4 flex justify-end items-center gap-2">
-              <Skeleton width={50} height={24} style={{ borderRadius: "0.5rem" }} />
-              <Skeleton circle width={24} height={24} />
+              <div className="w-20 h-6 bg-gray-300 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+              <div className="w-6 h-6 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
             </div>
           </div>
         ))}
@@ -514,7 +514,7 @@ const TodaysStocks = () => {
 
       {/* Market Mood Index Section - 40% width on large screens */}
       <div className="w-full lg:w-2/6">
-        <MarketMood stocks={stocks} />
+        <MarketMood stocks={stocks} loading={loading} />
       </div>
 
       <StockModal stock={selectedStock} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

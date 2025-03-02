@@ -106,3 +106,12 @@
   }
 }
 
+:root {
+  --skeleton-base: #e0e0e0;
+  --skeleton-highlight: #f5f5f5;
+}
+
+.dark {
+  --skeleton-base: #2d3748;
+  --skeleton-highlight: #4a5568;
+}

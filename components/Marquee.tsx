@@ -145,9 +145,8 @@ const nifty50Symbols = [
 ]
 
 export default function StockMarquee() {
-  const { stocks } = useStockContext()
+  const { stocks, loading } = useStockContext()
   const [greeting, setGreeting] = useState("")
-  const [showGreeting, setShowGreeting] = useState(true)
 
   useEffect(() => {
     const hour = new Date().getHours()
@@ -158,12 +157,6 @@ export default function StockMarquee() {
     } else {
       setGreeting("Good Evening 🛋️")
     }
-
-    const timer = setTimeout(() => {
-      setShowGreeting(false)
-    }, 5000) // Show greeting for 5 seconds
-
-    return () => clearTimeout(timer)
   }, [])
 
   const filteredStocks = useMemo(() => {
@@ -171,24 +164,16 @@ export default function StockMarquee() {
     return stocks.filter((stock) => nifty50Symbols.includes(stock.symbol))
   }, [stocks])
 
-  if (showGreeting) {
+  if (loading || filteredStocks.length === 0) {
     return (
-      <div className="fixed top-0 left-0 right-0 z-50 h-8 backdrop-blur-md bg-white dark:bg-black border-b dark:border-gray-700">
+      <div className="fixed top-0 left-0 right-0 z-50 h-8 backdrop-blur-md bg-white/50 dark:bg-black border-b dark:border-gray-700">
         <p className="flex items-center justify-center h-full text-gray-900 dark:text-gray-100">{greeting}</p>
       </div>
     )
   }
 
-  if (filteredStocks.length === 0) {
-    return (
-      <div className="fixed top-0 left-0 right-0 z-50 h-8 backdrop-blur-md bg-white dark:bg-black border-b dark:border-gray-700">
-        <p className="flex items-center justify-center h-full text-gray-900 dark:text-gray-100">No stocks available</p>
-      </div>
-    )
-  }
-
   return (
-    <div className="fixed flex items-center justify-center top-0 left-0 right-0 z-50 h-8 overflow-hidden backdrop-blur-sm bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700">
+    <div className="fixed flex items-center justify-center top-0 left-0 right-0 z-50 h-8 overflow-hidden backdrop-blur-sm bg-white/50 dark:bg-black border-b border-gray-200 dark:border-gray-700">
       <Marquee speed={80} gradient={false} pauseOnHover={true}>
         {filteredStocks.map((stock) => (
           <span key={stock.symbol} className="inline-block mx-1">
