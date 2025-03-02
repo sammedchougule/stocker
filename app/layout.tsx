@@ -54,31 +54,17 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 60 // Revalidate every 60 seconds
-
-async function fetchStockData() {
-  const res = await fetch(
-    'https://script.google.com/macros/s/AKfycbwa3ZVL20X9vlqFfpi6KSteUsEecC9QpkY3V45sxVAmEQ5xeBBKSaCUyQejxrRbwE6wGw/exec'
-  )
-  const stockData = await res.json()
-  return {
-    stocks: stockData.data,
-    lastUpdated: new Date().toISOString(),
-  }
-}
-
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
 
-  const initialData = await fetchStockData()
   return (
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <StockProvider initialData={initialData}>
+          <StockProvider >
             <div className=" bg-white dark:bg-black min-h-screen">
               <Marquee />
               <Navbar />
