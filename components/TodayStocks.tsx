@@ -302,23 +302,22 @@ const largeCapFilters: LargeCapFilter[] = [
 
 interface TodaysStocksProps {
   stocks: Stock[]
+  loading?: boolean
 }
 
-const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks }) => {
+const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks, loading = false }) => {
   const [activeFilter, setActiveFilter] = useState<FilterType>("gainers")
   const [largeCapFilterIndex, setLargeCapFilterIndex] = useState(0)
-  const [stocksState, setStocksState] = useState<Stock[]>(stocks)
-  const [loading, setLoading] = useState(false)
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const largeCapFilter = largeCapFilters[largeCapFilterIndex]
 
   const filteredStocks = useMemo(() => {
-    let filtered = stocksState.filter((stock) => stock.type === "EQ")
+    let filtered = stocks.filter((stock) => stock.type === "EQ")
 
     if (largeCapFilter !== "All") {
-      filtered = stocksState.filter((stock) => stock.indices && stock.indices[largeCapFilter])
+      filtered = stocks.filter((stock) => stock.indices && stock.indices[largeCapFilter])
     }
 
     const sorted = [...filtered]
@@ -336,7 +335,7 @@ const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks }) => {
       default:
         return sorted.slice(0, 5)
     }
-  }, [stocksState, activeFilter, largeCapFilter])
+  }, [stocks, activeFilter, largeCapFilter])
 
   const cycleLargeCapFilter = () => {
     setLargeCapFilterIndex((prevIndex) => (prevIndex + 1) % largeCapFilters.length)
@@ -501,7 +500,7 @@ const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks }) => {
       </div>
 
       <div className="w-full lg:w-2/6">
-        <MarketMood stocks={stocksState} loading={loading} />
+        <MarketMood stocks={stocks} loading={loading} />
       </div>
 
       <StockModal stock={selectedStock} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
