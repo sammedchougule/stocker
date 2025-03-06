@@ -165,7 +165,7 @@ export default async function TodayNews() {
 
   return (
     <div className="">
-      <div className="container mx-auto py-4">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* News Section */}
           <div className="lg:col-span-2">

@@ -41,26 +41,32 @@
 
 // app/page.tsx
 
-import './globals.css';
-import { StockProvider } from '@/contexts/StockContext';
-import Indices from '@/components/Indices';
-import TodayNews from '@/components/TodayNews';
-import TodaysStocks from '@/components/TodayStocks';
-// import { SubscriptionPlans } from '@/components/SubscriptionPlans';
+import "./globals.css"
+import Indices from "@/components/Indices"
+import TodayNews from "@/components/TodayNews"
+import TodaysStocks from "@/components/TodayStocks"
+//import { SubscriptionPlans } from "@/components/SubscriptionPlans"
+import { getStocks } from "@/lib/getStocks"
+import { Suspense } from "react"
 
 export default async function Home() {
+  const stocks = await getStocks()
 
   return (
-    <StockProvider >
-      <div className="bg-white dark:bg-black min-h-screen flex flex-col gap-y-4">
-        <Indices />
-        <TodaysStocks />
-        <TodayNews />
-        {/* <SubscriptionPlans /> */}
-      </div>
-    </StockProvider>
-  );
+    <div className="bg-white dark:bg-black min-h-screen flex flex-col gap-y-4">
+      <Suspense fallback={<div>Loading Indices...</div>}>
+        <Indices stocks={stocks} />
+      </Suspense>
+      <Suspense fallback={<div>Loading Today's Stocks...</div>}>
+        <TodaysStocks stocks={stocks} />
+      </Suspense>
+      <TodayNews />
+      {/* <SubscriptionPlans /> */}
+    </div>
+  )
 }
+
+
 
 
 
