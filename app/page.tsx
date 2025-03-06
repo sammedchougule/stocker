@@ -57,7 +57,7 @@ export default async function Home() {
       <Suspense fallback={<div>Loading Indices...</div>}>
         <Indices stocks={stocks} />
       </Suspense>
-      <Suspense fallback={<div>Loading Today's Stocks...</div>}>
+      <Suspense fallback={<div>Loading Todays Stocks...</div>}>
         <TodaysStocks stocks={stocks} />
       </Suspense>
       <TodayNews />
