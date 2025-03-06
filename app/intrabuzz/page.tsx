@@ -308,19 +308,16 @@
 // }
 
 
-import { Suspense } from "react"
 import { getStocks } from "@/lib/getStocks"
 import IntrabuzzContent from "@/components/IntrabuzzContent"
-import CustomizedProgressBars from "@/components/CustomizedProgressBars"
 
 export default async function Intrabuzz() {
   // Fetch stocks on the server with revalidation
   const stocks = await getStocks()
 
   return (
-    <Suspense fallback={<CustomizedProgressBars />}>
-      <IntrabuzzContent initialStocks={stocks} />
-    </Suspense>
+      <IntrabuzzContent initialStocks={stocks}  />
+   
   )
 }
 
