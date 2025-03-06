@@ -190,15 +190,12 @@
 
 
 
-// SSR 
 
 "use client"
 
-import type React from "react"
-import { useEffect, useState, useCallback } from "react"
+import { useMemo, useState, useCallback } from "react"
 import { ArrowUpIcon, ArrowDownIcon } from "lucide-react"
 import { useSwipeable } from "react-swipeable"
-import "react-loading-skeleton/dist/skeleton.css"
 import Image from "next/image"
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import type { Stock } from "@/types/Stock"
@@ -224,19 +221,17 @@ interface IndicesProps {
 }
 
 const Indices: React.FC<IndicesProps> = ({ stocks }) => {
-  const [filteredSectors, setFilteredSectors] = useState<Stock[]>([])
   const [activeCard, setActiveCard] = useState(0)
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (stocks && stocks.length > 0) {
-      const sectorsData = stocks.filter((stock) => INDICES.includes(stock.symbol)).slice(0, 9)
-      setFilteredSectors(sectorsData)
-      setLoading(false)
-    }
+  // Memoized filtering logic
+  const filteredSectors = useMemo(() => {
+    return stocks.filter((stock) => INDICES.includes(stock.symbol)).slice(0, 9)
   }, [stocks])
+
+  // Loading state derived from stocks availability
+  const isLoading = stocks.length === 0
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setActiveCard((prev) => Math.min(prev + 1, 2)),
@@ -251,27 +246,27 @@ const Indices: React.FC<IndicesProps> = ({ stocks }) => {
 
   const renderSkeleton = () => (
     <div className="grid grid-cols-1 gap-1">
-    {Array(3)
-      .fill(null)
-      .map((_, idx) => (
-        <div key={idx} className="flex justify-between items-start py-4 px-1">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
-            <div className="w-24 h-5 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
-          </div>
-          <div className="text-right">
-            <div className="w-20 h-5 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
-            <div className="flex items-center justify-end mt-0.5">
-              <div className="w-10 h-4 bg-gray-300 dark:bg-gray-700 rounded animate-pulse ml-2"></div>
+      {Array(3)
+        .fill(null)
+        .map((_, idx) => (
+          <div key={idx} className="flex justify-between items-start py-4 px-1">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
+              <div className="w-24 h-5 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
+            </div>
+            <div className="text-right">
+              <div className="w-20 h-5 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div className="flex items-center justify-end mt-0.5">
+                <div className="w-10 h-4 bg-gray-300 dark:bg-gray-700 rounded animate-pulse ml-2"></div>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
-  </div>
+        ))}
+    </div>
   )
 
   const renderCard = (startIndex: number, endIndex: number) => {
-    if (loading || filteredSectors.length === 0) {
+    if (isLoading) {
       return renderSkeleton()
     }
 
@@ -350,9 +345,9 @@ const Indices: React.FC<IndicesProps> = ({ stocks }) => {
                 transform: `translateX(-${activeCard * 100}%)`,
               }}
             >
-              <div className="w-full flex-shrink-0 ">{loading ? renderSkeleton() : renderCard(0, 3)}</div>
-              <div className="w-full flex-shrink-0 ">{loading ? renderSkeleton() : renderCard(3, 6)}</div>
-              <div className="w-full flex-shrink-0 ">{loading ? renderSkeleton() : renderCard(6, 9)}</div>
+              <div className="w-full flex-shrink-0">{isLoading ? renderSkeleton() : renderCard(0, 3)}</div>
+              <div className="w-full flex-shrink-0">{isLoading ? renderSkeleton() : renderCard(3, 6)}</div>
+              <div className="w-full flex-shrink-0">{isLoading ? renderSkeleton() : renderCard(6, 9)}</div>
             </div>
             <div className="flex justify-center mt-6">
               <div className="flex space-x-2">
@@ -377,4 +372,3 @@ const Indices: React.FC<IndicesProps> = ({ stocks }) => {
 }
 
 export default Indices
-
