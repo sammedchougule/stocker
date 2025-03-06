@@ -310,13 +310,17 @@
 
 import { getStocks } from "@/lib/getStocks"
 import IntrabuzzContent from "@/components/IntrabuzzContent"
+import { Suspense } from "react"
 
 export default async function Intrabuzz() {
   // Fetch stocks on the server with revalidation
   const stocks = await getStocks()
 
   return (
+    <Suspense>
       <IntrabuzzContent initialStocks={stocks}  />
+    </Suspense>
+      
    
   )
 }
