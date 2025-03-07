@@ -4,7 +4,7 @@
 import { Metadata } from "next";
 import { metadataConfig } from "@/lib/metadataConfig";
 
-export const metadata: Metadata = {
+ const metadata: Metadata = {
   title: metadataConfig.intrabuzz.title,
   description: metadataConfig.intrabuzz.description,
   keywords: metadataConfig.intrabuzz.keywords.join(", "),
