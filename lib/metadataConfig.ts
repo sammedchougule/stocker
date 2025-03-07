@@ -1,3 +1,11 @@
+export type MetadataConfigType = {
+  [key: string]: {
+    title: string;
+    description: string;
+    keywords: string[];
+  };
+};
+
 export const metadataConfig = {
   default: {
     title: 'Stocker - Real-Time Stock Data and Portfolio Tracker',
@@ -9,6 +17,27 @@ export const metadataConfig = {
       'financial analysis',
       'stock market',
     ],
+    openGraph: {
+      title: 'Stocker - Real-Time Stock Data and Portfolio Tracker',
+      description: 'Track real-time stock data, build portfolios, and analyze financial reports with Stocker.',
+      url: 'https://stocker.co.in',
+      siteName: 'Stocker',
+      images: [
+        {
+          url: '/stocker.png',
+          width: 800,
+          height: 600,
+          alt: 'Stocker - Stock Data',
+        },
+      ],
+      locale: 'en_US',
+      type: 'website',
+    },
+    icons: {
+      icon: [{ url: "/stocker.png", href: "/stocker.png" }],
+      shortcut: [{ url: "/stocker.png", href: "/stocker.png" }],
+      apple: [{ url: "/stocker.png", href: "/stocker.png" }],
+    },
   },
   intrabuzz: {
     title: 'Intrabuzz - Real-time Stock Movements & Volume Spikes',
@@ -58,6 +87,19 @@ export const metadataConfig = {
       'investment trends',
       'market insights',
       'trading news',
+    ],
+  },
+  screener: {
+    title: 'Stock Screener - Filter & Analyze Stocks',
+    description: 'Use the Stock Screener to filter and analyze stocks based on key financial metrics, price movements, and market trends.',
+    keywords: [
+      'stock screener',
+      'stock analysis',
+      'financial metrics',
+      'market trends',
+      'filter stocks',
+      'investment research',
+      'technical analysis',
     ],
   },
 };

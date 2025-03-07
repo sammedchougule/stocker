@@ -13,9 +13,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import SectorStockDataTable from "@/components/SectorStockDataTable"
 import { StockModal } from "@/components/StockModal"
 import type { SortColumn, SortDirection } from "@/types/Stock"
+import { Metadata } from "next";
+import { metadataConfig } from "@/lib/metadataConfig";
 
-// import AuthWrapper from "@/components/AuthWrapper";
-
+export const metadata: Metadata = {
+  title: metadataConfig.sector.title,
+  description: metadataConfig.sector.description,
+  keywords: metadataConfig.sector.keywords.join(", "),
+  openGraph: {
+    ...metadataConfig.default.openGraph,
+    title: metadataConfig.sector.title,
+    description: metadataConfig.sector.description,
+  },
+};
 // Define available sectors
 const SECTORS = [
   "NIFTY_50",
