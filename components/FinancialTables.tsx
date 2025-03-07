@@ -84,8 +84,8 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
 
   const sectionIcons: Record<string, React.ReactNode> = {
     "Quarterly Results": <ChartLine className="mr-2" />,
-    "Profit & Loss": <Scale className="mr-2" />,
-    "Balance Sheet": <ReceiptIndianRupee className="mr-2" />,
+    "Profit & Loss": <ReceiptIndianRupee className="mr-2" />,
+    "Balance Sheet": <Scale  className="mr-2" />,
     "Cash Flows": <Calculator className="mr-2" />,
     "Ratios": <ChartPie className="mr-2" />,
   };
