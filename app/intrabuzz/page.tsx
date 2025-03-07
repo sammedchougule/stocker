@@ -1,3 +1,18 @@
+import { Metadata } from "next";
+import { metadataConfig } from "@/lib/metadataConfig";
+
+export const metadata: Metadata = {
+  title: metadataConfig.intrabuzz.title,
+  description: metadataConfig.intrabuzz.description,
+  keywords: metadataConfig.intrabuzz.keywords.join(", "),
+  openGraph: {
+    ...metadataConfig.default.openGraph,
+    title: metadataConfig.intrabuzz.title,
+    description: metadataConfig.intrabuzz.description,
+  },
+};
+
+
 "use client"
 
 import { useEffect, useState, useMemo, Suspense } from "react"
@@ -11,18 +26,7 @@ import { useSearchParams } from "next/navigation"
 import StockCard from "@/components/StockCard"
 import IntrabuzzStockDataTable from "@/components/IntrabuzzStockDataTable"
 import CustomizedProgressBars from "@/components/CustomizedProgressBars"
-import { Metadata } from "next";
-import { metadataConfig } from "@/lib/metadataConfig";
 
-export const metadata: Metadata = {
-  title: metadataConfig.intrabuzz.title,
-  description: metadataConfig.intrabuzz.description,
-  keywords: metadataConfig.intrabuzz.keywords.join(", "),
-  openGraph: {
-    title: metadataConfig.intrabuzz.title,
-    description: metadataConfig.intrabuzz.description,
-  },
-};
 
 
 type SortOption =

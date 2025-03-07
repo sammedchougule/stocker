@@ -1,3 +1,17 @@
+import { Metadata } from "next";
+import { metadataConfig } from "@/lib/metadataConfig";
+
+export const metadata: Metadata = {
+  title: metadataConfig.heatmap.title,
+  description: metadataConfig.heatmap.description,
+  keywords: metadataConfig.heatmap.keywords.join(", "),
+  openGraph: {
+    ...metadataConfig.default.openGraph,
+    title: metadataConfig.heatmap.title,
+    description: metadataConfig.heatmap.description,
+  },
+};
+
 "use client"
 
 import { useEffect, useState } from "react"
@@ -9,18 +23,6 @@ import { StockModal } from "@/components/StockModal"
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
 import { CardContent } from "@mui/material"
 import { CustomTreemapContent } from "@/components/CustomTreemapContent"
-import { Metadata } from "next";
-import { metadataConfig } from "@/lib/metadataConfig";
-
-export const metadata: Metadata = {
-  title: metadataConfig.heatmap.title,
-  description: metadataConfig.heatmap.description,
-  keywords: metadataConfig.heatmap.keywords.join(", "),
-  openGraph: {
-    title: metadataConfig.heatmap.title,
-    description: metadataConfig.heatmap.description,
-  },
-};
 
 type FilterOption =
   | "Nifty FnO"

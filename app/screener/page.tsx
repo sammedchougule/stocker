@@ -1,8 +1,3 @@
-"use client"
-
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Metadata } from "next";
 import { metadataConfig } from "@/lib/metadataConfig";
 
@@ -11,10 +6,19 @@ export const metadata: Metadata = {
   description: metadataConfig.screener.description,
   keywords: metadataConfig.screener.keywords.join(", "),
   openGraph: {
+    ...metadataConfig.default.openGraph,
     title: metadataConfig.screener.title,
     description: metadataConfig.screener.description,
   },
 };
+
+
+"use client"
+
+import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+
 
 interface ScreenerCard {
   title: string
