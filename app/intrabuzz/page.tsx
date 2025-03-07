@@ -1,3 +1,6 @@
+
+"use client"
+
 import { Metadata } from "next";
 import { metadataConfig } from "@/lib/metadataConfig";
 
@@ -13,7 +16,6 @@ export const metadata: Metadata = {
 };
 
 
-"use client"
 
 import { useEffect, useState, useMemo, Suspense } from "react"
 import { useStockContext } from "@/contexts/StockContext"
