@@ -1,0 +1,9 @@
+# robots.txt for Stocker Website
+
+User-agent: *
+Disallow: /admin/  # Block the admin pages from indexing
+Disallow: /auth/   # Block authentication-related pages from indexing
+Disallow: /api/    # Block API routes if they're not meant to be indexed
+Allow: /          # Allow all other pages to be indexed
+
+Sitemap: https://stocker.co.in/sitemap.xml  # Link to your sitemap
