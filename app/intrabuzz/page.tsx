@@ -19,7 +19,6 @@ export const metadata: Metadata = {
   description: metadataConfig.intrabuzz.description,
   keywords: metadataConfig.intrabuzz.keywords.join(", "),
   openGraph: {
-    ...metadataConfig.default.openGraph,
     title: metadataConfig.intrabuzz.title,
     description: metadataConfig.intrabuzz.description,
   },

@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   description: metadataConfig.screener.description,
   keywords: metadataConfig.screener.keywords.join(", "),
   openGraph: {
-    ...metadataConfig.default.openGraph,
     title: metadataConfig.screener.title,
     description: metadataConfig.screener.description,
   },

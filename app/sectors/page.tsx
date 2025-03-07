@@ -21,7 +21,6 @@ export const metadata: Metadata = {
   description: metadataConfig.sector.description,
   keywords: metadataConfig.sector.keywords.join(", "),
   openGraph: {
-    ...metadataConfig.default.openGraph,
     title: metadataConfig.sector.title,
     description: metadataConfig.sector.description,
   },

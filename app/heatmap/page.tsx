@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import { useStockContext } from "@/contexts/StockContext"
 import type { Stock } from "@/types/Stock"
@@ -15,7 +17,6 @@ export const metadata: Metadata = {
   description: metadataConfig.heatmap.description,
   keywords: metadataConfig.heatmap.keywords.join(", "),
   openGraph: {
-    ...metadataConfig.default.openGraph,
     title: metadataConfig.heatmap.title,
     description: metadataConfig.heatmap.description,
   },
