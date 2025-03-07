@@ -36,9 +36,6 @@
 
 
 
-
-//TODO: Price history checking code
-
 // app/page.tsx
 
 import "./globals.css"
