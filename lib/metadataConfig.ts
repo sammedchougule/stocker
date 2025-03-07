@@ -53,7 +53,7 @@ export const metadataConfig = {
     ],
   },
   sector: {
-    title: 'Stock Market Sectors - Performance Overview',
+    title: 'Sectors - Performance Overview',
     description: 'Analyze sector-wise stock performance with change percentage values and bar chart insights.',
     keywords: [
       'sector stocks',
@@ -65,7 +65,7 @@ export const metadataConfig = {
     ],
   },
   heatmap: {
-    title: 'Stock Market Heatmap - Visualize Market Trends',
+    title: 'Heatmap - Visualize Market Trends',
     description: 'Analyze stock market trends with a heatmap. Filter stocks by change percentage, PE ratio, volume, and market cap.',
     keywords: [
       'stock market heatmap',
@@ -79,7 +79,7 @@ export const metadataConfig = {
     ],
   },
   news: {
-    title: 'Stock Market News - Latest Updates & Trends',
+    title: 'News - Latest Updates & Trends',
     description: 'Stay updated with the latest stock market news, trends, and financial insights.',
     keywords: [
       'stock market news',
@@ -90,7 +90,7 @@ export const metadataConfig = {
     ],
   },
   screener: {
-    title: 'Stock Screener - Filter & Analyze Stocks',
+    title: 'Screener - Filter & Analyze Stocks',
     description: 'Use the Stock Screener to filter and analyze stocks based on key financial metrics, price movements, and market trends.',
     keywords: [
       'stock screener',
