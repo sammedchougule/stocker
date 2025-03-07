@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home page -->
+  <url>
+    <loc>https://stocker.co.in/</loc>
+    <lastmod>2025-03-01</lastmod>
+    <priority>1.00</priority>
+  </url>
+
+  <!-- Intrabuzz page -->
+  <url>
+    <loc>https://stocker.co.in/intrabuzz</loc>
+    <lastmod>2025-03-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Sector page -->
+  <url>
+    <loc>https://stocker.co.in/sector</loc>
+    <lastmod>2025-03-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Screener page -->
+  <url>
+    <loc>https://stocker.co.in/screener</loc>
+    <lastmod>2025-03-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Heatmap page -->
+  <url>
+    <loc>https://stocker.co.in/heatmap</loc>
+    <lastmod>2025-03-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- News page -->
+  <url>
+    <loc>https://stocker.co.in/news</loc>
+    <lastmod>2025-03-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Add other important pages here -->
+</urlset>
