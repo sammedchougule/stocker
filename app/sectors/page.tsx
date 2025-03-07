@@ -1,19 +1,4 @@
-import { Metadata } from "next";
-import { metadataConfig } from "@/lib/metadataConfig";
 
-export const metadata: Metadata = {
-  title: metadataConfig.sector.title,
-  description: metadataConfig.sector.description,
-  keywords: metadataConfig.sector.keywords.join(", "),
-  openGraph: {
-    ...metadataConfig.default.openGraph,
-    title: metadataConfig.sector.title,
-    description: metadataConfig.sector.description,
-  },
-};
-
-
-// components/Sectors.tsx
 "use client"
 
 import { useMemo, useState, useRef, useEffect } from "react"

@@ -1,16 +1,4 @@
-import { Metadata } from "next";
-import { metadataConfig } from "@/lib/metadataConfig";
 
-export const metadata: Metadata = {
-  title: metadataConfig.heatmap.title,
-  description: metadataConfig.heatmap.description,
-  keywords: metadataConfig.heatmap.keywords.join(", "),
-  openGraph: {
-    ...metadataConfig.default.openGraph,
-    title: metadataConfig.heatmap.title,
-    description: metadataConfig.heatmap.description,
-  },
-};
 
 "use client"
 
