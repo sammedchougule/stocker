@@ -1,21 +1,6 @@
 
 "use client"
 
-import { Metadata } from "next";
-import { metadataConfig } from "@/lib/metadataConfig";
-
- const metadata: Metadata = {
-  title: metadataConfig.intrabuzz.title,
-  description: metadataConfig.intrabuzz.description,
-  keywords: metadataConfig.intrabuzz.keywords.join(", "),
-  openGraph: {
-    ...metadataConfig.default.openGraph,
-    title: metadataConfig.intrabuzz.title,
-    description: metadataConfig.intrabuzz.description,
-  },
-};
-
-
 
 import { useEffect, useState, useMemo, Suspense } from "react"
 import { useStockContext } from "@/contexts/StockContext"
