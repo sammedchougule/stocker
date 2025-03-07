@@ -134,7 +134,7 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
                       {tableData.header.slice(1).map((header, index) => (
                         <TableHead
                           key={index}
-                          className="text-left font-semibold px-4 py-2"
+                          className="text-left font-semibold px-4 py-2 text-black dark:text-white"
                         >
                           {header}
                         </TableHead>
