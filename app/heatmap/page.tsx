@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { useStockContext } from "@/contexts/StockContext"
 import type { Stock } from "@/types/Stock"
