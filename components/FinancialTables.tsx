@@ -121,12 +121,12 @@ const FinancialTables: React.FC<FinancialTablesProps> = ({ stockName }) => {
                 <Table className="min-w-full border-collapse shadow-lg rounded-lg">
                   {/* Table Header */}
                   <TableHeader
-                    className="text-white"
+                    className=""
                     style={{ backgroundColor: getStockBgColor(stockName) }}
                   >
                     <TableRow>
                       <TableHead
-                        className="sticky left-0 z-10 font-semibold text-left text-white px-4 py-2"
+                        className="sticky left-0 z-10 font-semibold text-left text-black dark:text-white px-4 py-2"
                         style={{ backgroundColor: getStockBgColor(stockName) }}
                       >
                         Financial Year
