@@ -76,7 +76,7 @@ const MetadataManager = () => {
   }
 
   // For other pages (e.g., intrabuzz, sector, etc.), use the static metadata
-  const pageName = pathname.split('/').pop();  
+  //const pageName = pathname.split('/').pop();  
   const metadata = metadataConfig.default; // Default metadata for other pages
 
   return (
