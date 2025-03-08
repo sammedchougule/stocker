@@ -33,33 +33,31 @@
 
 
 
-
-// MetadataManager.tsx
 'use client';
 
 import { usePathname } from 'next/navigation'; // Use Next.js navigation hook to get the path
-import { metadataConfig } from '@/lib/metadataConfig';  // Import the metadataConfig
+import { metadataConfig, MetadataConfigType } from '@/lib/metadataConfig';  // Import the metadataConfig
 
 const MetadataManager = () => {
-  const pathname = usePathname(); // Get the current path using usePathname
-  const symbol = pathname?.split('/').pop(); // Extract the stock symbol from the URL
+  const pathname = usePathname(); // Get the current page path
 
-  // If the current page is a stock detail page
+  // Check if the current page is a stock detail page
   if (pathname.includes('/stockdetail/')) {
+    const symbol = pathname.split('/')[2]; // Assuming the symbol is part of the URL
     const companyName = symbol ? symbol.toUpperCase() : 'Default Company';
-    const metadata = metadataConfig.stockDetail; // Get stock detail metadata
+    const stockDetailMetadata = metadataConfig.stockDetail; // Get stock detail metadata
 
     // Replace placeholders like {companyName} in metadata fields
-    const dynamicTitle = metadata.title.replace(/{companyName}/g, companyName);
-    const dynamicDescription = metadata.description.replace(/{companyName}/g, companyName);
+    const dynamicTitle = stockDetailMetadata.title.replace(/{companyName}/g, companyName);
+    const dynamicDescription = stockDetailMetadata.description.replace(/{companyName}/g, companyName);
 
     // For keywords, ensure we only replace {companyName} and leave the rest intact
-    const dynamicKeywords = metadata.keywords.map(keyword =>
+    const dynamicKeywords = stockDetailMetadata.keywords.map(keyword =>
       keyword.replace(/{companyName}/g, companyName)
     ).join(', ');
 
-    const dynamicOpenGraphTitle = metadata.openGraph.title.replace(/{companyName}/g, companyName);
-    const dynamicOpenGraphDescription = metadata.openGraph.description.replace(/{companyName}/g, companyName);
+    const dynamicOpenGraphTitle = stockDetailMetadata.openGraph.title.replace(/{companyName}/g, companyName);
+    const dynamicOpenGraphDescription = stockDetailMetadata.openGraph.description.replace(/{companyName}/g, companyName);
 
     return (
       <>
@@ -69,15 +67,18 @@ const MetadataManager = () => {
           <meta name="keywords" content={dynamicKeywords} />
           <meta property="og:title" content={dynamicOpenGraphTitle} />
           <meta property="og:description" content={dynamicOpenGraphDescription} />
-          {/* <meta property="og:image" content={metadata.openGraph.image} /> */}
+          {/* Optionally add og:image */}
         </head>
       </>
     );
   }
 
-  // For other pages (e.g., intrabuzz, sector, etc.), use the static metadata
-  //const pageName = pathname.split('/').pop();  
-  const metadata = metadataConfig.default; // Default metadata for other pages
+  // For other pages, check the pathname to dynamically set the metadata for each page
+  const pageKey = pathname.split('/')[1] as keyof typeof metadataConfig || 'default'; // Get page key (e.g., 'intrabuzz', 'sector', etc.)
+  
+  // Get the specific metadata for the page or fallback to the default metadata
+  const metadata: MetadataConfigType[keyof typeof metadataConfig] = 
+  metadataConfig[pageKey] || metadataConfig.default;
 
   return (
     <>
@@ -85,12 +86,13 @@ const MetadataManager = () => {
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
         <meta name="keywords" content={metadata.keywords.join(', ')} />
-        <meta property="og:title" content={metadata.openGraph.title} />
-        <meta property="og:description" content={metadata.openGraph.description} />
-        <meta property="og:image" content={metadata.openGraph.images[0].url} />
+        <meta property="og:title" content={metadata.openGraph?.title || 'Default Title'} />
+        <meta property="og:description" content={metadata.openGraph?.description || 'Default Description'} />
+        <meta property="og:image" content={Array.isArray(metadata.openGraph?.images) ? metadata.openGraph.images[0].url : metadata.openGraph?.images || '/stocker.png'} />
       </head>
     </>
   );
 };
 
 export default MetadataManager;
+

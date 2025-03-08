@@ -1,10 +1,45 @@
+export type OpenGraphType = {
+  title: string;
+  description: string;
+  url: string;
+  siteName: string;
+  images: {
+    url: string;
+    width: number;
+    height: number;
+    alt: string;
+  }[];
+  locale: string;
+  type: string;
+};
+
 export type MetadataConfigType = {
   [key: string]: {
     title: string;
     description: string;
     keywords: string[];
+    openGraph?: {
+      title: string;
+      description: string;
+      url: string;
+      siteName: string;
+      images: {
+        url: string;
+        width: number;
+        height: number;
+        alt: string;
+      }[];
+      locale: string;
+      type: string;
+    };
+    icons?: {
+      icon: { url: string; href: string }[];
+      shortcut: { url: string; href: string }[];
+      apple: { url: string; href: string }[];
+    };
   };
 };
+
 
 export const metadataConfig = {
   default: {
@@ -87,29 +122,45 @@ export const metadataConfig = {
       locale: "en_US",
       type: "website",
     },
-    icons: [
-      {
-        url: "/favicon.ico",
-        href: "/favicon.ico",
-      },
-    ],
+    icons: {
+      icon: [{ url: "/stocker.png", href: "/stocker.png" }],
+      shortcut: [{ url: "/stocker.png", href: "/stocker.png" }],
+      apple: [{ url: "/stocker.png", href: "/stocker.png" }],
+    },
   },
   intrabuzz: {
     title: 'Intrabuzz - Real-time Stock Movements & Volume Spikes',
-    description: 'Track stock movements, volume spikes, price changes, and market trends in real-time.',
+    description: 'Track stock movements, volume spikes, price changes, and market trends in real-time. Stay informed with our powerful real-time stock analysis tool.',
     keywords: [
       'intrabuzz stocks',
       'real-time stock data',
       'price changes',
       'volume spikes',
-      'market trends',
+      'stock market trends',
       'high & low stocks',
       'stock analysis',
+      'market volatility',
+      'stock trading insights',
     ],
+    openGraph: {
+      title: 'Intrabuzz - Real-time Stock Movements & Volume Spikes',
+      description: 'Track stock movements, volume spikes, and market trends in real-time with Intrabuzz.',
+      image: 'https://www.nseindia.com/assets/images/nse-thumbnail.jpg?09082024',
+    },
+    twitter: {
+      title: 'Intrabuzz - Real-time Stock Movements & Volume Spikes',
+      description: 'Real-time stock analysis with price changes, volume spikes, and market insights.',
+      image: '/images/intrabuzz-og-image.jpg',
+    },
+    icons: {
+      icon: [{ url: "/stocker.png", href: "/stocker.png" }],
+      shortcut: [{ url: "/stocker.png", href: "/stocker.png" }],
+      apple: [{ url: "/stocker.png", href: "/stocker.png" }],
+    },
   },
   sectors: {
     title: 'Sectors - Performance Overview',
-    description: 'Analyze sector-wise stock performance with change percentage values and bar chart insights.',
+    description: 'Analyze sector-wise stock performance with change percentage values and bar chart insights. Explore the latest trends in stock sectors for better investment decisions.',
     keywords: [
       'sector stocks',
       'sector performance',
@@ -117,11 +168,29 @@ export const metadataConfig = {
       'change percentage',
       'bar chart analysis',
       'market trends',
+      'investment opportunities',
+      'financial analysis',
+      'stock market sectors',
     ],
+    openGraph: {
+      title: 'Sectors - Performance Overview',
+      description: 'Explore sector-wise stock performance with detailed insights and change percentage values.',
+      image: '/images/sectors-og-image.jpg',
+    },
+    twitter: {
+      title: 'Sectors - Performance Overview',
+      description: 'Explore sector performance and trends with detailed insights and market analysis.',
+      image: '/images/sectors-og-image.jpg',
+    },
+    icons: {
+      icon: [{ url: "/stocker.png", href: "/stocker.png" }],
+      shortcut: [{ url: "/stocker.png", href: "/stocker.png" }],
+      apple: [{ url: "/stocker.png", href: "/stocker.png" }],
+    },
   },
   heatmap: {
     title: 'Heatmap - Visualize Market Trends',
-    description: 'Analyze stock market trends with a heatmap. Filter stocks by change percentage, PE ratio, volume, and market cap.',
+    description: 'Analyze stock market trends with a heatmap. Filter stocks by change percentage, PE ratio, volume, and market cap to make better investment choices.',
     keywords: [
       'stock market heatmap',
       'Treemap chart',
@@ -131,22 +200,29 @@ export const metadataConfig = {
       '1-month volume',
       'market cap',
       'sector stocks',
+      'stock trends',
+      'stock visualization',
+      'market performance',
     ],
-  },
-  news: {
-    title: 'News - Latest Updates & Trends',
-    description: 'Stay updated with the latest stock market news, trends, and financial insights.',
-    keywords: [
-      'stock market news',
-      'financial updates',
-      'investment trends',
-      'market insights',
-      'trading news',
-    ],
+    openGraph: {
+      title: 'Heatmap - Visualize Market Trends',
+      description: 'Visualize market trends using our heatmap and explore stocks by key metrics.',
+      image: '/images/heatmap-og-image.jpg',
+    },
+    twitter: {
+      title: 'Heatmap - Visualize Market Trends',
+      description: 'A powerful heatmap to analyze stock trends and make informed investment decisions.',
+      image: '/images/heatmap-og-image.jpg',
+    },
+    icons: {
+      icon: [{ url: "/stocker.png", href: "/stocker.png" }],
+      shortcut: [{ url: "/stocker.png", href: "/stocker.png" }],
+      apple: [{ url: "/stocker.png", href: "/stocker.png" }],
+    },
   },
   screener: {
     title: 'Screener - Filter & Analyze Stocks',
-    description: 'Use the Stock Screener to filter and analyze stocks based on key financial metrics, price movements, and market trends.',
+    description: 'Use the Stock Screener to filter and analyze stocks based on key financial metrics, price movements, and market trends. Find the best stocks based on your criteria.',
     keywords: [
       'stock screener',
       'stock analysis',
@@ -155,6 +231,24 @@ export const metadataConfig = {
       'filter stocks',
       'investment research',
       'technical analysis',
+      'stock performance',
+      'stock selection tool',
     ],
+    openGraph: {
+      title: 'Screener - Filter & Analyze Stocks',
+      description: 'Filter and analyze stocks using the stock screener with powerful tools for research.',
+      image: '/images/screener-og-image.jpg',
+    },
+    twitter: {
+      title: 'Screener - Filter & Analyze Stocks',
+      description: 'Find the best stocks with powerful filtering and analysis tools for investors.',
+      image: '/images/screener-og-image.jpg',
+    },
+    icons: {
+      icon: [{ url: "/stocker.png", href: "/stocker.png" }],
+      shortcut: [{ url: "/stocker.png", href: "/stocker.png" }],
+      apple: [{ url: "/stocker.png", href: "/stocker.png" }],
+    },
   },
+  
 };
