@@ -142,10 +142,21 @@ export default function StockDetailPage() {
           <h2 className="text-xl font-semibold">Compare To</h2>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {similarStocks.length ? similarStocks.map((stock) => (
-              <StockCard key={stock.symbol} stock={stock} highLowFilterOn={false} spikeFilterOn={true} showChangePctOnly={true} onClick={() => window.location.href = `/stockdetail/${stock.symbol}`} />
-            )) : Array(4).fill(<Skeleton className="h-24 w-full" />)}
+          <div className="overflow-x-auto h-[220px]">
+            <div className="flex gap-4 ">
+              {similarStocks.length ? similarStocks.map((stock) => (
+                <div className="shrink-0" key={stock.symbol}>
+                  <StockCard 
+                  key={stock.symbol} 
+                  stock={stock} 
+                  highLowFilterOn={false} 
+                  spikeFilterOn={true} 
+                  showChangePctOnly={true} 
+                  onClick={() => window.location.href = `/stockdetail/${stock.symbol}`} 
+                />
+                </div>
+              )) : Array(4).fill(<Skeleton className="h-24  w-[150px]" />)}
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -14,8 +14,6 @@ import StockCard from "@/components/StockCard"
 import IntrabuzzStockDataTable from "@/components/IntrabuzzStockDataTable"
 import CustomizedProgressBars from "@/components/CustomizedProgressBars"
 
-
-
 type SortOption =
   | "changepct_desc"
   | "changepct_asc"
