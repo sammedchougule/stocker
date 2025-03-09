@@ -66,8 +66,8 @@ export const metadataConfig = {
     robots: "index,follow", 
   },
   stockDetail: {
-    title: "{companyName} Share Price Today, Live NSE Stock Price: Get the latest {companyName} news, company updates, quotes, offers, annual financial reports, graph, volumes, 52 week high low, buy sell tips, balance sheet, historical charts, market performance, capitalisation, dividends, volume, profit and loss account, research, results and more details at NSE India.",
-    description: "{companyName} Share Price Today, Live NSE Stock Price: Get the latest {companyName} news, company updates, quotes, financial reports, 52 week high low, tips, historical charts, market performance etc at NSE India.",
+    title: "{companyName} Share Price Today, Live NSE Stock Price: Get the latest {companyName} news, company updates, quotes, offers, annual financial reports, graph, volumes, 52 week high low, buy sell tips, balance sheet, historical charts, market performance, capitalisation, dividends, volume, profit and loss account, research, results and more details at Stocker.",
+    description: "{companyName} Share Price Today, Live NSE Stock Price: Get the latest {companyName} news, company updates, quotes, financial reports, 52 week high low, tips, historical charts, market performance etc at Stocker.",
     keywords: [
       "{companyName} share price",
       "{companyName} stock price",
@@ -95,11 +95,11 @@ export const metadataConfig = {
       "{companyName} research",
       "{companyName} results",
       "NSE India",
-      "nseindia.com",
+      "stocker.co.in",
     ],
     openGraph: {
-      title: "{companyName} Share Price Today, Live NSE Stock Price,News – NSE India",
-      description: "{companyName} Share Price Today, Live NSE Stock Price: Get the latest {companyName} news, company updates, quotes, financial reports, 52 week high low, tips, historical charts, market performance etc at NSE India.",
+      title: "{companyName} Share Price Today, Live NSE Stock Price, News – Stocker",
+      description: "{companyName} Share Price Today, Live NSE Stock Price: Get the latest {companyName} news, company updates, quotes, financial reports, 52 week high low, tips, historical charts, market performance etc at Stocker.",
       url: "https://stocker.co.in/{companyName}",
       siteName: "Stocker",
       images: [
