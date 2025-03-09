@@ -21,6 +21,7 @@ import Image from "next/image";
 import { Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+
 export default function StockDetailPage() {
   const params = useParams();
   const symbol = params.symbol as string;
