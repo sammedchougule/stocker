@@ -312,7 +312,7 @@ export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
               {/* Right Section */}
               <div className="flex items-center gap-2">
                 <Link
-                  href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
+                  href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.viewchart}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
