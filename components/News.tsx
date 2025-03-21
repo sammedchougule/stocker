@@ -37,7 +37,7 @@ const News: React.FC = () => {
         const data = await getTopHeadlines(category, page);
         setNews(data.articles);
         setTotalResults(data.totalResults);
-        setGenLoading(Array(data.articles.length).fill(false));
+        setGenLoading(Array(data.articles.length).fill(false)); // Initialize genLoading
       } catch (error) {
         console.error("Error fetching news:", error);
       } finally {
@@ -62,7 +62,7 @@ const News: React.FC = () => {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const prompt = `Write a detailed news article based on the following title: "${title}". The article should be between 400-500 words. Provide the output in professional news article format.`;
         const result = await model.generateContent(prompt);
-        let article = result.response.text();
+        const article = result.response.text();
 
         setGeneratedContent((prev) => {
           const newContent = [...prev];
@@ -139,12 +139,16 @@ const News: React.FC = () => {
             <p className="text-gray-600 mb-2">
               Published At: {formatDate(article.publishedAt)}
             </p>
-            <button
-              onClick={() => handleViewArticle(article.title, index)}
-              className="bg-gray-500 hover:bg-gray-700 rounded-full text-white font-semibold py-2 px-4 border border-gray-800"
-            >
-              View Full Article
-            </button>
+            {genLoading[index] ? (
+              <p>Generating article...</p>
+            ) : (
+              <button
+                onClick={() => handleViewArticle(article.title, index)}
+                className="bg-gray-500 hover:bg-gray-700 rounded-full text-white font-semibold py-2 px-4 border border-gray-800"
+              >
+                View Full Article
+              </button>
+            )}
           </div>
         ))}
       </div>

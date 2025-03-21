@@ -34,7 +34,7 @@ export default function ArticlePage() {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const prompt = `Write a detailed news article based on the following title: "${decodeURIComponent(slug || "")}". The article should be between 400-500 words. Provide the output in professional news article format.`;
         const result = await model.generateContent(prompt);
-        let articleText = result.response.text();
+        const articleText = result.response.text();
 
         const formattedArticle = articleText.split('\n').map((paragraph, index) => {
           if (paragraph.trim() === '') return null;
