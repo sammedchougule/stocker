@@ -15,12 +15,6 @@ interface Article {
   urlToImage: string | null;
 }
 
-interface NewsResponse {
-  articles: Article[];
-  status: string;
-  totalResults: number;
-}
-
 export async function getTopHeadlines(category?: string, page = 1) {
   let url = `${BASE_URL}/top-headlines?country=us&page=${page}&pageSize=10&apiKey=${API_KEY}`
 
