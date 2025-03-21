@@ -124,13 +124,13 @@ const Navbar = () => {
               Screener
             </Link>
             <Link
-              href="/journal"
-              className={`flex items-center gap-1 ${isActive("/journal") ? "text-blue-500 font-semibold" : "text-gray-700 dark:text-gray-300"}`}
+              href="/news"
+              className={`flex items-center gap-1 ${isActive("/news") ? "text-blue-500 font-semibold" : "text-gray-700 dark:text-gray-300"}`}
             >
               <NotebookText
-                className={`h-5 w-5 ${isActive("/journal") ? "text-blue-700" : "text-gray-700 dark:text-gray-300"}`}
+                className={`h-5 w-5 ${isActive("/news") ? "text-blue-700" : "text-gray-700 dark:text-gray-300"}`}
               />
-              Journal
+              News
             </Link>
             <button
               onClick={toggleTheme}
@@ -201,11 +201,11 @@ const Navbar = () => {
               Screener
             </Link>
             <Link
-              href="/journal"
+              href="/news"
               className="flex items-center py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md px-2 transition-colors duration-200"
             >
               <NotebookText className="h-5 w-5 mr-3" />
-              Journal
+              News
             </Link>
             <button
               onClick={toggleTheme}
@@ -268,15 +268,15 @@ const Navbar = () => {
             <span className="text-xs text-gray-600 dark:text-gray-400">Screener</span>
           </Link>
           <Link
-            href="/journal"
+            href="/news"
             className={`text-gray-700 dark:text-gray-300 flex flex-col items-center ${
-              isActive("/journal") ? "bg-gray-200 dark:bg-gray-700 rounded-md px-2 py-1" : ""
+              isActive("/news") ? "bg-gray-200 dark:bg-gray-700 rounded-md px-2 py-1" : ""
             }`}
           >
             <NotebookText
-              className={`h-6 w-6 ${isActive("/journal") ? "text-blue-700" : "text-gray-700 dark:text-gray-300"}`}
+              className={`h-6 w-6 ${isActive("/news") ? "text-blue-700" : "text-gray-700 dark:text-gray-300"}`}
             />
-            <span className="text-xs text-gray-600 dark:text-gray-400">Journal</span>
+            <span className="text-xs text-gray-600 dark:text-gray-400">News</span>
           </Link>
         </div>
       </nav>
