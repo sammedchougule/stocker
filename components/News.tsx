@@ -1,7 +1,7 @@
 // components/News.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getTopHeadlines } from "@/lib/newsapi";
@@ -19,7 +19,7 @@ interface Article {
   content: string;
 }
 
-const News: React.FC = () => {
+const NewsContent = () => {
   const [news, setNews] = useState<Article[]>([]);
   const [generatedContent, setGeneratedContent] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +37,7 @@ const News: React.FC = () => {
         const data = await getTopHeadlines(category, page);
         setNews(data.articles);
         setTotalResults(data.totalResults);
-        setGenLoading(Array(data.articles.length).fill(false)); // Initialize genLoading
+        setGenLoading(Array(data.articles.length).fill(false));
       } catch (error) {
         console.error("Error fetching news:", error);
       } finally {
@@ -108,11 +108,7 @@ const News: React.FC = () => {
   }
 
   if (loading) {
-    return (
-      <div>
-        <CustomizedProgressBars />
-      </div>
-    );
+    return <CustomizedProgressBars />;
   }
 
   return (
@@ -152,12 +148,17 @@ const News: React.FC = () => {
           </div>
         ))}
       </div>
-      <NewsPagination
-        currentPage={page}
-        totalPages={Math.ceil(totalResults / 8)}
-      />
+      <NewsPagination currentPage={page} totalPages={Math.ceil(totalResults / 8)} />
     </div>
   );
 };
+
+const News = () => {
+  return (
+    <Suspense fallback={<CustomizedProgressBars />}>
+      <NewsContent />
+    </Suspense>
+  );
+}
 
 export default News;
