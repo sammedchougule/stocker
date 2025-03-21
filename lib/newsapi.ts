@@ -1,6 +1,26 @@
 const API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY
 const BASE_URL = "https://newsapi.org/v2"
 
+interface Article {
+  author: string | null;
+  content: string | null;
+  description: string | null;
+  publishedAt: string;
+  source: {
+    id: string | null;
+    name: string;
+  };
+  title: string;
+  url: string;
+  urlToImage: string | null;
+}
+
+interface NewsResponse {
+  articles: Article[];
+  status: string;
+  totalResults: number;
+}
+
 export async function getTopHeadlines(category?: string, page = 1) {
   let url = `${BASE_URL}/top-headlines?country=us&page=${page}&pageSize=10&apiKey=${API_KEY}`
 
@@ -50,8 +70,9 @@ export async function getArticleByUrl(encodedTitle: string) {
 
     if (data.articles && data.articles.length > 0) {
       // Find the article that best matches the title
-      const article =
-        data.articles.find((a: any) => a.title.toLowerCase().includes(title.toLowerCase())) || data.articles[0]
+      const article = data.articles.find((a: Article) => // Corrected line
+        a.title.toLowerCase().includes(title.toLowerCase())
+      );
       return article
     } else {
       throw new Error("No articles found in API response")
