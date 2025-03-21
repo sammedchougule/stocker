@@ -18,7 +18,7 @@ interface NewsResponse {
 const NewsContent = () => {
   const [news, setNews] = useState<Article[]>([]); // Initialize as an array
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+
 
   useEffect(() => {
     const fetchNews = async () => {
