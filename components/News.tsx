@@ -141,7 +141,7 @@ const News: React.FC = () => {
             </p>
             <button
               onClick={() => handleViewArticle(article.title, index)}
-className="hover:bg-gray-700 rounded-full text-black dark:text-white font-semibold py-2 px-4 border border-gray-800"
+              className="bg-gray-500 hover:bg-gray-700 rounded-full text-white font-semibold py-2 px-4 border border-gray-800"
             >
               View Full Article
             </button>
