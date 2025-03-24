@@ -1,15 +1,9 @@
-// app/news/page.tsx
-"use client";
+import React from 'react'
 
-import News from "@/components/News";
-import { useSearchParams } from "next/navigation";
-
-export default function NewsPage() {
-
+function page() {
   return (
-    <div className="container mx-auto ">
-      
-      <News />
-    </div>
-  );
+    <div>News</div>
+  )
 }
+
+export default page
