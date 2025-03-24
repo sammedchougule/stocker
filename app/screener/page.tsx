@@ -40,7 +40,8 @@ const technicalScreeners: ScreenerCard[] = [
 ];
 
 function ScreenerCardComponent({ screener }: { screener: ScreenerCard }) {
-  const href = `/screener/${encodeURIComponent(screener.title)}`;
+  const formattedTitle = screener.title.toLowerCase().replace(/\s+/g, "_");
+  const href = `/screener/${formattedTitle}`;
 
   return (
     <Link href={href} passHref>
