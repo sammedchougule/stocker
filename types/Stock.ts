@@ -48,6 +48,8 @@ export interface Stock {
   pe: number | null;
   shares: number | null;
   closings: { [date: string]: number };
+  near52WHigh: string;
+  near52WLow: string;
 }
 
 export interface StockData {

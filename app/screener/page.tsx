@@ -1,14 +1,12 @@
-
 "use client"
 
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 interface ScreenerCard {
-  title: string
-  description: string
+  title: string;
+  description: string;
 }
 
 const fundamentalScreeners: ScreenerCard[] = [
@@ -25,11 +23,11 @@ const fundamentalScreeners: ScreenerCard[] = [
     description:
       "Companies good at quickly turning around cash to generate profits due to low/negative cash conversion cycles",
   },
-]
+];
 
 const technicalScreeners: ScreenerCard[] = [
   {
-    title: "Nearing Breakout",
+    title: "Near Breakout",
     description: "A technical screen to identify stocks in high momentum that are nearing breakout",
   },
   {
@@ -40,28 +38,21 @@ const technicalScreeners: ScreenerCard[] = [
     title: "Limited Variability",
     description: "Low risk, large cap stocks to achieve market beating returns",
   },
-]
+];
 
 function ScreenerCardComponent({ screener }: { screener: ScreenerCard }) {
+  const href = `/screener/${encodeURIComponent(screener.title)}`;
+
   return (
-    <Card className="hover:shadow-lg transition-shadow bg-white dark:bg-[#151719]">
-      <CardHeader>
-        <CardTitle className="text-xl text-gray-900 dark:text-gray-100">{screener.title}</CardTitle>
-        <CardDescription className="mt-2 text-gray-600 dark:text-gray-300">{screener.description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex dark:bg-gray-800"
-          >
-            <ArrowRight className="h-5 w-5" />
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  )
+    <Link href={href} passHref>
+      <Card className="hover:shadow-lg transition-shadow bg-white dark:bg-[#151719] cursor-pointer">
+        <CardHeader>
+          <CardTitle className="text-xl text-gray-900 dark:text-gray-100">{screener.title}</CardTitle>
+          <CardDescription className="mt-2 text-gray-600 dark:text-gray-300">{screener.description}</CardDescription>
+        </CardHeader>
+      </Card>
+    </Link>
+  );
 }
 
 export default function Screeners() {
@@ -85,6 +76,5 @@ export default function Screeners() {
         </div>
       </section>
     </div>
-  )
+  );
 }
-
