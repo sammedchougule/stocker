@@ -5,7 +5,6 @@
 
 import { usePathname } from 'next/navigation'; // Use Next.js navigation hook to get the path
 import { metadataConfig, MetadataConfigType } from '@/lib/metadataConfig';  // Import the metadataConfig
-//import { url } from 'inspector';
 
 const MetadataManager = () => {
   const pathname = usePathname(); // Get the current page path
@@ -64,7 +63,14 @@ const MetadataManager = () => {
         <meta name="keywords" content={metadata.keywords.join(', ')} />
         <meta property="og:title" content={metadata.openGraph?.title || 'Default Title'} />
         <meta property="og:description" content={metadata.openGraph?.description || 'Default Description'} />
-        <meta property="og:image" content={Array.isArray(metadata.openGraph?.images) ? metadata.openGraph.images[0].url : metadata.openGraph?.images || '/stocker.png'} />
+        <meta
+          property="og:image"
+          content={
+            Array.isArray(metadata.openGraph?.images)
+              ? metadata.openGraph.images[0].url
+              : metadata.openGraph?.images || "/stocker.png"
+          }
+        />
         <meta property="og:url" content={metadata.openGraph?.url || window.location.href} />
         <meta property="og:site_name" content={metadata.openGraph?.siteName || 'Stocker'} />
         <meta property="og:locale" content={metadata.openGraph?.locale || 'en_US'} />
