@@ -11,6 +11,7 @@ import { StockModal } from "@/components/StockModal"
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
 import { CardContent } from "@mui/material"
 import { CustomTreemapContent } from "@/components/CustomTreemapContent"
+import CustomizedProgressBars from "@/components/CustomizedProgressBars"
 
 type FilterOption =
   | "Nifty FnO"
@@ -77,8 +78,8 @@ export default function Heatmap() {
   useEffect(() => {
     let filtered = stocks.filter((stock) => stock.type === "EQ")
 
-    if (selectedIndex === "Nifty FnO") {
-      filtered = filtered.filter((stock) => stock.indices && stock.indices["Nifty FnO"])
+    if (selectedIndex === "Nifty 50") {
+      filtered = filtered.filter((stock) => stock.indices && stock.indices["Nifty 50"])
     } else {
       filtered = filtered.filter((stock) => stock.indices && stock.indices[selectedIndex as keyof typeof stock.indices])
     }
@@ -130,6 +131,14 @@ export default function Heatmap() {
     companyname: stock.companyname,
     selectedSort: selectedSort,
   }))
+
+  if (stocks.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-[700px]">
+        <CustomizedProgressBars />
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto bg-white dark:bg-[#151719] mt-0 ">
