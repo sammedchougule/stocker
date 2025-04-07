@@ -1,5 +1,6 @@
 "use client"
 
+
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
@@ -40,8 +41,7 @@ const technicalScreeners: ScreenerCard[] = [
 ];
 
 function ScreenerCardComponent({ screener }: { screener: ScreenerCard }) {
-  const formattedTitle = screener.title.toLowerCase().replace(/\s+/g, "_");
-  const href = `/screener/${formattedTitle}`;
+  const href = `/screener/${encodeURIComponent(screener.title)}`;
 
   return (
     <Link href={href} passHref>

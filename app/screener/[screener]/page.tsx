@@ -7,6 +7,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { getStocks } from "@/lib/getStocks";
 import type { Stock } from "@/types/Stock";
 import CustomizedProgressBars from "@/components/CustomizedProgressBars";
+import { getStockBgColor } from "@/lib/getstockBgColor"
 
 export default function ScreenerDetail() {
   const { screener } = useParams();
@@ -137,8 +138,23 @@ export default function ScreenerDetail() {
               <TableBody>
                 {sortedStocks.map((stock) => (
                   <TableRow key={stock.symbol} className="hover:bg-gray-100 dark:hover:bg-gray-800">
-                    <TableCell className="p-4 sticky left-0 bg-white dark:bg-black z-10">
-                      {stock.symbol}
+                    <TableCell className="sticky left-0 z-10  p-4 border-t dark:border-gray-800">                
+                        <div
+                            className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
+                            style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
+                        >
+                            <span
+                            className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
+                            style={{
+                                paddingLeft: "2px",
+                                paddingRight: "2px",
+                                maxWidth: "100%",
+                                fontSize: stock.symbol.length > 10 ? "10px" : "12px",
+                            }}
+                            >
+                            {stock.symbol}
+                            </span>
+                        </div>
                     </TableCell>
                     <TableCell className="p-4">{stock.companyname}</TableCell>
                     <TableCell className="p-4 text-right">₹{Number(stock.closeyest).toFixed(2)}</TableCell>

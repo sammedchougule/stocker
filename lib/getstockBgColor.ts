@@ -11,6 +11,6 @@ type StockColors = {
     if (color) {
       return `rgb(${color.join(', ')})`; // Return the RGB color format
     }
-    return 'rgb(255, 255, 255)'; // Default to white if no color found
+    return 'rgb(140, 139, 139)'; // Default to white if no color found
   };
   
