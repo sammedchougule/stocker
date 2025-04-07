@@ -63,4 +63,3 @@ export default function StockNewsCard({ article }: StockNewsCardProps) {
     </div>
   )
 }
-
