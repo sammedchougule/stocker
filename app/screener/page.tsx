@@ -58,7 +58,17 @@ function ScreenerCardComponent({ screener }: { screener: ScreenerCard }) {
 export default function Screeners() {
   return (
     <div className="container mx-auto px-4 py-8 bg-white dark:bg-black">
+
       <section className="mb-12">
+        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Technical & Momentum Screens</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {technicalScreeners.map((screener) => (
+            <ScreenerCardComponent key={screener.title} screener={screener} />
+          ))}
+        </div>
+      </section>
+
+      <section >
         <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Fundamental Screens</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {fundamentalScreeners.map((screener) => (
@@ -67,14 +77,6 @@ export default function Screeners() {
         </div>
       </section>
 
-      <section>
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Technical & Momentum Screens</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {technicalScreeners.map((screener) => (
-            <ScreenerCardComponent key={screener.title} screener={screener} />
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
