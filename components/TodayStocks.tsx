@@ -242,7 +242,7 @@ const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks, loading = false }) 
       </div>
 
       <div className="w-full lg:w-2/6">
-        <MarketMood stocks={stocks} loading={loading} />
+        <MarketMood stocks={stocks} />
       </div>
 
       <StockModal stock={selectedStock} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
