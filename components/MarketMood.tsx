@@ -526,33 +526,45 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
                   <CircleArrowOutDownLeft className="text-green-600 dark:text-green-400" size={20} />
                   <span className="font-bold text-green-600 dark:text-green-400">Extreme Fear (&lt;30):</span>
                 </div>
-                <span className="font-normal dark:text-gray-300">Extreme fear suggests a good time to open fresh positions.</span>
+                <span className="font-normal dark:text-gray-300">
+                  Extreme fear suggests a good time to open fresh positions, as markets are likely to be oversold and
+                  might turn upwards.
+                </span>
               </li>
               <li className="mb-6">
                 <div className="flex items-center gap-2 mb-2">
                   <CircleArrowOutUpLeft className="text-yellow-500 dark:text-yellow-400" size={20} />
                   <span className="font-bold text-yellow-500 dark:text-yellow-400">Fear (30-50):</span>
                 </div>
-                <span className="font-normal dark:text-gray-300">Consider the trajectory before taking action.</span>
+                <span className="font-normal dark:text-gray-300">
+                  If dropping from Greed to Fear, wait till Extreme Fear. If rising from Extreme Fear, consider opening
+                  positions.
+                </span>
               </li>
               <li className="mb-6">
                 <div className="flex items-center gap-2 mb-2">
                   <CircleArrowOutUpRight className="text-orange-500 dark:text-orange-400" size={20} />
                   <span className="font-bold text-orange-500 dark:text-orange-400">Greed (50-70):</span>
                 </div>
-                <span className="font-normal dark:text-gray-300">Caution advised while taking fresh positions.</span>
+                <span className="font-normal dark:text-gray-300">
+                  If rising towards Greed, be cautious with new positions. If dropping from Extreme Greed, wait for
+                  better opportunities.
+                </span>
               </li>
               <li className="mb-6">
                 <div className="flex items-center gap-2 mb-2">
                   <CircleArrowOutDownRight className="text-red-500 dark:text-red-400" size={20} />
                   <span className="font-bold text-red-500 dark:text-red-400">Extreme Greed ({">"}70):</span>
                 </div>
-                <span className="font-normal dark:text-gray-300">Avoid opening fresh positions.</span>
+                <span className="font-normal dark:text-gray-300">
+                  Avoid opening fresh positions as markets are overbought and likely to turn downwards.
+                </span>
               </li>
             </ul>
           </div>
         </DialogContent>
       </Dialog>
+      
     </Card>
   )
 }
