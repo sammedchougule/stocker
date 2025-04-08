@@ -361,7 +361,7 @@ import {
   CircleArrowOutDownRight,
 } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import "react-loading-skeleton/dist/skeleton.css"
+
 
 // Nifty 50 stocks array
 const NIFTY50_STOCKS = [
@@ -418,10 +418,9 @@ const NIFTY50_STOCKS = [
 
 interface MarketMoodProps {
   stocks: Stock[]
-  loading: boolean
 }
 
-export default function MarketMood({ stocks, loading }: MarketMoodProps) {
+export default function MarketMood({ stocks }: MarketMoodProps) {
   const [marketMood, setMarketMood] = useState(50)
   const [showModal, setShowModal] = useState(false)
 
