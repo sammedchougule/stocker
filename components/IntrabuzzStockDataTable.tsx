@@ -230,6 +230,7 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
               )}
             </TableRow>
           </TableHeader>
+          
           <TableBody>
             {paginatedStocks.map((stock) => (
               <TableRow
