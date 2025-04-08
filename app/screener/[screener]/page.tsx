@@ -8,14 +8,16 @@ import { getStocks } from "@/lib/getStocks";
 import type { Stock } from "@/types/Stock";
 import CustomizedProgressBars from "@/components/CustomizedProgressBars";
 import { getStockBgColor } from "@/lib/getstockBgColor"
+import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react"
+
 
 export default function ScreenerDetail() {
   const { screener } = useParams();
   const [showHigh, setShowHigh] = useState(true);
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortColumn, setSortColumn] = useState<keyof Stock | null>(null);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortColumn, setSortColumn] = useState<string | null>(null)
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
 
   useEffect(() => {
     async function fetchStocks() {
@@ -43,24 +45,59 @@ export default function ScreenerDetail() {
       : ((price - low52) / low52) * 100;
   };
 
-  const handleSort = (column: keyof Stock) => {
-    if (sortColumn === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortColumn(column);
-      setSortOrder("asc");
+
+  const renderSortIcon = (column: string, sortColumn: string, sortOrder: "asc" | "desc") => {
+    if (column === sortColumn) {
+      return sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
     }
-  };
+    return <ArrowUpDown className="w-4 h-4" />
+  }
 
   const sortedStocks = [...filteredStocks].sort((a, b) => {
     if (!sortColumn) return 0;
-    const valueA = sortColumn === "price" ? Number(a[sortColumn]) : a[sortColumn];
-    const valueB = sortColumn === "price" ? Number(b[sortColumn]) : b[sortColumn];
-
-    if ((valueA ?? 0) < (valueB ?? 0)) return sortOrder === "asc" ? -1 : 1;
-    if ((valueA ?? 0) > (valueB ?? 0)) return sortOrder === "asc" ? 1 : -1;
+  
+    let aValue: string | number;
+    let bValue: string | number;
+  
+    if (sortColumn === "nearPct") {
+      aValue = calculateNearPercentage(a);
+      bValue = calculateNearPercentage(b);
+    } else {
+      const valueA = a[sortColumn as keyof Stock];
+      const valueB = b[sortColumn as keyof Stock];
+  
+      // Determine if the field should be treated as a number
+      const numericFields: (keyof Stock | "nearPct")[] = [
+        "price",
+        "closeyest",
+        "high52",
+        "low52",
+      ];
+  
+      const isNumeric = numericFields.includes(sortColumn as "nearPct" | keyof Stock);
+  
+      // Use Number for numeric fields, else default to string or fallback
+      aValue = isNumeric ? Number(valueA ?? 0) : String(valueA ?? "");
+      bValue = isNumeric ? Number(valueB ?? 0) : String(valueB ?? "");
+    }
+  
+    if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
     return 0;
-  });
+  });  
+
+
+  const handleSort = (column: string) => {
+    if (column === sortColumn) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+    } else {
+      setSortColumn(column)
+      setSortOrder("asc")
+    }
+  }
+  
+
+  
 
   return (
     <div className="container mx-auto px-4">
@@ -88,51 +125,98 @@ export default function ScreenerDetail() {
               {/* Sticky Header */}
               <TableHeader className="bg-blue-200 dark:bg-blue-900 sticky top-0 z-10">
                 <TableRow>
-                  <TableHead
-                    className="p-4 text-left font-medium sticky left-0 bg-blue-200 dark:bg-blue-900 z-20 cursor-pointer"
-                    onClick={() => handleSort("symbol")}
-                  >
-                    Symbol {sortColumn === "symbol" ? (sortOrder === "asc" ? "⬆️" : "⬇️") : ""}
+                <TableHead
+                  className="p-4 text-left font-medium sticky left-0 bg-blue-200 dark:bg-blue-900 z-20 cursor-pointer"
+                  onClick={() => handleSort("symbol")}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>Symbol</span>
+                    {sortColumn === "symbol" ? (
+                      sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                    ) : (
+                      <ArrowUpDown className="w-4 h-4" />
+                    )}
+                  </div>
+                </TableHead>
+
+                <TableHead
+                  className="p-4 text-left font-medium cursor-pointer"
+                  onClick={() => handleSort("companyname")}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>Company Name</span>
+                    {sortColumn === "companyname" ? (
+                      sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                    ) : (
+                      <ArrowUpDown className="w-4 h-4" />
+                    )}
+                  </div>
+                </TableHead>
+
+                <TableHead
+                  className="p-4 text-right font-medium cursor-pointer"
+                  onClick={() => handleSort("closeyest")}
+                >
+                  <div className="flex items-center justify-end gap-2">
+                    <span>Yest Close</span>
+                    {sortColumn === "closeyest" ? (
+                      sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                    ) : (
+                      <ArrowUpDown className="w-4 h-4" />
+                    )}
+                  </div>
+                </TableHead>
+                  <TableHead onClick={() => handleSort("price")} className="cursor-pointer">
+                    <div className="flex items-center justify-end gap-2">
+                      <span>Price</span>
+                      {renderSortIcon("price", sortColumn || "", sortOrder)}
+                    </div>
                   </TableHead>
-                  <TableHead
-                    className="p-4 text-left font-medium cursor-pointer"
-                    onClick={() => handleSort("companyname")}
-                  >
-                    Company Name {sortColumn === "companyname" ? (sortOrder === "asc" ? "⬆️" : "⬇️") : ""}
-                  </TableHead>
-                  <TableHead
-                    className="p-4 text-right font-medium cursor-pointer"
-                    onClick={() => handleSort("closeyest")}
-                  >
-                    Previous Close {sortColumn === "closeyest" ? (sortOrder === "asc" ? "⬆️" : "⬇️") : ""}
-                  </TableHead>
-                  <TableHead
-                    className="p-4 text-right font-medium cursor-pointer"
-                    onClick={() => handleSort("price")}
-                  >
-                    Price {sortColumn === "price" ? (sortOrder === "asc" ? "⬆️" : "⬇️") : ""}
-                  </TableHead>
+
                   {showHigh ? (
-                    <TableHead
-                      className="p-4 text-right font-medium cursor-pointer"
-                      onClick={() => handleSort("high52")}
-                    >
-                      High 52W {sortColumn === "high52" ? (sortOrder === "asc" ? "⬆️" : "⬇️") : ""}
-                    </TableHead>
-                  ) : (
-                    <TableHead
-                      className="p-4 text-right font-medium cursor-pointer"
-                      onClick={() => handleSort("low52")}
-                    >
-                      Low 52W {sortColumn === "low52" ? (sortOrder === "asc" ? "⬆️" : "⬇️") : ""}
-                    </TableHead>
-                  )}
                   <TableHead
                     className="p-4 text-right font-medium cursor-pointer"
-                    onClick={() => handleSort("price")}
+                    onClick={() => handleSort("high52")}
                   >
-                    Near % {sortColumn === "price" ? (sortOrder === "asc" ? "⬆️" : "⬇️") : ""}
+                    <div className="flex items-center justify-end gap-2">
+                      <span>High 52W</span>
+                      {sortColumn === "high52" ? (
+                        sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                      ) : (
+                        <ArrowUpDown className="w-4 h-4" />
+                      )}
+                    </div>
                   </TableHead>
+                ) : (
+                  <TableHead
+                    className="p-4 text-right font-medium cursor-pointer"
+                    onClick={() => handleSort("low52")}
+                  >
+                    <div className="flex items-center justify-end gap-2">
+                      <span>Low 52W</span>
+                      {sortColumn === "low52" ? (
+                        sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                      ) : (
+                        <ArrowUpDown className="w-4 h-4" />
+                      )}
+                    </div>
+                  </TableHead>
+                )}
+
+                <TableHead
+                  className="p-4 text-right font-medium cursor-pointer"
+                  onClick={() => handleSort("nearPct")}
+                >
+                  <div className="flex items-center justify-end gap-2">
+                    <span>Near %</span>
+                    {sortColumn === "nearPct" ? (
+                      sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                    ) : (
+                      <ArrowUpDown className="w-4 h-4" />
+                    )}
+                  </div>
+                </TableHead>
+
                 </TableRow>
               </TableHeader>
               <TableBody>
