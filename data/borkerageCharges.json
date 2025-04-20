@@ -1,0 +1,98 @@
+[
+    {
+      "broker": "Zerodha",
+      "account_opening": {
+        "resident": "₹0",
+        "nri": "₹500"
+      },
+      "amc": {
+        "resident_first_year": "₹300 + GST",
+        "resident_subsequent_years": "₹300 + GST (Billed quarterly, BSDA applies)",
+        "nri": "₹500 + GST (Annually)"
+      },
+      "brokerage": {
+        "equity_intraday": "₹20 or 0.03% / order",
+        "currency_futures": "₹20 or 0.03% / order",
+        "currency_options": "₹20 / order",
+        "commodity_futures": "₹20 or 0.03% / order",
+        "commodity_options": "₹20 / order"
+      }
+    },
+    {
+      "broker": "Upstox",
+      "account_opening": {
+        "resident": "₹0",
+        "nri": "Not Found"
+      },
+      "amc": {
+        "resident_first_year": "₹0",
+        "resident_subsequent_years": "₹300 + GST (Annually, Non-BSDA, BSDA applies)",
+        "nri": "Not Found"
+      },
+      "brokerage": {
+        "equity_intraday": "₹20 or 0.1% / order",
+        "currency_futures": "₹20 or 0.05% / order",
+        "currency_options": "₹20 / order",
+        "commodity_futures": "₹20 or 0.05% / order",
+        "commodity_options": "₹20 / order"
+      }
+    },
+    {
+      "broker": "Motilal Oswal",
+      "account_opening": {
+        "resident": "₹0",
+        "nri": "₹0 (Third-party source)"
+      },
+      "amc": {
+        "resident_first_year": "₹0",
+        "resident_subsequent_years": "₹199 + GST (Annually)",
+        "nri": "₹199 + GST (Demat); ₹999 + GST (Trading Annually); PIS: Not Found"
+      },
+      "brokerage": {
+        "equity_intraday": "0.02%",
+        "currency_futures": "₹20 / lot",
+        "currency_options": "₹20 / lot",
+        "commodity_futures": "0.02%",
+        "commodity_options": "₹200 / lot"
+      }
+    },
+    {
+      "broker": "Angel One",
+      "account_opening": {
+        "resident": "₹0",
+        "nri": "~₹536.48 + GST"
+      },
+      "amc": {
+        "resident_first_year": "₹0",
+        "resident_subsequent_years": "₹240 + GST (Quarterly, Non-BSDA, BSDA applies)",
+        "nri": "₹450 + GST (Demat annually); PIS/Trading: Not Found"
+      },
+      "brokerage": {
+        "equity_intraday": "₹20 or 0.25% / order",
+        "currency_futures": "₹20 or 0.25% / order",
+        "currency_options": "₹20 or 0.25% / order",
+        "commodity_futures": "₹20 or 0.25% / order",
+        "commodity_options": "₹20 or 0.25% / order"
+      }
+    },
+    {
+      "broker": "Groww",
+      "account_opening": {
+        "resident": "₹0",
+        "nri": "N/A (Service not offered)"
+      },
+      "amc": {
+        "resident_first_year": "₹0",
+        "resident_subsequent_years": "₹0",
+        "nri": "N/A"
+      },
+      "brokerage": {
+        "equity_intraday": "₹20 or 0.1% / order",
+        "currency_futures": "₹20 / order",
+        "currency_options": "₹20 / order",
+        "commodity_futures": "₹20 / order",
+        "commodity_options": "₹20 / order"
+      }
+    }
+  ]
+  

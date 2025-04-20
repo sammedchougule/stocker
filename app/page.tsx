@@ -38,6 +38,7 @@
 
 // app/page.tsx
 
+import Brokers from "@/components/Brokers"
 import "./globals.css"
 import Indices from "@/components/Indices"
 import TodayNews from "@/components/TodayNews"
@@ -58,6 +59,8 @@ export default async function Home() {
         <TodaysStocks stocks={stocks} />
       </Suspense>
       <TodayNews />
+      < Brokers />
+      {/* <TodayNewsData>{({ newsData }) => <TodayNews newsData={newsData} />}</TodayNewsData> */}
       {/* <SubscriptionPlans /> */}
     </div>
   )
