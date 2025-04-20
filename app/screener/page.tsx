@@ -40,6 +40,8 @@ const technicalScreeners: ScreenerCard[] = [
   },
 ];
 
+//create Intraday screeners and add highvolume stocks, open-low, open-high, top gainer,losers, 
+
 function ScreenerCardComponent({ screener }: { screener: ScreenerCard }) {
   const href = `/screener/${encodeURIComponent(screener.title)}`;
 
