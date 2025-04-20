@@ -7,12 +7,12 @@ import { unstable_noStore as noStore } from "next/cache"
 
 // Mock data for earnings calendar
 const earningsData = [
-  { date: "24 Feb 2025", company: "Dev Information Technology Ltd." },
-  { date: "25 Feb 2025", company: "Tempus AI" },
-  { date: "25 Feb 2025", company: "Rain Commodities" },
-  { date: "25 Feb 2025", company: "Home Depot" },
-  { date: "27 Feb 2025", company: "Schaeffler India" },
-  { date: "28 Feb 2025", company: "Rana Sugars Ltd." },
+  { date: "21 Apr 2025", company: "Alok Industries Ltd" },
+  { date: "22 Apr 2025", company: "AU Small Finance Bank Ltd" },
+  { date: "22 Apr 2025", company: "Delta Corp Ltd" },
+  { date: "22 Apr 2025", company: "HCL Technologies Ltd" },
+  { date: "23 Apr 2025", company: "Havells India Ltd" },
+  { date: "23 Apr2025", company: "Bajaj Housing Finance Ltd" },
 ]
 
 interface NewsItem {
