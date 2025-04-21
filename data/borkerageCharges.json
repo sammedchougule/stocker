@@ -7,7 +7,7 @@
       },
       "amc": {
         "resident_first_year": "₹300 + GST",
-        "resident_subsequent_years": "₹300 + GST (Billed quarterly, BSDA applies)",
+        "resident_subsequent_years": "₹300 + GST (Billed Quarterly)",
         "nri": "₹500 + GST (Annually)"
       },
       "brokerage": {
@@ -26,7 +26,7 @@
       },
       "amc": {
         "resident_first_year": "₹0",
-        "resident_subsequent_years": "₹300 + GST (Annually, Non-BSDA, BSDA applies)",
+        "resident_subsequent_years": "₹300 + GST (Annually)",
         "nri": "Not Found"
       },
       "brokerage": {
@@ -46,7 +46,7 @@
       "amc": {
         "resident_first_year": "₹0",
         "resident_subsequent_years": "₹199 + GST (Annually)",
-        "nri": "₹199 + GST (Demat); ₹999 + GST (Trading Annually); PIS: Not Found"
+        "nri": "₹199 + GST (Demat)"
       },
       "brokerage": {
         "equity_intraday": "0.02%",
@@ -64,8 +64,8 @@
       },
       "amc": {
         "resident_first_year": "₹0",
-        "resident_subsequent_years": "₹240 + GST (Quarterly, Non-BSDA, BSDA applies)",
-        "nri": "₹450 + GST (Demat annually); PIS/Trading: Not Found"
+        "resident_subsequent_years": "₹240 + GST (Annually)",
+        "nri": "₹450 + GST (Demat annually)"
       },
       "brokerage": {
         "equity_intraday": "₹20 or 0.25% / order",
