@@ -19,14 +19,6 @@ export function Footer() {
                   href="#"
                   className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors"
                 >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors"
-                >
                   Stocks
                 </a>
               </li>
@@ -60,8 +52,8 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Contact Us</h3>
             <ul className="space-y-2 text-gray-600 dark:text-gray-300">
               <li>123 Finance Street</li>
-              <li>Market City, ST 12345</li>
-              <li>Phone: (123) 456-7890</li>
+              <li>Belgaum, Karnataka</li>
+              <li>Phone: (+91) 890 433 1718</li>
               <li>Email: info@stocker.co.in</li>
             </ul>
           </div>
