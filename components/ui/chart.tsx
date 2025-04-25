@@ -66,14 +66,12 @@ ChartTooltip.displayName = "ChartTooltip"
 
 export const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
-    indicator?: "line" | "dashed"
-    hideLabel?: boolean
-  }
->(({ className, indicator = "line", hideLabel = false, ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("", className)} {...props} />
 ))
 ChartTooltipContent.displayName = "ChartTooltipContent"
+
 
 export const ChartLegend = React.forwardRef<
   HTMLDivElement,
