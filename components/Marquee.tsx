@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useMemo } from "react"
 import Marquee from "react-fast-marquee"
-import { getStocks } from "@/lib/getStocks" // Import getStocks function
+import { getStocks } from "@/lib/getStocks"
+import type { Stock } from "@/types/Stock"
 
 const nifty50Symbols = [
   "AXISBANK",
@@ -58,11 +59,10 @@ const nifty50Symbols = [
 ]
 
 export default function StockMarquee() {
-  const [stocks, setStocks] = useState<any[]>([]) // Adjust type if needed
+  const [stocks, setStocks] = useState<Stock[]>([]) 
   const [loading, setLoading] = useState<boolean>(true)
   const [greeting, setGreeting] = useState("")
 
-  // Fetch stocks using getStocks on component mount
   useEffect(() => {
     const fetchStocks = async () => {
       setLoading(true)
