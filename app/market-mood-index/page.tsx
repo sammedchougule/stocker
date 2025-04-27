@@ -1,26 +1,19 @@
-
 import { ArrowRightIcon, InfoIcon } from "lucide-react"
+import Link from "next/link"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Gauge from "@/components/Gauge"
+import { MarketGauge } from "@/components/market-mood/market-gauge"
 import { MarketTrends } from "@/components/market-mood/market-trends"
 import { MarketMetrics } from "@/components/market-mood/market-metrics"
 import { HowItWorks } from "@/components/market-mood/how-it-works"
-import type { Stock } from "@/types/Stock" 
 
-interface MarketMoodProps {
-  stocks: Stock[]
-}
-
-
-
-export default function MarketMoodIndex({ stocks }: MarketMoodProps) {
+export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1 container mx-auto px-4 py-8 md:px-6 md:py-12">
-
         <section className="py-12 md:py-16 px-6 md:px-10 bg-gradient-to-b from-emerald-50 to-white dark:from-emerald-950/20 dark:to-background rounded-lg">
           <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_500px]">
             <div className="flex flex-col justify-center space-y-4">
@@ -39,7 +32,8 @@ export default function MarketMoodIndex({ stocks }: MarketMoodProps) {
               </div>
             </div>
             <div className="flex items-center justify-center">
-               <Gauge stocks={stocks} />
+              {/* You will add your custom gauge design in the MarketGauge component */}
+              <MarketGauge value={72} />
             </div>
           </div>
         </section>
@@ -49,7 +43,7 @@ export default function MarketMoodIndex({ stocks }: MarketMoodProps) {
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Current Market Mood</h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                The Market Mood Index is currently at <span className="font-bold text-emerald-600">50</span>, indicating{" "}
+                The Market Mood Index is currently at <span className="font-bold text-emerald-600">72</span>, indicating{" "}
                 <span className="font-bold text-emerald-600">Optimistic</span> sentiment
               </p>
             </div>
@@ -183,7 +177,28 @@ export default function MarketMoodIndex({ stocks }: MarketMoodProps) {
           </div>
         </section>
       </main>
-
+      <footer className="border-t bg-background py-6 md:py-8">
+        <div className="container mx-auto px-4 md:px-6 flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="flex items-center gap-2 font-semibold">
+            <div className="h-6 w-6 rounded-full bg-emerald-500"></div>
+            Market Mood Index
+          </div>
+          <p className="text-center text-sm text-muted-foreground md:text-left">
+            © 2025 Market Mood Index. All rights reserved.
+          </p>
+          <div className="flex gap-4">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              Terms
+            </Link>
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              Privacy
+            </Link>
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+              Contact
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
