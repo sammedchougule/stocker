@@ -1,25 +1,41 @@
 import type React from "react"
 import { useState, useEffect } from "react"
-import { useStockContext } from "@/contexts/StockContext"
+import { getStocks } from "@/lib/getStocks" // Import getStocks function
 import type { Stock } from "@/types/Stock"
 
 const StockInput: React.FC = () => {
-  const { stocks } = useStockContext()
   const [query, setQuery] = useState("")
+  const [stocks, setStocks] = useState<Stock[]>([])
   const [filteredStocks, setFilteredStocks] = useState<Stock[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    const fetchStocks = async () => {
+      setLoading(true)
+      const fetchedStocks = await getStocks()
+      setStocks(fetchedStocks)
+      setLoading(false)
+    }
+
+    fetchStocks()
+  }, [])
 
   useEffect(() => {
     if (query.length > 0) {
       const results = stocks.filter(
         (stock) =>
           stock.symbol.toLowerCase().includes(query.toLowerCase()) ||
-          stock.companyname.toLowerCase().includes(query.toLowerCase()),
+          stock.companyname.toLowerCase().includes(query.toLowerCase())
       )
       setFilteredStocks(results)
     } else {
       setFilteredStocks([])
     }
   }, [query, stocks])
+
+  if (loading) {
+    return <div>Loading stocks...</div> // Optional loading state
+  }
 
   return (
     <div className="relative">
@@ -53,7 +69,7 @@ const StockInput: React.FC = () => {
                     stock.changepct >= 0 ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300" : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300"
                   } rounded-md px-2 py-1`}
                 >
-                  {stock.changepct}%
+                  {stock.changepct}% 
                 </div>
               </div>
             </li>
@@ -61,9 +77,7 @@ const StockInput: React.FC = () => {
         </ul>
       )}
     </div>
-
   )
 }
 
 export { StockInput }
-

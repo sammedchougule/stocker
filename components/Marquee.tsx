@@ -1,10 +1,8 @@
-
-
 "use client"
 
 import { useEffect, useState, useMemo } from "react"
-import { useStockContext } from "@/contexts/StockContext"
 import Marquee from "react-fast-marquee"
+import { getStocks } from "@/lib/getStocks" // Import getStocks function
 
 const nifty50Symbols = [
   "AXISBANK",
@@ -60,10 +58,21 @@ const nifty50Symbols = [
 ]
 
 export default function StockMarquee() {
-  const { stocks, loading } = useStockContext()
+  const [stocks, setStocks] = useState<any[]>([]) // Adjust type if needed
+  const [loading, setLoading] = useState<boolean>(true)
   const [greeting, setGreeting] = useState("")
 
+  // Fetch stocks using getStocks on component mount
   useEffect(() => {
+    const fetchStocks = async () => {
+      setLoading(true)
+      const fetchedStocks = await getStocks()
+      setStocks(fetchedStocks)
+      setLoading(false)
+    }
+
+    fetchStocks()
+
     const hour = new Date().getHours()
     if (hour >= 5 && hour < 12) {
       setGreeting("Good Morning 🌞")
@@ -74,6 +83,7 @@ export default function StockMarquee() {
     }
   }, [])
 
+  // Filter stocks based on Nifty 50 symbols
   const filteredStocks = useMemo(() => {
     if (!stocks) return []
     return stocks.filter((stock) => nifty50Symbols.includes(stock.symbol))
@@ -105,4 +115,3 @@ export default function StockMarquee() {
     </div>
   )
 }
-

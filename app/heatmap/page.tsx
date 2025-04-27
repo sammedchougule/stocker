@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useStockContext } from "@/contexts/StockContext"
-import type { Stock } from "@/types/Stock"
-import { Treemap, Tooltip, ResponsiveContainer, type TooltipProps } from "recharts"
-import type { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent"
-import { StockModal } from "@/components/StockModal"
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
-import { CardContent } from "@mui/material"
-import { CustomTreemapContent } from "@/components/CustomTreemapContent"
-import CustomizedProgressBars from "@/components/CustomizedProgressBars"
+import { useEffect, useState } from "react";
+import { Stock } from "@/types/Stock";
+import { Treemap, Tooltip, ResponsiveContainer, type TooltipProps } from "recharts";
+import type { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
+import { StockModal } from "@/components/StockModal";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { CardContent } from "@mui/material";
+import { CustomTreemapContent } from "@/components/CustomTreemapContent";
+import CustomizedProgressBars from "@/components/CustomizedProgressBars";
+import { getStocks } from "@/lib/getStocks"; // Assuming getStocks is imported from a utility function.
 
 type FilterOption =
   | "Nifty FnO"
@@ -21,7 +21,7 @@ type FilterOption =
   | "Nifty FMCG"
   | "Nifty IT"
   | "Nifty Metal"
-  | "Nifty Pharma"
+  | "Nifty Pharma";
 
 const filterOptions: FilterOption[] = [
   "Nifty FnO",
@@ -34,11 +34,11 @@ const filterOptions: FilterOption[] = [
   "Nifty IT",
   "Nifty Metal",
   "Nifty Pharma",
-]
+];
 
-type SortOption = "changepct" | "marketcap" | "volumespike" | "pe" | "volume"
+type SortOption = "changepct" | "marketcap" | "volumespike" | "pe" | "volume";
 
-const sortOptions: SortOption[] = ["changepct", "marketcap", "volumespike", "pe", "volume"]
+const sortOptions: SortOption[] = ["changepct", "marketcap", "volumespike", "pe", "volume"];
 
 const sortOptionLabels = {
   pe: "PE",
@@ -46,11 +46,11 @@ const sortOptionLabels = {
   marketcap: "Market Cap",
   volumespike: "1M Volume",
   volume: "1D Volume",
-}
+};
 
 const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) => {
   if (active && payload && payload.length) {
-    const data = payload[0].payload
+    const data = payload[0].payload;
     return (
       <div className="custom-tooltip bg-white dark:bg-[#151719] p-2 border border-gray-200 rounded shadow">
         <p className="font-semibold">{data.companyname}</p>
@@ -60,63 +60,68 @@ const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) =
           {data.selectedSort === "changepct" ? "%" : ""}
         </p>
       </div>
-    )
+    );
   }
-  return null
-}
+  return null;
+};
 
 export default function Heatmap() {
-  const { stocks } = useStockContext()
-  const [heatmapData, setHeatmapData] = useState<Stock[]>([])
-  const [selectedIndex, setSelectedIndex] = useState<FilterOption>("Nifty 50")
-  const [selectedSort, setSelectedSort] = useState<SortOption>("changepct")
-  const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [heatmapData, setHeatmapData] = useState<Stock[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<FilterOption>("Nifty 50");
+  const [selectedSort, setSelectedSort] = useState<SortOption>("changepct");
+  const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    let filtered = stocks.filter((stock) => stock.type === "EQ")
+    const fetchStocks = async () => {
+      const fetchedStocks = await getStocks(); // Fetch stock data using getStocks
+      let filtered = fetchedStocks.filter((stock) => stock.type === "EQ");
 
-    if (selectedIndex === "Nifty 50") {
-      filtered = filtered.filter((stock) => stock.indices && stock.indices["Nifty 50"])
-    } else {
-      filtered = filtered.filter((stock) => stock.indices && stock.indices[selectedIndex as keyof typeof stock.indices])
-    }
+      if (selectedIndex === "Nifty 50") {
+        filtered = filtered.filter((stock) => stock.indices && stock.indices["Nifty 50"]);
+      } else {
+        filtered = filtered.filter((stock) => stock.indices && stock.indices[selectedIndex as keyof typeof stock.indices]);
+      }
 
-    if (filtered.length > 0) {
-      const sortedStocks = [...filtered].sort((a, b) => b.changepct - a.changepct)
-      setHeatmapData(sortedStocks)
-    }
-  }, [stocks, selectedIndex])
+      if (filtered.length > 0) {
+        const sortedStocks = [...filtered].sort((a, b) => b.changepct - a.changepct);
+        setHeatmapData(sortedStocks);
+      }
+    };
+
+    fetchStocks(); // Fetch data on component mount
+
+  }, [selectedIndex]);
 
   const getColor = (value: number, maxChange = 3) => {
-    const clampedChange = Math.max(-maxChange, Math.min(value, maxChange))
-    const normalizedChange = clampedChange / maxChange
+    const clampedChange = Math.max(-maxChange, Math.min(value, maxChange));
+    const normalizedChange = clampedChange / maxChange;
 
-    const green = [34, 197, 94] // Emerald Green
-    const yellow = [253, 224, 71] // Canary Yellow
-    const red = [239, 68, 68] // Crimson Red
+    const green = [34, 197, 94]; // Emerald Green
+    const yellow = [253, 224, 71]; // Canary Yellow
+    const red = [239, 68, 68]; // Crimson Red
 
-    let startColor, endColor, t
+    let startColor, endColor, t;
 
     if (normalizedChange > 0) {
-      startColor = yellow
-      endColor = green
-      t = Math.sqrt(normalizedChange)
+      startColor = yellow;
+      endColor = green;
+      t = Math.sqrt(normalizedChange);
     } else {
-      startColor = yellow
-      endColor = red
-      t = Math.sqrt(Math.abs(normalizedChange))
+      startColor = yellow;
+      endColor = red;
+      t = Math.sqrt(Math.abs(normalizedChange));
     }
 
-    const interpolatedColor = startColor.map((start, i) => Math.round(start + (endColor[i] - start) * t))
+    const interpolatedColor = startColor.map((start, i) => Math.round(start + (endColor[i] - start) * t));
 
-    return `rgb(${interpolatedColor[0]}, ${interpolatedColor[1]}, ${interpolatedColor[2]})`
-  }
+    return `rgb(${interpolatedColor[0]}, ${interpolatedColor[1]}, ${interpolatedColor[2]})`;
+  };
 
   const handleStockClick = (stock: Stock) => {
-    setSelectedStock(stock)
-    setIsModalOpen(true)
-  }
+    setSelectedStock(stock);
+    setIsModalOpen(true);
+  };
 
   const formattedData = heatmapData.map((stock) => ({
     name: stock.symbol,
@@ -128,19 +133,18 @@ export default function Heatmap() {
     image: `/images/${stock.symbol}.svg`,
     companyname: stock.companyname,
     selectedSort: selectedSort,
-  }))
+  }));
 
-  if (stocks.length === 0) {
+  if (heatmapData.length === 0) {
     return (
       <div className="flex justify-center items-center h-[700px]">
         <CustomizedProgressBars />
       </div>
-    )
+    );
   }
 
   return (
     <div className="container mx-auto bg-white dark:bg-[#151719] mt-0 ">
-      
       <div className="flex gap-2 py-4">
         <div className="relative">
           <Select value={selectedIndex} onValueChange={(value) => setSelectedIndex(value as FilterOption)}>
@@ -177,39 +181,38 @@ export default function Heatmap() {
         </div>
       </div>
 
-        <CardContent>
-            <ResponsiveContainer width="100%" height={700}>
-                <Treemap
-                    data={formattedData}
-                    dataKey="value"
-                    isAnimationActive={true}
-                    animationDuration={300}
-                    animationEasing="ease-out"
-                    content={
-                        <CustomTreemapContent
-                        x={0}
-                        y={0}
-                        width={0}
-                        height={0}
-                        name=""
-                        color=""
-                        image=""
-                        changepct={0}
-                        price={0}
-                        onClick={(name) => {
-                            const stock = heatmapData.find((s) => s.symbol === name)
-                            if (stock) handleStockClick(stock)
-                        }}
-                        />
-                    }
-                    >
-                    <Tooltip content={<CustomTooltip />} />
-                </Treemap>
-            </ResponsiveContainer>
-        </CardContent>
+      <CardContent>
+        <ResponsiveContainer width="100%" height={700}>
+          <Treemap
+            data={formattedData}
+            dataKey="value"
+            isAnimationActive={true}
+            animationDuration={300}
+            animationEasing="ease-out"
+            content={
+              <CustomTreemapContent
+                x={0}
+                y={0}
+                width={0}
+                height={0}
+                name=""
+                color=""
+                image=""
+                changepct={0}
+                price={0}
+                onClick={(name) => {
+                  const stock = heatmapData.find((s) => s.symbol === name);
+                  if (stock) handleStockClick(stock);
+                }}
+              />
+            }
+          >
+            <Tooltip content={<CustomTooltip />} />
+          </Treemap>
+        </ResponsiveContainer>
+      </CardContent>
 
       <StockModal stock={selectedStock} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
-  )
+  );
 }
-

@@ -2,7 +2,7 @@
 "use client"
 
 import { useMemo, useState, useRef, useEffect } from "react"
-import { useStockContext } from "@/contexts/StockContext"
+import { getStocks } from "@/lib/getStocks" 
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, ReferenceLine, Tooltip, Cell, ResponsiveContainer } from "recharts"
 import { ChartContainer } from "@/components/ui/chart"
@@ -38,12 +38,21 @@ interface SortState {
 }
 
 export default function Sectors() {
-  const { stocks } = useStockContext()
+  const [stocks, setStocks] = useState<Stock[]>([])
   const [selectedSector, setSelectedSector] = useState<string | null>(null)
   const [sortState, setSortState] = useState<SortState>({})
   const sectorRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Fetch stocks on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedStocks = await getStocks()
+      setStocks(fetchedStocks)
+    }
+    fetchData()
+  }, [])
 
   // Prepare sector data
   const sectorData = useMemo(() => {

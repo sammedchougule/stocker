@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Stock } from "@/types/Stock";
-import { useStockContext } from "@/contexts/StockContext";
+import { getStocks } from "@/lib/getStocks"; // Assuming getStocks is a function to fetch stock data
 import { StockChart } from "@/components/StockChart";
 import StockCard from "@/components/StockCard";
 import { format } from "date-fns";
@@ -21,27 +21,41 @@ import Image from "next/image";
 import { Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-
 export default function StockDetailPage() {
   const params = useParams();
   const symbol = params.symbol as string;
-  const { stocks } = useStockContext();
+
+  const [stocks, setStocks] = useState<Stock[]>([]);
   const [stockData, setStockData] = useState<Stock | null>(null);
   const [similarStocks, setSimilarStocks] = useState<Stock[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch all stocks on component mount
   useEffect(() => {
-    if (stocks?.length) {
+    const fetchStocks = async () => {
+      setIsLoading(true);
+      const stocksData = await getStocks(); // Fetch the stock data
+      setStocks(stocksData);
+      setIsLoading(false);
+    };
+
+    fetchStocks();
+  }, []);
+
+  // Find the stock data and similar stocks once stocks are fetched
+  useEffect(() => {
+    if (stocks.length > 0) {
       const stock = stocks.find((s) => s.symbol === symbol);
       if (stock) {
         setStockData(stock);
         setSimilarStocks(
-          stocks.filter(s => s.sector === stock.sector && s.symbol !== stock.symbol).slice(0, 6)
+          stocks.filter((s) => s.sector === stock.sector && s.symbol !== stock.symbol).slice(0, 6)
         );
       }
     }
   }, [stocks, symbol]);
 
-  if (!stockData) return <div className="container mx-auto"><CustomizedProgressBars /></div>;
+  if (isLoading || !stockData) return <div className="container mx-auto"><CustomizedProgressBars /></div>;
 
   return (
     <div className="container mx-auto space-y-4 mt-4 sm:mt-2">
@@ -89,8 +103,6 @@ export default function StockDetailPage() {
         </CardContent>
       </Card>
 
-
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Main Content */}
         <Card className="lg:col-span-2 bg-white dark:bg-[#151719]">
@@ -113,7 +125,7 @@ export default function StockDetailPage() {
         <Card className="bg-white dark:bg-[#151719]">
           <CardContent>
             <div className="divide-y border-b">
-              {[
+              {[ 
                 ['Previous Close', stockData.closeyest],
                 ['Day Range', `${stockData.low} - ${stockData.high}`],
                 ['Year Range', `${stockData.low52} - ${stockData.high52}`],
@@ -127,7 +139,6 @@ export default function StockDetailPage() {
                 <div key={label} className="flex justify-between p-4">
                   <span className="text-gray-600">{label}</span>
                   <span className="font-medium">
-                    {/* Check if value is a number before formatting */}
                     {typeof value === 'number' ? `₹${Number(value).toFixed(2)}` : value}
                   </span>
                 </div>
@@ -148,13 +159,12 @@ export default function StockDetailPage() {
               {similarStocks.length ? similarStocks.map((stock) => (
                 <div className="shrink-0" key={stock.symbol}>
                   <StockCard 
-                  key={stock.symbol} 
-                  stock={stock} 
-                  highLowFilterOn={false} 
-                  spikeFilterOn={true} 
-                  showChangePctOnly={true} 
-                  onClick={() => window.location.href = `/stockdetail/${stock.symbol}`} 
-                />
+                    stock={stock} 
+                    highLowFilterOn={false} 
+                    spikeFilterOn={true} 
+                    showChangePctOnly={true} 
+                    onClick={() => window.location.href = `/stockdetail/${stock.symbol}`} 
+                  />
                 </div>
               )) : Array(4).fill(<Skeleton className="h-24  w-[150px]" />)}
             </div>
@@ -176,4 +186,3 @@ export default function StockDetailPage() {
     </div>
   );
 }
-

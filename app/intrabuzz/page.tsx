@@ -1,9 +1,8 @@
 
 "use client"
 
-
 import { useEffect, useState, useMemo, Suspense } from "react"
-import { useStockContext } from "@/contexts/StockContext"
+import { getStocks } from "@/lib/getStocks"
 import type { Stock } from "@/types/Stock"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowUp, ArrowDown, TableIcon, LayoutGrid, Flame, Percent } from "lucide-react"
@@ -53,8 +52,10 @@ type TableSortColumn =
 type TableSortDirection = "asc" | "desc"
 
 function IntrabuzzContent() {
-  const { stocks, isLoading } = useStockContext()
-  const searchParams = useSearchParams()
+   // Fetching stock data using the getStocks function
+   const [stocks, setStocks] = useState<Stock[]>([])
+   const [isLoading, setIsLoading] = useState(true)
+   const searchParams = useSearchParams()
 
   const [sortBy, setSortBy] = useState<SortOption>(() => {
     if (typeof window !== "undefined") {
@@ -79,6 +80,18 @@ function IntrabuzzContent() {
   const [tableSortDirection, setTableSortDirection] = useState<TableSortDirection>("asc")
   const [spikeFilterOn, setSpikeFilterOn] = useState(false)
   const [highLowFilterOn, setHighLowFilterOn] = useState(false)
+
+  // Fetch stocks on component mount
+  useEffect(() => {
+    const fetchStocks = async () => {
+      setIsLoading(true)
+      const stocksData = await getStocks()  // Assuming getStocks is a function that fetches stock data
+      setStocks(stocksData)
+      setIsLoading(false)
+    }
+    fetchStocks()
+  }, [])
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {
