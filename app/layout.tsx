@@ -12,8 +12,6 @@ import { getStocks } from '@/lib/getStocks' // Import the getStocks function
 const inter = Inter({ subsets: ['latin'] })
 
 export default async function RootLayout({ children }: {children: React.ReactNode}) {
-  // Fetch the stocks data using getStocks function
-  const stocks = await getStocks()
 
   return (
     <html lang="en">
