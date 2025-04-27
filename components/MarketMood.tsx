@@ -251,7 +251,7 @@ export default function MarketMood({ stocks }: MarketMoodProps) {
       <CardContent className="pt-6 px-2 sm:px-4">
         <div className="text-center">
           <h3 className="text-2xl font-bold dark:text-white">Market Mood Index</h3>
-          <p className="text-md text-gray-500 dark:text-gray-400">Know what's the sentiment on the street today</p>
+          <p className="text-md text-gray-500 dark:text-gray-400">Know what&apos;s the sentiment on the street today</p>
 
           {/* Use the Gauge component */}
           <div className="flex justify-between text-sm font-medium my-6 px-4">
