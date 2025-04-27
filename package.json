@@ -2,11 +2,13 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+     "insert-stocks": "node --loader ts-node/esm app/insertStocks.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -14,6 +16,7 @@
     "@google/generative-ai": "^0.24.0",
     "@headlessui/react": "^2.2.0",
     "@mui/material": "^6.3.1",
+    "@prisma/client": "^6.6.0",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-label": "^2.1.1",
@@ -36,7 +39,7 @@
     "@visx/scale": "^3.12.0",
     "@visx/shape": "^3.12.0",
     "@visx/tooltip": "^3.12.0",
-    "axios": "^1.8.4",
+    "axios": "^1.9.0",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.1",
     "d3": "^7.9.0",
@@ -77,7 +80,9 @@
     "eslint-config-next": "15.0.4",
     "eslint-plugin-react": "^7.37.3",
     "postcss": "^8.4.49",
+    "prisma": "^6.6.0",
     "tailwindcss": "^3.4.16",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }

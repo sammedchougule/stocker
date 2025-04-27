@@ -1,17 +1,26 @@
+
 import { ArrowRightIcon, InfoIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarketGauge } from "@/components/market-mood/market-gauge"
+import Gauge from "@/components/Gauge"
 import { MarketTrends } from "@/components/market-mood/market-trends"
 import { MarketMetrics } from "@/components/market-mood/market-metrics"
 import { HowItWorks } from "@/components/market-mood/how-it-works"
+import type { Stock } from "@/types/Stock" 
 
-export default function Home() {
+interface MarketMoodProps {
+  stocks: Stock[]
+}
+
+
+
+export default function MarketMoodIndex({ stocks }: MarketMoodProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1 container mx-auto px-4 py-8 md:px-6 md:py-12">
+
         <section className="py-12 md:py-16 px-6 md:px-10 bg-gradient-to-b from-emerald-50 to-white dark:from-emerald-950/20 dark:to-background rounded-lg">
           <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_500px]">
             <div className="flex flex-col justify-center space-y-4">
@@ -30,8 +39,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex items-center justify-center">
-              {/* You will add your custom gauge design in the MarketGauge component */}
-              <MarketGauge value={72} />
+               <Gauge stocks={stocks} />
             </div>
           </div>
         </section>
@@ -41,7 +49,7 @@ export default function Home() {
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Current Market Mood</h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                The Market Mood Index is currently at <span className="font-bold text-emerald-600">72</span>, indicating{" "}
+                The Market Mood Index is currently at <span className="font-bold text-emerald-600">50</span>, indicating{" "}
                 <span className="font-bold text-emerald-600">Optimistic</span> sentiment
               </p>
             </div>
