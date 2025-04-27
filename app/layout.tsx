@@ -7,11 +7,11 @@ import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from "@/components/theme-provider"
 import PageLayout from '@/components/PageLayout'
 import MetadataManager from '@/components/MetadataManager'
-import { getStocks } from '@/lib/getStocks' // Import the getStocks function
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default async function RootLayout({ children }: {children: React.ReactNode}) {
+  
 
   return (
     <html lang="en">
