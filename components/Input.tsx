@@ -1,20 +1,18 @@
 import type React from "react"
 import { useState, useEffect } from "react"
-import { getStocks } from "@/lib/getStocks" // Import getStocks function
+import { getStocks } from "@/lib/getStocks"
 import type { Stock } from "@/types/Stock"
 
 const StockInput: React.FC = () => {
   const [query, setQuery] = useState("")
   const [stocks, setStocks] = useState<Stock[]>([])
   const [filteredStocks, setFilteredStocks] = useState<Stock[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const fetchStocks = async () => {
-      setLoading(true)
       const fetchedStocks = await getStocks()
       setStocks(fetchedStocks)
-      setLoading(false)
+     
     }
 
     fetchStocks()
@@ -33,9 +31,6 @@ const StockInput: React.FC = () => {
     }
   }, [query, stocks])
 
-  if (loading) {
-    return <div>Loading stocks...</div> // Optional loading state
-  }
 
   return (
     <div className="relative">
