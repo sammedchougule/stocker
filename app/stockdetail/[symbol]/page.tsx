@@ -128,7 +128,7 @@ export default function StockDetailPage() {
               {[ 
                 ['Previous Close', stockData.closeyest],
                 ['Day Range', `${stockData.low} - ${stockData.high}`],
-                ['Year Range', `${stockData.low52} - ${stockData.high52}`],
+                ['Year Range', `${stockData.lowYear} - ${stockData.highYear}`],
                 ['Market Cap', `${Number(stockData.marketcap).toFixed(2)}T INR`],
                 ['Volume', `${(Number(stockData.volume) / 1_000_000).toFixed(2)}M`],
                 ['Avg. Volume', `${(Number(stockData.volumeavg) / 1_000_000).toFixed(2)}M`],
