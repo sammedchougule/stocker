@@ -70,7 +70,6 @@ export default function StockMarquee() {
       setStocks(fetchedStocks)
       setLoading(false)
     }
-
     fetchStocks()
 
     const hour = new Date().getHours()
@@ -101,7 +100,7 @@ export default function StockMarquee() {
     <div className="fixed flex items-center justify-center top-0 left-0 right-0 z-50 h-8 overflow-hidden backdrop-blur-sm bg-white/50 dark:bg-black border-b border-gray-200 dark:border-gray-700">
       <Marquee speed={80} gradient={false} pauseOnHover={true}>
         {filteredStocks.map((stock) => (
-          <span key={stock.symbol} className="inline-block mx-1">
+          <span key={stock.symbol} className="inline-block mx-4">
             <span className="mr-2 text-md font-medium text-gray-900 dark:text-gray-100">{stock.symbol}</span>
             <span className="mr-2 text-md text-gray-900 dark:text-gray-100">₹{Number(stock.price).toFixed(2)}</span>
             <span
