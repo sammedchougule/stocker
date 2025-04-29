@@ -35,14 +35,14 @@ export default function ScreenerDetail() {
   }, []);
 
   const filteredStocks = stocks.filter((stock) =>
-    showHigh ? stock.near52WHigh === "Yes" : stock.near52WLow === "Yes"
+    showHigh ? stock.nearYearHigh === "Yes" : stock.nearYearLow === "Yes"
   );
 
   const calculateNearPercentage = (stock: Stock): number => {
-    const { high52, low52, price } = stock;
+    const { highYear, lowYear, price } = stock;
     return showHigh
-      ? ((high52 - price) / high52) * 100
-      : ((price - low52) / low52) * 100;
+      ? ((highYear - price) / highYear) * 100
+      : ((price - lowYear) / lowYear) * 100;
   };
 
 
@@ -70,8 +70,8 @@ export default function ScreenerDetail() {
       const numericFields: (keyof Stock | "nearPct")[] = [
         "price",
         "closeyest",
-        "high52",
-        "low52",
+        "highYear",
+        "lowYear",
       ];
   
       const isNumeric = numericFields.includes(sortColumn as "nearPct" | keyof Stock);
@@ -242,9 +242,9 @@ export default function ScreenerDetail() {
                     <TableCell className="p-4 text-right">₹{Number(stock.closeyest).toFixed(2)}</TableCell>
                     <TableCell className="p-4 text-right">₹{Number(stock.price).toFixed(2)}</TableCell>
                     {showHigh ? (
-                      <TableCell className="p-4 text-right">₹{Number(stock.high52).toFixed(2)}</TableCell>
+                      <TableCell className="p-4 text-right">₹{Number(stock.highYear).toFixed(2)}</TableCell>
                     ) : (
-                      <TableCell className="p-4 text-right">₹{Number(stock.low52).toFixed(2)}</TableCell>
+                      <TableCell className="p-4 text-right">₹{Number(stock.lowYear).toFixed(2)}</TableCell>
                     )}
                     <TableCell className="p-4 text-right">
                       {Number(calculateNearPercentage(stock)).toFixed(2)}%
