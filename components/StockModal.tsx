@@ -1,14 +1,11 @@
 
-
 "use client"
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { ArrowUpIcon, ArrowDownIcon, SquareArrowOutUpRight, Scan } from "lucide-react"
+import { ArrowUpIcon, ArrowDownIcon, SquareArrowOutUpRight, ChartSpline } from "lucide-react"
 import Link from "next/link"
 import type { Stock } from "@/types/Stock"
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
-import { format } from "date-fns"
 
 interface StockModalProps {
   stock: Stock | null
@@ -19,271 +16,115 @@ interface StockModalProps {
 export function StockModal({ stock, isOpen, onClose }: StockModalProps) {
   if (!stock) return null
 
-  // Get the 5D data
-  const getFilteredData = () => {
-    const chartData = Object.entries(stock.closings)
-      .map(([date, price]) => ({
-        date,
-        closingPrice: price,
-      }))
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  const sectorEmojiMap: Record<string, string> = {
+    Materials: "🪨",
+    Industrials: "🏭",
+    Healthcare: "🩺",
+    Financials: "💰",
+    "Consumer Discretionary": "🛍️",
+    Utilities: "💡",
+    Energy: "🔥",
+    "Consumer Staples": "🍽️",
+    Technology: "💻",
+    "Communication Services": "📡",
+    "Real Estate": "🏠",
+  };
 
-    // Get the last 5 days data
-    return chartData.slice(-5)
-  }
-
-  const filteredData = getFilteredData()
-
-  // Only show the chart if there's data
-  if (filteredData.length === 0)
-    return (
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="bg-white dark:bg-gray-800 dark:text-white max-w-md rounded-lg shadow-lg w-[calc(100%-32px)] sm:w-full mx-auto">
-          <DialogHeader className="flex flex-col">
-            <div className="flex justify-between items-start w-full">
-              <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                {stock.companyname}
-              </DialogTitle>
-            </div>
-            <div className="flex items-center justify-between mt-2 border-b dark:border-gray-700">
-              {/* Top Section */}
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{stock.symbol}</span>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {stock.symbol.startsWith("NIFTY") ? "is a Index" : `is in ${stock.sector}`}
-                </span>
-              </div>
-
-              {/* Right Section */}
-              <div className="flex items-center gap-2">
-                <Link
-                  href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.viewchart}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    size="icon"
-                    className="h-10 w-10 bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 group"
-                  >
-                    <Scan className="h-6 w-6 text-gray-700 dark:text-gray-300 group-hover:text-blue-600" />
-                  </Button>
-                </Link>
-
-                <Link href={`/StockDetail/${stock.symbol}`}>
-                  <Button
-                    size="icon"
-                    className="h-10 w-10 bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 group"
-                  >
-                    <SquareArrowOutUpRight className="h-6 w-6 text-gray-700 dark:text-gray-300 group-hover:text-blue-600" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </DialogHeader>
-
-          {/* Modal Body with No Chart */}
-          <div className="space-y-4 py-4">
-            {/* Price and Changes */}
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">₹{stock.price}</span>
-              <div className={`flex items-center ${stock.changepct >= 0 ? "text-green-500" : "text-red-500"}`}>
-                {stock.changepct >= 0 ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
-                <span className="text-lg">{stock.changepct}%</span>
-              </div>
-            </div>
-
-            {/* Key Stats */}
-            <div className="grid grid-cols-2 gap-4 py-2 border-b dark:border-gray-700">
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Day Range</p>
-                <p className="text-sm text-gray-900 dark:text-gray-100">
-                  ₹{stock.low} - ₹{stock.high}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">52W Range</p>
-                <p className="text-sm text-gray-900 dark:text-gray-100">
-                  ₹{stock.low52} - ₹{stock.high52}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Market Cap</p>
-                <p className="text-sm text-gray-900 dark:text-gray-100">
-                  ₹{stock.marketcap ? `${stock.marketcap} Cr` : "N/A"}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">P/E Ratio</p>
-                <p className="text-sm text-gray-900 dark:text-gray-100">{stock.pe !== null ? stock.pe : "N/A"}</p>
-              </div>
-            </div>
-
-            {/* Company Info */}
-            <div>
-              <p className="text-sm mb-1 text-gray-600 dark:text-gray-400">About</p>
-              <p className="text-sm text-gray-900 dark:text-gray-100">
-                {stock.companyname} is a {stock.industry || "N/A"} company listed on {stock.exchange}, operating in the{" "}
-                {stock.sector || "N/A"} sector.
-              </p>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    )
-
-  // Calculate Y-axis domain for chart
-  const yAxisDomain = [
-    Math.min(...filteredData.map((item) => item.closingPrice)) * 0.9,
-    Math.max(...filteredData.map((item) => item.closingPrice)) * 1.1,
-  ]
-
-  const chartColor =
-    filteredData[filteredData.length - 1].closingPrice >= filteredData[0].closingPrice ? "#22c55e" : "#ef4444" // green-500 : red-500
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white dark:bg-gray-800 dark:text-white max-w-md rounded-lg shadow-lg w-[calc(100%-32px)] sm:w-full mx-auto">
-        <DialogHeader className="flex flex-col">
-          <div className="flex justify-between items-start w-full">
-            <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+      <DialogContent className="bg-white dark:bg-[#151719] text-black dark:text-white max-w-md rounded-xl shadow-xl w-[calc(100%-32px)] sm:w-full mx-auto p-4">
+        
+        {/* Header */}
+        <DialogHeader className="flex flex-col space-y-2 pb-2 border-b dark:border-gray-700">
+          <div className="flex justify-between items-start">
+            <DialogTitle className="text-lg font-semibold">
               {stock.companyname}
             </DialogTitle>
           </div>
-          <div className="flex items-center justify-between border-b dark:border-gray-700">
-            {/* Top Section */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{stock.symbol}</span>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {stock.symbol.startsWith("NIFTY") ? "is a Index" : `is in ${stock.sector}`}
-              </span>
-            </div>
-
-            {/* Right Section */}
-            <div className="flex items-center gap-2">
-              <Link
-                href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="icon"
-                  className="h-10 w-10 bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 group"
-                >
-                  <Scan className="h-6 w-6 text-gray-700 dark:text-gray-300 group-hover:text-blue-600" />
-                </Button>
-              </Link>
-
-              <Link href={`/stockdetail/${stock.symbol}`}>
-                <Button
-                  size="icon"
-                  className="h-10 w-10 bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 group"
-                >
-                  <SquareArrowOutUpRight className="h-6 w-6 text-gray-700 dark:text-gray-300 group-hover:text-blue-600" />
-                </Button>
-              </Link>
-            </div>
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            {stock.symbol.startsWith("NIFTY") ? (
+              <span>Index</span>
+            ) : (
+              <>
+                <span>{stock.sector ? sectorEmojiMap[stock.sector] || "🏢" : "🏢"}</span>
+                <span>{stock.sector}</span>
+              </>
+            )}
+            <span>→</span>
+            <span>{stock.industry}</span>
           </div>
         </DialogHeader>
 
-        {/* Modal Body with Chart */}
-        <div className="">
-          {/* Price and Changes */}
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">₹{stock.price}</span>
-            <div className={`flex items-center ${stock.changepct >= 0 ? "text-green-500" : "text-red-500"}`}>
+        {/* Body */}
+        <div className="py-3 space-y-4">
+          {/* Price + Change */}
+          <div className="flex items-baseline gap-3">
+            <span className="text-2xl font-bold">₹{stock.price}</span>
+            <div className={`flex items-center text-sm ${stock.changepct >= 0 ? "text-green-600" : "text-red-600"}`}>
               {stock.changepct >= 0 ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
-              <span className="text-lg">{stock.changepct}%</span>
+              <span className="ml-1">{stock.changepct}%</span>
             </div>
-          </div>
-
-          {/* StockChart Component */}
-          <div className="w-full h-[180px] sm:h-[200px] -mt-10 mb-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={filteredData}>
-                {/* X-axis removed */}
-                <XAxis
-                  dataKey="date"
-                  tickFormatter={(date) => format(new Date(date), "MMM d")}
-                  hide={true} // Hides the X-axis labels
-                />
-                {/* Y-axis removed */}
-                <YAxis
-                  domain={yAxisDomain}
-                  hide={true} // Hides the Y-axis labels
-                />
-                <Tooltip
-                  labelFormatter={(date) => {
-                    const dateObj = new Date(date)
-                    const year = dateObj.getFullYear()
-                    const currentYear = new Date().getFullYear()
-                    return year !== currentYear ? format(dateObj, "MMM d, yy") : format(dateObj, "MMM d")
-                  }}
-                  formatter={(value) => [`₹${Number(value).toFixed(2)}`, "Price"]}
-                  contentStyle={{
-                    backgroundColor: "rgba(255, 255, 255, 0.8)",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                  }}
-                  itemStyle={{ color: "#333" }}
-                  labelStyle={{ color: "#666" }}
-                />
-                <defs>
-                  <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={chartColor} stopOpacity={25} />
-                    <stop offset="100%" stopColor={chartColor} stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <Area
-                  type="monotone"
-                  dataKey="closingPrice"
-                  stroke={chartColor}
-                  fill="url(#colorGradient)"
-                  strokeWidth={2}
-                  isAnimationActive={true} // Enable animation
-                  animationDuration={1000} // Animation duration in milliseconds
-                  animationEasing="ease-out" // Smooth easing
-                />
-              </AreaChart>
-            </ResponsiveContainer>
           </div>
 
           {/* Key Stats */}
-          <div className="grid grid-cols-2 gap-4 py-2 border-b dark:border-gray-700">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm border-t pt-2 border-b pb-2 dark:border-gray-700">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Day Range</p>
-              <p className="text-sm text-gray-900 dark:text-gray-100">
-                ₹{stock.low} - ₹{stock.high}
-              </p>
+              <p className="text-gray-500">Day Range</p>
+              <p>₹{stock.low} - ₹{stock.high}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">52W Range</p>
-              <p className="text-sm text-gray-900 dark:text-gray-100">
-                ₹{stock.low52} - ₹{stock.high52}
-              </p>
+              <p className="text-gray-500">52W Range</p>
+              <p>₹{stock.lowYear} - ₹{stock.highYear}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Market Cap</p>
-              <p className="text-sm text-gray-900 dark:text-gray-100">
-                ₹{stock.marketcap ? `${stock.marketcap} Cr` : "N/A"}
-              </p>
+              <p className="text-gray-500">Market Cap</p>
+              <p>₹{stock.marketcap ? `${stock.marketcap} Cr` : "N/A"}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">P/E Ratio</p>
-              <p className="text-sm text-gray-900 dark:text-gray-100">{stock.pe !== null ? stock.pe : "N/A"}</p>
+              <p className="text-gray-500">P/E Ratio</p>
+              <p>{stock.pe ?? "N/A"}</p>
             </div>
           </div>
 
-          {/* Company Info */}
+          {/* About Company */}
           <div>
-            <p className="text-sm mb-1 text-gray-600 dark:text-gray-400">About</p>
-            <p className="text-sm text-gray-900 dark:text-gray-100">
+            <p className="text-sm text-gray-500 mb-1">About</p>
+            <p className="text-sm">
               {stock.companyname} is a {stock.industry || "N/A"} company listed on {stock.exchange}, operating in the{" "}
               {stock.sector || "N/A"} sector.
             </p>
           </div>
         </div>
+
+        {/* Footer Buttons */}
+        <DialogFooter className="pt-4 border-t dark:border-gray-700">
+          <div className="grid grid-cols-2 gap-2 w-full">
+            <Link
+              href={`https://in.tradingview.com/chart/0Xx4mWye/?symbol=NSE%3A${stock.symbol}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button className="w-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 hover:shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-shadow">
+                <ChartSpline className="mr-2 h-4 w-4" />
+                View Chart
+              </Button>
+            </Link>
+
+            <Link href={`/stockdetail/${stock.symbol}`}>
+              <Button className="w-full bg-gray-800 text-white hover:bg-[#151719] hover:shadow-md transition-shadow">
+                <SquareArrowOutUpRight className="mr-2 h-4 w-4" />
+                View Detail
+              </Button>
+            </Link>
+          </div>
+        </DialogFooter>
+
+
+
       </DialogContent>
     </Dialog>
+
+
   )
 }
-
