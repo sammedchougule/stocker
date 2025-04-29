@@ -21,18 +21,18 @@ const StockCard: React.FC<StockCardProps> = ({
   highLowFilterOn,
   showChangePctOnly = false,
 }) => {
-  // Don't render the card if highLowFilterOn is true and all HL values are "-"
+  // Don't render the card if highLowFilterOn is true and all HL values are "..."
   if (
     highLowFilterOn &&
-    (!stock.today_hlCross || stock.today_hlCross === "-") &&
-    (!stock.month_hlCross || stock.month_hlCross === "-") &&
-    (!stock.year_hlCross || stock.year_hlCross === "-")
+    (!stock.todayHLCross || stock.todayHLCross === "...") &&
+    (!stock.monthHLCross || stock.monthHLCross === "...") &&
+    (!stock.yearHLCross || stock.yearHLCross === "...")
   ) {
     return null
   }
 
   const renderHLValue = (value: string | null | undefined, type: string) => {
-    if (!value || value === "-") return null
+    if (!value || value === "...") return null
     const isHigh = value.includes("H")
     return (
       <div
@@ -49,9 +49,9 @@ const StockCard: React.FC<StockCardProps> = ({
 
   const renderHLValues = () => {
     const hlValues = [
-      renderHLValue(stock.today_hlCross, "today"),
-      renderHLValue(stock.month_hlCross, "month"),
-      renderHLValue(stock.year_hlCross, "year"),
+      renderHLValue(stock.todayHLCross, "today"),
+      renderHLValue(stock.monthHLCross, "month"),
+      renderHLValue(stock.yearHLCross, "year"),
     ].filter(Boolean)
 
     return <div className="flex flex-col space-y-1">{hlValues}</div>

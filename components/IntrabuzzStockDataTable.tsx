@@ -29,9 +29,9 @@ type SortColumn =
   | "change"
   | "changepct"
   | "volumespike"
-  | "today_hlCross"
-  | "month_hlCross"
-  | "year_hlCross"
+  | "todayHLCross"
+  | "monthHLCross"
+  | "yearHLCross"
 type SortDirection = "asc" | "desc"
 
 const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
@@ -51,7 +51,7 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
       .filter((stock) => {
         if (highLowFilterOn) {
           // Only include stocks that have at least one non-"-" HL Cross value
-          const hasValidHLCross = [stock.today_hlCross, stock.month_hlCross, stock.year_hlCross].some(
+          const hasValidHLCross = [stock.todayHLCross, stock.monthHLCross, stock.yearHLCross].some(
             (value) => value && value !== "-",
           )
           return hasValidHLCross
@@ -81,9 +81,9 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
           bValue = parseCurrency(bValue?.toString() ?? null)
         } else if (
           sortColumn === "changepct" ||
-          sortColumn === "today_hlCross" ||
-          sortColumn === "month_hlCross" ||
-          sortColumn === "year_hlCross"
+          sortColumn === "todayHLCross" ||
+          sortColumn === "monthHLCross" ||
+          sortColumn === "yearHLCross"
         ) {
           aValue = parsePercentage(aValue?.toString() ?? null)
           bValue = parsePercentage(bValue?.toString() ?? null)
@@ -201,29 +201,29 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                 <>
                   <TableHead
                     className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
-                    onClick={() => onSort("today_hlCross")}
+                    onClick={() => onSort("todayHLCross")}
                   >
                     <div className="flex items-center justify-end gap-2">
                       <span>Today HL Cross</span>
-                      {renderSortIcon("today_hlCross")}
+                      {renderSortIcon("todayHLCross")}
                     </div>
                   </TableHead>
                   <TableHead
                     className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
-                    onClick={() => onSort("month_hlCross")}
+                    onClick={() => onSort("monthHLCross")}
                   >
                     <div className="flex items-center justify-end gap-2">
                       <span>Month HL Cross</span>
-                      {renderSortIcon("month_hlCross")}
+                      {renderSortIcon("monthHLCross")}
                     </div>
                   </TableHead>
                   <TableHead
                     className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
-                    onClick={() => onSort("year_hlCross")}
+                    onClick={() => onSort("yearHLCross")}
                   >
                     <div className="flex items-center justify-end gap-2">
                       <span>Year HL Cross</span>
-                      {renderSortIcon("year_hlCross")}
+                      {renderSortIcon("yearHLCross")}
                     </div>
                   </TableHead>
                 </>
@@ -313,9 +313,9 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                 )}
                 {highLowFilterOn && (
                   <>
-                    <TableCell className="p-2 border-t text-right">{renderHLCrossValue(stock.today_hlCross ?? undefined)}</TableCell>
-                    <TableCell className="p-2 border-t text-right">{renderHLCrossValue(stock.month_hlCross ?? undefined)}</TableCell>
-                    <TableCell className="p-2 border-t text-right">{renderHLCrossValue(stock.year_hlCross ?? undefined)}</TableCell>
+                    <TableCell className="p-2 border-t text-right">{renderHLCrossValue(stock.todayHLCross ?? undefined)}</TableCell>
+                    <TableCell className="p-2 border-t text-right">{renderHLCrossValue(stock.monthHLCross ?? undefined)}</TableCell>
+                    <TableCell className="p-2 border-t text-right">{renderHLCrossValue(stock.yearHLCross ?? undefined)}</TableCell>
                   </>
                 )}
               </TableRow>

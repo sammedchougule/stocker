@@ -18,8 +18,8 @@ type SortOption =
   | "changepct_asc"
   | "volumespike_desc"
   | "volumespike_asc"
-  | "today_hlCross_desc"
-  | "today_hlCross_asc"
+  | "todayHLCross_desc"
+  | "todayHLCross_asc"
 
 type FilterOption =
   | "all"
@@ -46,9 +46,9 @@ type TableSortColumn =
   | "change"
   | "changepct"
   | "volumespike"
-  | "today_hlCross"
-  | "month_hlCross"
-  | "year_hlCross"
+  | "todayHLCross"
+  | "monthHLCross"
+  | "yearHLCross"
 type TableSortDirection = "asc" | "desc"
 
 function IntrabuzzContent() {
@@ -115,7 +115,7 @@ function IntrabuzzContent() {
       filtered = filtered.filter((stock) => (stock.volumespike ?? 0) > 0)
       filtered.sort((a, b) => (b.volumespike ?? 0) - (a.volumespike ?? 0))
     } else if (highLowFilterOn) {
-      filtered.sort((a, b) => (Number(b.today_hlCross) ?? 0) - (Number(a.today_hlCross) ?? 0))
+      filtered.sort((a, b) => (Number(b.todayHLCross) ?? 0) - (Number(a.todayHLCross) ?? 0))
     } else {
       if (viewMode === "card") {
         switch (sortBy) {
@@ -131,11 +131,11 @@ function IntrabuzzContent() {
           case "volumespike_asc":
             filtered.sort((a, b) => (a.volumespike ?? 0) - (b.volumespike ?? 0))
             break
-          case "today_hlCross_desc":
-            filtered.sort((a, b) => (Number(b.today_hlCross) ?? 0) - (Number(a.today_hlCross) ?? 0))
+          case "todayHLCross_desc":
+            filtered.sort((a, b) => (Number(b.todayHLCross) ?? 0) - (Number(a.todayHLCross) ?? 0))
             break
-          case "today_hlCross_asc":
-            filtered.sort((a, b) => (Number(a.today_hlCross) ?? 0) - (Number(b.today_hlCross) ?? 0))
+          case "todayHLCross_asc":
+            filtered.sort((a, b) => (Number(a.todayHLCross) ?? 0) - (Number(b.todayHLCross) ?? 0))
             break
         }
       } else {

@@ -71,9 +71,9 @@ const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks, loading = false }) 
       case "most-active":
         return sorted.sort((a, b) => (b.volume || 0) - (a.volume || 0)).slice(0, 5)
       case "52w-high":
-        return sorted.filter((stock) => stock.price >= stock.high52).slice(0, 5)
+        return sorted.filter((stock) => stock.price >= stock.highYear).slice(0, 5)
       case "52w-low":
-        return sorted.filter((stock) => stock.price <= stock.low52).slice(0, 5)
+        return sorted.filter((stock) => stock.price <= stock.lowYear).slice(0, 5)
       default:
         return sorted.slice(0, 5)
     }
