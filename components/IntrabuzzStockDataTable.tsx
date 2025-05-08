@@ -52,7 +52,7 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
         if (highLowFilterOn) {
           // Only include stocks that have at least one non-"-" HL Cross value
           const hasValidHLCross = [stock.todayHLCross, stock.monthHLCross, stock.yearHLCross].some(
-            (value) => value && value !== "-",
+            (value) => value && value !== "...",
           )
           return hasValidHLCross
         }
@@ -127,101 +127,114 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
   
 
   return (
-    <div className="relative border border-gray-200 dark:border-gray-700 rounded-lg">
-      <div className="overflow-auto max-h-[710px] bottom-b">
-        <Table className="w-full border-collapse">
-          <TableHeader className="sticky top-0 z-20 bg-blue-200 dark:bg-blue-900">
-            <TableRow>
+    <div className=" overflow-x-auto">
+      <div className="max-h-[650px] overflow-auto">
+        <Table className="w-full">
+          <TableHeader className="bg-blue-400 dark:bg-blue-900  sticky top-0 z-10">
+            <TableRow >
+              {/* Sticky Left Column - Symbol */}
               <TableHead
-                className="sticky left-0 z-30 text-gray-900 dark:text-gray-100 bg-blue-200 dark:bg-blue-900 min-w-[160px] p-4 text-left font-medium cursor-pointer"
+                className="p-4 text-left font-medium cursor-pointer sticky left-0 bg-blue-400 dark:bg-blue-900 z-30"
                 onClick={() => onSort("symbol")}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex text-gray-900 dark:text-white items-center gap-2">
                   <span>Symbol</span>
                   {renderSortIcon("symbol")}
                 </div>
               </TableHead>
+
+              {/* Company Name */}
               <TableHead
-                className="p-4 text-left font-medium min-w-[200px] cursor-pointer text-gray-900 dark:text-gray-100"
+                className="p-4 text-right font-medium cursor-pointer sticky top-0 left-0 bg-blue-400 dark:bg-blue-900 z-20"
                 onClick={() => onSort("companyname")}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center text-gray-900 dark:text-white gap-2">
                   <span>Company Name</span>
                   {renderSortIcon("companyname")}
                 </div>
               </TableHead>
+
+              {/* Previous Close */}
               <TableHead
-                className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
+                className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
                 onClick={() => onSort("closeyest")}
               >
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center text-gray-900 dark:text-white justify-end gap-2">
                   <span>Previous Close</span>
                   {renderSortIcon("closeyest")}
                 </div>
               </TableHead>
+
+              {/* Price */}
               <TableHead
-                className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
+                className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
                 onClick={() => onSort("price")}
               >
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center text-gray-900 dark:text-white justify-end gap-2">
                   <span>Price</span>
                   {renderSortIcon("price")}
                 </div>
               </TableHead>
+
+              {/* Change */}
               <TableHead
-                className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
+                className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
                 onClick={() => onSort("change")}
               >
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center text-gray-900 dark:text-white justify-end gap-2">
                   <span>Change</span>
                   {renderSortIcon("change")}
                 </div>
               </TableHead>
+
+              {/* Change % */}
               <TableHead
-                className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
+                className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
                 onClick={() => onSort("changepct")}
               >
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center text-gray-900 dark:text-white justify-end gap-2">
                   <span>Change %</span>
                   {renderSortIcon("changepct")}
                 </div>
               </TableHead>
+
               {spikeFilterOn && (
                 <TableHead
-                  className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
+                  className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
                   onClick={() => onSort("volumespike")}
                 >
-                  <div className="flex items-center justify-end gap-2">
+                  <div className="flex items-center text-gray-900 dark:text-white justify-end gap-2">
                     <span>Spike</span>
                     {renderSortIcon("volumespike")}
                   </div>
                 </TableHead>
               )}
+
               {highLowFilterOn && (
                 <>
                   <TableHead
-                    className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
+                    className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
                     onClick={() => onSort("todayHLCross")}
                   >
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center text-gray-900 dark:text-white justify-end gap-2">
                       <span>Today HL Cross</span>
                       {renderSortIcon("todayHLCross")}
                     </div>
                   </TableHead>
                   <TableHead
-                    className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
+                    className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
                     onClick={() => onSort("monthHLCross")}
                   >
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center text-gray-900 dark:text-white justify-end gap-2">
                       <span>Month HL Cross</span>
                       {renderSortIcon("monthHLCross")}
                     </div>
                   </TableHead>
                   <TableHead
-                    className="p-4 text-right font-medium min-w-[150px] cursor-pointer text-gray-900 dark:text-gray-100"
+                    className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
                     onClick={() => onSort("yearHLCross")}
                   >
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center text-gray-900 dark:text-white justify-end gap-2">
                       <span>Year HL Cross</span>
                       {renderSortIcon("yearHLCross")}
                     </div>
@@ -230,47 +243,43 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
               )}
             </TableRow>
           </TableHeader>
-          
+
           <TableBody>
             {paginatedStocks.map((stock) => (
               <TableRow
                 key={stock.symbol}
-                className="cursor-pointer border rounded-md bg-white dark:bg-[#151719] hover:bg-gray-200 dark:hover:bg-muted/100"
+                className="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
                 onClick={() => onStockClick && onStockClick(stock)}
               >
-                <TableCell className="p-2 border-t sticky left-0 z-10 ">
-                    <div
-                      className="px-1 py-1 rounded-md text-white  font-semibold flex items-center justify-center"
-                      style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
+                <TableCell className="sticky left-0 p-4 border-t ">
+                  <div
+                    className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
+                    style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
+                  >
+                    <span
+                      className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
+                      style={{
+                        paddingLeft: "2px",
+                        paddingRight: "2px",
+                        maxWidth: "100%",
+                        fontSize: stock.symbol.length > 10 ? "10px" : "12px",
+                      }}
                     >
-                      <span
-                        className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
-                        style={{
-                          paddingLeft: "2px",
-                          paddingRight: "2px",
-                          maxWidth: "100%",
-                          fontSize: stock.symbol.length > 10 ? "10px" : "12px",
-                        }}
-                      >
-                        {stock.symbol}
-                      </span>
-                    </div>
+                      {stock.symbol}
+                    </span>
+                  </div>
                 </TableCell>
-                <TableCell className="p-2 border-t truncate max-w-[200px] text-gray-900 dark:text-gray-100">
-                  {stock.companyname}
-                </TableCell>
-                <TableCell className="p-2 border-t text-right text-gray-900 dark:text-gray-100">
-                  ₹{Number(stock.closeyest).toFixed(2)}
-                </TableCell>
-                <TableCell className="p-2 border-t text-right text-gray-900 dark:text-gray-100">
-                  ₹{Number(stock.price).toFixed(2)}
-                </TableCell>
-                <TableCell className="p-2 border-t text-right">
+
+                <TableCell className="p-2 max-w-[120px] truncate whitespace-nowrap overflow-hidden text-ellipsis">{stock.companyname}</TableCell>
+                <TableCell className="p-2 text-right">₹{Number(stock.closeyest).toFixed(2)}</TableCell>
+                <TableCell className="p-2 text-right">₹{Number(stock.price).toFixed(2)}</TableCell>
+
+                <TableCell className="p-2 text-right">
                   <span
                     className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                       stock.change >= 0
-                        ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50 rounded-lg"
-                        : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50 rounded-lg"
+                        ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50"
+                        : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50"
                     }`}
                   >
                     {stock.change >= 0 ? (
@@ -281,12 +290,13 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                     {Number(stock.change).toFixed(2)}
                   </span>
                 </TableCell>
-                <TableCell className="p-2 border-t text-right">
+
+                <TableCell className="p-2 text-right">
                   <span
                     className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                       stock.changepct >= 0
-                        ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50 rounded-lg"
-                        : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50 rounded-lg"
+                        ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50"
+                        : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50"
                     }`}
                   >
                     {stock.changepct >= 0 ? (
@@ -297,13 +307,14 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                     {Number(stock.changepct).toFixed(2)}%
                   </span>
                 </TableCell>
+
                 {spikeFilterOn && (
-                  <TableCell className="p-2 border-t text-right">
+                  <TableCell className="p-2 text-right">
                     <span
                       className={`inline-flex items-center rounded px-1 py-1 font-medium ${
                         (stock.volumespike ?? 0) >= 0
-                          ? "text-orange-600 bg-orange-100 rounded-lg"
-                          : "text-yellow-600 bg-yellow-100 rounded-lg"
+                          ? "text-orange-600 bg-orange-100"
+                          : "text-yellow-600 bg-yellow-100"
                       }`}
                     >
                       <Flame className="w-3.5 h-3.5 mr-0.5" />
@@ -311,11 +322,12 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
                     </span>
                   </TableCell>
                 )}
+
                 {highLowFilterOn && (
                   <>
-                    <TableCell className="p-2 border-t text-right">{renderHLCrossValue(stock.todayHLCross ?? undefined)}</TableCell>
-                    <TableCell className="p-2 border-t text-right">{renderHLCrossValue(stock.monthHLCross ?? undefined)}</TableCell>
-                    <TableCell className="p-2 border-t text-right">{renderHLCrossValue(stock.yearHLCross ?? undefined)}</TableCell>
+                    <TableCell className="p-2 text-right">{renderHLCrossValue(stock.todayHLCross ?? undefined)}</TableCell>
+                    <TableCell className="p-2 text-right">{renderHLCrossValue(stock.monthHLCross  ?? undefined)}</TableCell>
+                    <TableCell className="p-2 text-right">{renderHLCrossValue(stock.yearHLCross  ?? undefined)}</TableCell>
                   </>
                 )}
               </TableRow>
@@ -324,8 +336,9 @@ const IntrabuzzStockDataTable: React.FC<IntrabuzzStockDataTableProps> = ({
         </Table>
       </div>
 
+
       {/* Updated Pagination Controls */}
-      <div className="flex justify-between items-center p-2 bg-blue-200 dark:bg-gray-800">
+      <div className="flex justify-between items-center p-2 bg-blue-400 dark:bg-blue-900">
         <Button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1} variant="outline" size="sm">
           <ChevronLeft className="w-4 h-4 mr-2" />Previous
         </Button>

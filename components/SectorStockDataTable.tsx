@@ -84,7 +84,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
           <TableHeader className="sticky top-0 z-20  backdrop-blur bg-blue-200 dark:bg-blue-900 ">
             <TableRow>
               <TableHead
-                className="sticky left-0 z-30  min-w-[100px] px-8 py-3 text-left font-medium cursor-pointer border-b bg-blue-200 dark:bg-blue-900 dark:border-gray-700"
+                className="p-4 text-left font-medium cursor-pointer sticky left-0 bg-blue-400 dark:bg-blue-900 z-30"
                 onClick={() => onSort(tableId, "symbol")}
               >
                 <div className="flex items-center gap-2">
@@ -93,7 +93,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </TableHead>
               <TableHead
-                className="p-3 text-left font-medium cursor-pointer border-b dark:border-gray-700"
+                className="p-4 text-left font-medium cursor-pointer sticky left-0 bg-blue-400 dark:bg-blue-900 z-20"
                 onClick={() => onSort(tableId, "companyname")}
               >
                 <div className="flex items-center gap-2">
@@ -102,7 +102,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </TableHead>
               <TableHead
-                className="p-3 text-right font-medium min-w-[100px] cursor-pointer border-b dark:border-gray-700"
+                className="p-4 text-left font-medium cursor-pointer sticky left-0 bg-blue-400 dark:bg-blue-900 z-20"
                 onClick={() => onSort(tableId, "price")}
               >
                 <div className="flex items-center justify-end gap-2">
@@ -111,7 +111,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </TableHead>
               <TableHead
-                className="p-3 text-right font-medium min-w-[100px] cursor-pointer border-b dark:border-gray-700"
+                className="p-4 text-left font-medium cursor-pointer sticky left-0 bg-blue-400 dark:bg-blue-900 z-20"
                 onClick={() => onSort(tableId, "change")}
               >
                 <div className="flex items-center justify-end gap-2">
@@ -120,7 +120,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
                 </div>
               </TableHead>
               <TableHead
-                className="p-3 text-right font-medium min-w-[100px] cursor-pointer border-b dark:border-gray-700"
+                className="p-4 text-left font-medium cursor-pointer sticky left-0 bg-blue-400 dark:bg-blue-900 z-20"
                 onClick={() => onSort(tableId, "changepct")}
               >
                 <div className="flex items-center justify-end gap-2">
@@ -130,6 +130,7 @@ const SectorStockDataTable: React.FC<SectorStockDataTableProps> = ({
               </TableHead>
             </TableRow>
           </TableHeader>
+          
           <TableBody className="bg-white dark:bg-[#151719]">
             {sortedStocks.map((stock) => (
               <TableRow

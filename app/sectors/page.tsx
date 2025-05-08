@@ -285,20 +285,18 @@ export default function Sectors() {
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Sector Performance</h2>
               </CardHeader>
               <CardContent className="h-[700px] overflow-hidden flex flex-col">
+
                 <div className="flex-none">
                   <Table>
                     <TableHeader className="bg-blue-200 dark:bg-blue-900 ">
                       <TableRow>
-                        <TableHead className="sticky top-0 text-lg text-gray-900 dark:text-gray-100">Sector</TableHead>
-                        <TableHead className="sticky top-0 text-lg z-10 text-right text-gray-900 dark:text-gray-100">
+                        <TableHead className="p-4 text-left font-medium text-gray-900 dark:text-white cursor-pointer sticky left-0 bg-blue-400 dark:bg-blue-900 z-30">Sector</TableHead>
+                        <TableHead className="top-0 text-right text-gray-900 dark:text-white p-4 font-medium cursor-pointer sticky left-0 bg-blue-400 dark:bg-blue-900 z-30">
                           Change %
                         </TableHead>
                       </TableRow>
                     </TableHeader>
-                  </Table>
-                </div>
-                <div className="flex-grow overflow-auto">
-                  <Table>
+                  
                     <TableBody>
                       {sectorData.map((sector) => (
                         <TableRow

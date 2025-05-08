@@ -9,6 +9,7 @@ import type { Stock } from "@/types/Stock";
 import CustomizedProgressBars from "@/components/CustomizedProgressBars";
 import { getStockBgColor } from "@/lib/getstockBgColor"
 import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react"
+import { StockModal } from "@/components/StockModal";
 
 
 export default function ScreenerDetail() {
@@ -18,6 +19,9 @@ export default function ScreenerDetail() {
   const [loading, setLoading] = useState(true);
   const [sortColumn, setSortColumn] = useState<string | null>(null)
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+
+  const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     async function fetchStocks() {
@@ -95,7 +99,11 @@ export default function ScreenerDetail() {
       setSortOrder("asc")
     }
   }
-  
+ 
+  const handleStockClick = (stock: Stock) => {
+      setSelectedStock(stock)
+      setIsModalOpen(true)
+    }
 
   return (
     <div className="container mx-auto px-4">
@@ -114,131 +122,143 @@ export default function ScreenerDetail() {
 
       <div className="mt-6 overflow-x-auto">
         {loading ? (
-          <p className="text-center text-gray-600 dark:text-gray-300">
             <CustomizedProgressBars />
-          </p>
         ) : sortedStocks.length > 0 ? (
-          <div className="max-h-[600px] overflow-auto border rounded-lg relative">
-            <Table className="w-full border-collapse">
+
+          <div className="max-h-[650px] overflow-auto">
+            <Table className="w-full">
               {/* Sticky Header */}
-              <TableHeader className="bg-blue-200 dark:bg-blue-900 sticky top-0 z-10">
+              <TableHeader className="bg-blue-400 dark:bg-blue-900 sticky top-0 z-10">
                 <TableRow>
-                <TableHead
-                  className="p-4 text-left font-medium sticky left-0 bg-blue-200 dark:bg-blue-900 z-20 cursor-pointer"
-                  onClick={() => handleSort("symbol")}
-                >
-                  <div className="flex items-center gap-2">
-                    <span>Symbol</span>
-                    {sortColumn === "symbol" ? (
-                      sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
-                    ) : (
-                      <ArrowUpDown className="w-4 h-4" />
-                    )}
-                  </div>
-                </TableHead>
+                  {/* Sticky Left Column - Symbol */}
+                  <TableHead
+                    className="p-4 text-left font-medium cursor-pointer sticky left-0 bg-blue-400 dark:bg-blue-900 z-30"
+                    onClick={() => handleSort("symbol")}
+                  >
+                    <div className="flex items-center text-gray-900 dark:text-white gap-2">
+                      <span>Symbol</span>
+                      {sortColumn === "symbol" ? (
+                        sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                      ) : (
+                        <ArrowUpDown className="w-4 h-4" />
+                      )}
+                    </div>
+                  </TableHead>
 
-                <TableHead
-                  className="p-4 text-left font-medium cursor-pointer"
-                  onClick={() => handleSort("companyname")}
-                >
-                  <div className="flex items-center gap-2">
-                    <span>Company Name</span>
-                    {sortColumn === "companyname" ? (
-                      sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
-                    ) : (
-                      <ArrowUpDown className="w-4 h-4" />
-                    )}
-                  </div>
-                </TableHead>
+                  {/* Company Name */}
+                  <TableHead
+                    className="p-4 text-right font-medium cursor-pointer sticky top-0 left-0 bg-blue-400 dark:bg-blue-900 z-20"
+                    onClick={() => handleSort("companyname")}
+                  >
+                    <div className="flex items-center text-gray-900 dark:text-gray-300 gap-2">
+                      <span>Company Name</span>
+                      {sortColumn === "companyname" ? (
+                        sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                      ) : (
+                        <ArrowUpDown className="w-4 h-4" />
+                      )}
+                    </div>
+                  </TableHead>
 
-                <TableHead
-                  className="p-4 text-right font-medium cursor-pointer"
-                  onClick={() => handleSort("closeyest")}
-                >
-                  <div className="flex items-center justify-end gap-2">
-                    <span>Yest Close</span>
-                    {sortColumn === "closeyest" ? (
-                      sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
-                    ) : (
-                      <ArrowUpDown className="w-4 h-4" />
-                    )}
-                  </div>
-                </TableHead>
-                  <TableHead onClick={() => handleSort("price")} className="cursor-pointer">
-                    <div className="flex items-center justify-end gap-2">
+                  {/* Yest Close */}
+                  <TableHead
+                    className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
+                    onClick={() => handleSort("closeyest")}
+                  >
+                    <div className="flex items-center text-gray-900 dark:text-gray-300 justify-end gap-2">
+                      <span>Yest Close</span>
+                      {sortColumn === "closeyest" ? (
+                        sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                      ) : (
+                        <ArrowUpDown className="w-4 h-4" />
+                      )}
+                    </div>
+                  </TableHead>
+
+                  {/* Price */}
+                  <TableHead
+                    className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
+                    onClick={() => handleSort("price")}
+                  >
+                    <div className="flex items-center text-gray-900 dark:text-gray-300 justify-end gap-2">
                       <span>Price</span>
                       {renderSortIcon("price", sortColumn || "", sortOrder)}
                     </div>
                   </TableHead>
 
+                  {/* High 52W or Low 52W */}
                   {showHigh ? (
+                    <TableHead
+                      className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
+                      onClick={() => handleSort("highYear")}
+                    >
+                      <div className="flex items-center text-gray-900 dark:text-gray-300 justify-end gap-2">
+                        <span>High 52W</span>
+                        {sortColumn === "highYear" ? (
+                          sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                        ) : (
+                          <ArrowUpDown className="w-4 h-4" />
+                        )}
+                      </div>
+                    </TableHead>
+                  ) : (
+                    <TableHead
+                      className="p-4 text-right font-medium cursor-pointer sticky top-0 bg-blue-400 dark:bg-blue-900 z-20"
+                      onClick={() => handleSort("lowYear")}
+                    >
+                      <div className="flex items-center text-gray-900 dark:text-gray-300 justify-end gap-2">
+                        <span>Low 52W</span>
+                        {sortColumn === "lowYear" ? (
+                          sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
+                        ) : (
+                          <ArrowUpDown className="w-4 h-4" />
+                        )}
+                      </div>
+                    </TableHead>
+                  )}
+
+                  {/* Sticky Right Column - Near % */}
                   <TableHead
-                    className="p-4 text-right font-medium cursor-pointer"
-                    onClick={() => handleSort("high52")}
+                    className="p-4 text-right font-medium cursor-pointer sticky top-0 right-0 bg-blue-400 dark:bg-blue-900 z-20"
+                    onClick={() => handleSort("nearPct")}
                   >
-                    <div className="flex items-center justify-end gap-2">
-                      <span>High 52W</span>
-                      {sortColumn === "high52" ? (
+                    <div className="flex items-center text-gray-900 dark:text-gray-300 justify-end gap-2">
+                      <span>Near %</span>
+                      {sortColumn === "nearPct" ? (
                         sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
                       ) : (
                         <ArrowUpDown className="w-4 h-4" />
                       )}
                     </div>
                   </TableHead>
-                ) : (
-                  <TableHead
-                    className="p-4 text-right font-medium cursor-pointer"
-                    onClick={() => handleSort("low52")}
-                  >
-                    <div className="flex items-center justify-end gap-2">
-                      <span>Low 52W</span>
-                      {sortColumn === "low52" ? (
-                        sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
-                      ) : (
-                        <ArrowUpDown className="w-4 h-4" />
-                      )}
-                    </div>
-                  </TableHead>
-                )}
-
-                <TableHead
-                  className="p-4 text-right font-medium cursor-pointer"
-                  onClick={() => handleSort("nearPct")}
-                >
-                  <div className="flex items-center justify-end gap-2">
-                    <span>Near %</span>
-                    {sortColumn === "nearPct" ? (
-                      sortOrder === "asc" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />
-                    ) : (
-                      <ArrowUpDown className="w-4 h-4" />
-                    )}
-                  </div>
-                </TableHead>
-
                 </TableRow>
               </TableHeader>
+
               <TableBody>
                 {sortedStocks.map((stock) => (
-                  <TableRow key={stock.symbol} className="hover:bg-gray-100 dark:hover:bg-gray-800">
-                    <TableCell className="sticky left-0 z-10  p-4 border-t dark:border-gray-800">                
-                        <div
-                            className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
-                            style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
+                  <TableRow key={stock.symbol} className="hover:bg-gray-100 dark:hover:bg-gray-800  cursor-pointer"
+                  onClick={() => handleStockClick(stock)}
+                  >
+                    <TableCell className="sticky left-0 p-4">
+                      <div
+                        className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
+                        style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
+                      >
+                        <span
+                          className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
+                          style={{
+                            paddingLeft: "2px",
+                            paddingRight: "2px",
+                            maxWidth: "100%",
+                            fontSize: stock.symbol.length > 10 ? "10px" : "12px",
+                          }}
                         >
-                            <span
-                            className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
-                            style={{
-                                paddingLeft: "2px",
-                                paddingRight: "2px",
-                                maxWidth: "100%",
-                                fontSize: stock.symbol.length > 10 ? "10px" : "12px",
-                            }}
-                            >
-                            {stock.symbol}
-                            </span>
-                        </div>
+                          {stock.symbol}
+                        </span>
+                      </div>
                     </TableCell>
-                    <TableCell className="p-4">{stock.companyname}</TableCell>
+
+                    <TableCell className="p-4 max-w-[120px] truncate whitespace-nowrap overflow-hidden text-ellipsis ">{stock.companyname}</TableCell>
                     <TableCell className="p-4 text-right">₹{Number(stock.closeyest).toFixed(2)}</TableCell>
                     <TableCell className="p-4 text-right">₹{Number(stock.price).toFixed(2)}</TableCell>
                     {showHigh ? (
@@ -258,6 +278,7 @@ export default function ScreenerDetail() {
           <p className="text-center text-gray-600 dark:text-gray-300">No stocks found</p>
         )}
       </div>
+      <StockModal stock={selectedStock} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }
