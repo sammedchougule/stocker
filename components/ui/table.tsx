@@ -39,7 +39,7 @@ const TableBody = React.forwardRef<
     {...props}
   />
 ));
-
+TableBody.displayName = "TableBody";
 
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
