@@ -258,7 +258,7 @@ export default function Journal() {
 
           <Card className="bg-white dark:bg-[#1b1d20]">
             <CardHeader>
-              <CardTitle className="text-black dark:text-white">{isCurrentWeek ? "This Week&apos;s Trades" : "Last Week&apos;s Trades"}</CardTitle>
+              <CardTitle className="text-black dark:text-white">{isCurrentWeek ? "This Weeks Trades" : "Last Weeks Trades"}</CardTitle>
               <CardDescription>
                 {recentTrades.length === 0
                   ? "No trades found for the last two weeks"
