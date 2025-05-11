@@ -65,7 +65,7 @@ export default function TradeScatterChart({ trades }: TradeScatterChartProps) {
           <ZAxis type="number" dataKey="roi" range={[50, 400]} name="ROI %" />
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
-            formatter={(value: any, name: string) => {
+            formatter={(value: number, name: string) => {
               if (name === "Trade Size") return [`₹${value.toFixed(2)}`, name]
               if (name === "Profit/Loss") return [`₹${value.toFixed(2)}`, name]
               if (name === "ROI %") return [`${value.toFixed(2)}%`, name]
