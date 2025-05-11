@@ -57,29 +57,32 @@ export default function PerformanceChart({ trades }: PerformanceChartProps) {
     let periodLabel: string
 
     switch (timeFilter) {
-      case "daily":
+      case "daily": {
         const targetDay = offset === 0 ? today : addDays(today, offset)
         start = startOfDay(targetDay)
         end = endOfDay(targetDay)
         periodLabel = format(targetDay, "MMMM d, yyyy")
         break
-      case "weekly":
+      }
+      case "weekly": {
         const targetWeek = offset === 0 ? today : addWeeks(today, offset)
         start = startOfWeek(targetWeek, { weekStartsOn: 0 })
         end = endOfWeek(targetWeek, { weekStartsOn: 0 })
         periodLabel = `Week of ${format(start, "MMM d")} - ${format(end, "MMM d, yyyy")}`
         break
-      case "monthly":
+      }
+      case "monthly": {
         const targetMonth = offset === 0 ? today : addMonths(today, offset)
         start = startOfMonth(targetMonth)
         end = endOfMonth(targetMonth)
         periodLabel = format(targetMonth, "MMMM yyyy")
         break
-      default:
-        // All time - show by month for the last year
+      }
+      default: {
         start = startOfMonth(addMonths(today, -11))
         end = endOfMonth(today)
         periodLabel = `${format(start, "MMM yyyy")} - ${format(end, "MMM yyyy")}`
+      }
     }
 
     return { start, end, periodLabel }
@@ -408,9 +411,13 @@ export default function PerformanceChart({ trades }: PerformanceChartProps) {
                 domain={yAxisDomain}
               />
               <Tooltip
-                formatter={(value: number, name: string, props: any) => {
+                formatter={(
+                  value: number,
+                  name: string,
+                  props: any
+                ) => {
                   if (name === "Positive" || name === "Negative") return null
-                  const tradeCount = props.payload.tradeCount || 0
+                  const tradeCount = props.payload?.tradeCount || 0
                   return [
                     <div key="profit-loss">₹{value.toFixed(2)}</div>,
                     <div key="trade-count">
