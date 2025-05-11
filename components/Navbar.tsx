@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Menu, X, SquareActivity, Layers, Sliders, LayoutGrid, Newspaper , Moon, Sun } from "lucide-react"
+import { Menu, X, SquareActivity, Layers, Sliders, LayoutGrid, Moon, Sun, NotebookPen  } from "lucide-react"
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { StockInput } from "./Input"
@@ -124,13 +124,13 @@ const Navbar = () => {
               Screener
             </Link>
             <Link
-              href="/news"
-              className={`flex items-center gap-1 ${isActive("/news") ? "text-blue-500 font-semibold" : "text-gray-700 dark:text-gray-300"}`}
+              href="/journal"
+              className={`flex items-center gap-1 ${isActive("/journal") ? "text-blue-500 font-semibold" : "text-gray-700 dark:text-gray-300"}`}
             >
-              <Newspaper 
-                className={`h-5 w-5 ${isActive("/news") ? "text-blue-700" : "text-gray-700 dark:text-gray-300"}`}
+              <NotebookPen  
+                className={`h-5 w-5 ${isActive("/journal") ? "text-blue-700" : "text-gray-700 dark:text-gray-300"}`}
               />
-              News
+              Journal
             </Link>
             <button
               onClick={toggleTheme}
@@ -201,11 +201,11 @@ const Navbar = () => {
               Screener
             </Link>
             <Link
-              href="/news"
+              href="/journal"
               className="flex items-center py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md px-2 transition-colors duration-200"
             >
-              <Newspaper  className="h-5 w-5 mr-3" />
-              News
+              <NotebookPen  className="h-5 w-5 mr-3" />
+              Journal
             </Link>
             <button
               onClick={toggleTheme}
@@ -268,15 +268,15 @@ const Navbar = () => {
             <span className="text-xs text-gray-600 dark:text-gray-400">Screener</span>
           </Link>
           <Link
-            href="/news"
+            href="/journal"
             className={`text-gray-700 dark:text-gray-300 flex flex-col items-center ${
-              isActive("/news") ? "bg-gray-200 dark:bg-gray-700 rounded-md px-2 py-1" : ""
+              isActive("/journal") ? "bg-gray-200 dark:bg-gray-700 rounded-md px-2 py-1" : ""
             }`}
           >
-            <Newspaper 
-              className={`h-6 w-6 ${isActive("/news") ? "text-blue-700" : "text-gray-700 dark:text-gray-300"}`}
+            <NotebookPen 
+              className={`h-6 w-6 ${isActive("/journal") ? "text-blue-700" : "text-gray-700 dark:text-gray-300"}`}
             />
-            <span className="text-xs text-gray-600 dark:text-gray-400">News</span>
+            <span className="text-xs text-gray-600 dark:text-gray-400">Journal</span>
           </Link>
         </div>
       </nav>
