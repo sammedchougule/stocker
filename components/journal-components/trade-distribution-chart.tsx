@@ -38,7 +38,6 @@ const renderActiveShape = (props: any) => {
     fill,
     payload,
     percent,
-    value,
     profitLoss,
     tradeCount,
   } = props
@@ -247,7 +246,8 @@ export default function TradeDistributionChart({ trades }: TradeDistributionChar
   // Calculate chart dimensions based on screen size
   const isMobile = windowWidth < 768
   // Increased chart dimensions for mobile
-  const chartHeight = isMobile ? 450 : 500
+  
+  //const chartHeight = isMobile ? 450 : 500 
   const outerRadius = isMobile ? 100 : 120
   const innerRadius = isMobile ? 45 : 90
 
