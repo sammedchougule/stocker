@@ -14,12 +14,12 @@ export interface Trade {
 // Mock data to use as fallback when Supabase connection fails
 export const mockTrades = []
 
-export function getTotalProfitLoss(trades: any[]): number {
-  return trades.reduce((total, trade) => total + (trade.profit_loss || 0), 0)
+export function getTotalProfitLoss(trades: Trade[]): number {
+  return trades.reduce((total, trade) => total + (trade.profitLoss || 0), 0)
 }
 
-export function getWinRate(trades: any[]): number {
+export function getWinRate(trades: Trade[]): number {
   if (trades.length === 0) return 0
-  const winningTrades = trades.filter((trade) => (trade.profit_loss || 0) > 0)
+  const winningTrades = trades.filter((trade) => (trade.profitLoss || 0) > 0)
   return winningTrades.length / trades.length
 }
