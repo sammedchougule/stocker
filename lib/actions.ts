@@ -3,6 +3,23 @@
 import { createServerClient } from "@/lib/supabase"
 import { revalidatePath } from "next/cache"
 
+// Define a type for updating trades (all fields optional except id)
+interface TradeUpdate {
+  id: number;
+  date?: string;
+  symbol?: string;
+  type?: string;
+  trade_type?: string;
+  entry_price?: number;
+  exit_price?: number;
+  quantity?: number;
+  profit_loss?: number;
+  note?: string;
+  strategy?: string;
+  stop_loss?: number | null;
+  expiry?: string | null;
+}
+
 export async function addTrade(formData: FormData) {
   try {
     const supabase = createServerClient()
@@ -57,7 +74,7 @@ export async function addTrade(formData: FormData) {
   }
 }
 
-export async function updateTrade(trade: any) {
+export async function updateTrade(trade: TradeUpdate) {
   try {
     const supabase = createServerClient()
 
@@ -69,7 +86,7 @@ export async function updateTrade(trade: any) {
     const { id, ...updateData } = trade
 
     // Clean and prepare the data for update
-    const cleanedData: Record<string, any> = {}
+    const cleanedData: Record<string, unknown> = {}
 
     // Process each field to ensure proper formatting
     Object.entries(updateData).forEach(([key, value]) => {
