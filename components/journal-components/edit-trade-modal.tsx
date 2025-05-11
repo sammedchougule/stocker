@@ -19,6 +19,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { format, parseISO } from "date-fns"
 import { updateTrade } from "@/lib/actions"
 import { useToast } from "@/hooks/use-toast"
+
+// Helper function to normalize empty strings to undefined
+const normalizeToUndefined = (value: string | null | undefined): string | undefined => {
+  return value && value.trim() !== "" ? value : undefined
+}
 import type { Database } from "@/types/supabase"
 
 type Trade = Database["public"]["Tables"]["journal"]["Row"]
@@ -107,12 +112,20 @@ export function EditTradeModal({ isOpen, onClose, trade, onTradeUpdated }: EditT
       const submissionData = {
         id: trade.id,
         ...formData,
-        // Ensure numeric fields are numbers
         entry_price: formData.entry_price ? Number(formData.entry_price) : null,
         exit_price: formData.exit_price ? Number(formData.exit_price) : null,
         quantity: formData.quantity ? Number(formData.quantity) : null,
         profit_loss: formData.profit_loss ? Number(formData.profit_loss) : null,
         stop_loss: formData.stop_loss ? Number(formData.stop_loss) : null,
+
+        // normalize string fields that shouldn't be null
+        strategy: normalizeToUndefined(formData.strategy),
+        symbol: normalizeToUndefined(formData.symbol),
+        type: normalizeToUndefined(formData.type),
+        trade_type: normalizeToUndefined(formData.trade_type),
+        date: normalizeToUndefined(formData.date),
+        expiry: normalizeToUndefined(formData.expiry),
+        note: normalizeToUndefined(formData.note),
       }
 
       const result = await updateTrade(submissionData)
