@@ -290,5 +290,52 @@ export const metadataConfig = {
     },
     robots: "index,follow", 
   },
+  journal: {
+  title: '#1 Trading Journal - Stocker',
+  description:
+    'Gain deeper insight into your trading behavior and drive sustainable profits with the Trading Journal from Stocker. Analyze, reflect, and improve your trading strategy today.',
+  keywords: [
+    'trading journal',
+    'stock trading log',
+    'trade analysis',
+    'trading performance',
+    'trading strategy',
+    'investment journal',
+    'stock market tracker',
+    'trading metrics',
+    'trader reflection',
+    'Stocker journal',
+  ],
+  openGraph: {
+    title: '#1 Trading Journal - Stocker',
+    description:
+      'Gain deeper insight into your trading behavior and drive sustainable profits with the Trading Journal from Stocker. Track every trade, analyze mistakes, and build consistency.',
+    url: 'https://stocker.co.in/journal',
+    siteName: 'Stocker',
+    images: [
+      {
+        url: 'https://www.nseindia.com/assets/images/nse-thumbnail.jpg?09082024',
+        width: 1084,
+        height: 492,
+        alt: '#1 Trading Journal - Stocker',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    title: '#1 Trading Journal - Stocker',
+    description:
+      'Gain deeper insight into your trading behavior and drive sustainable profits with the Trading Journal from Stocker. Start seeing actionable results today!',
+    image: '/images/journal-og-image.jpg',
+  },
+  icons: {
+    icon: [{ url: "/stocker.png", href: "/stocker.png" }],
+    shortcut: [{ url: "/stocker.png", href: "/stocker.png" }],
+    apple: [{ url: "/stocker.png", href: "/stocker.png" }],
+  },
+  robots: 'index,follow',
+}
+
   
 };
