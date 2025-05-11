@@ -2,6 +2,7 @@
 
 import { useMemo } from "react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts"
+import type { Payload } from "recharts/types/component/DefaultTooltipContent"
 import type { Database } from "@/types/supabase"
 
 type Trade = Database["public"]["Tables"]["journal"]["Row"]
@@ -49,8 +50,8 @@ export default function WinLossChart({ trades }: WinLossChartProps) {
           <XAxis type="number" tickFormatter={(value) => `${value}`} />
           <YAxis type="category" dataKey="type" width={60} />
           <Tooltip
-            formatter={(value: number, name: string, props: any) => {
-              const entry = chartData.find((item) => item.type === props.payload.type)
+            formatter={(value: number, name: string, props: Payload<number, string>) => {
+              const entry = chartData.find((item) => item.type === props.payload?.type)
               if (name === "wins") return [`${value} trades (${entry?.winRate.toFixed(1)}%)`, "Wins"]
               if (name === "losses") return [`${value} trades`, "Losses"]
               if (name === "breakeven") return [`${value} trades`, "Breakeven"]
