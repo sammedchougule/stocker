@@ -26,7 +26,24 @@ const COLORS = [
 ]
 
 // Custom active shape component for the pie chart
-const renderActiveShape = (props: any) => {
+interface ActiveShapeProps {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  startAngle: number;
+  endAngle: number;
+  fill: string;
+  payload: {
+    symbol: string;
+  };
+  percent: number;
+  profitLoss: number;
+  tradeCount: number;
+}
+
+const renderActiveShape = (props: unknown) => {
   const {
     cx,
     cy,
@@ -40,7 +57,7 @@ const renderActiveShape = (props: any) => {
     percent,
     profitLoss,
     tradeCount,
-  } = props
+  } = props as ActiveShapeProps
 
   // Calculate profit/loss color - using standardized colors
   const plColor = profitLoss > 0 ? "#10b981" : profitLoss < 0 ? "#ef4444" : "#9ca3af"
@@ -210,7 +227,7 @@ export default function TradeDistributionChart({ trades }: TradeDistributionChar
     window.addEventListener("resize", handleResize)
   }
 
-  const onPieEnter = useCallback((_: any, index: number) => {
+  const onPieEnter = useCallback((_: { symbol: string; value: number; profitLoss: number; tradeCount: number }, index: number) => {
     setActiveIndex(index)
   }, [])
 
