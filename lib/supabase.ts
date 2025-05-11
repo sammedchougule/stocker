@@ -64,7 +64,7 @@ const createBrowserClient = () => {
 }
 
 // For server-side use (optional, if needed)
-const createServerClient = () => {
+export const createServerClient = () => {
   return createClient<Database>(supabaseUrl, supabaseAnonKey)
 }
 
