@@ -14,7 +14,7 @@ interface TradeUpdate {
   exit_price?: number | null;
   quantity?: number | null;
   profit_loss?: number | null;
-  note?: string;
+  note?: string | null;
   strategy?: string;
   stop_loss?: number | null;
   expiry?: string | null;
