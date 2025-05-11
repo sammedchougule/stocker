@@ -117,7 +117,7 @@ export default function StockDetailPage() {
               </div>
               <p className="text-sm text-gray-500">{format(new Date(), "d MMM, HH:mm:ss")} IST {stockData.currency} • {stockData.exchange}</p>
             </div>
-            <StockChart stock={stockData} />
+            <StockChart symbol={stockData.symbol} />
           </CardContent>
         </Card>
 
