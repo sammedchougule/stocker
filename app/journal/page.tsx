@@ -153,7 +153,7 @@ export default function Journal() {
           <AlertCircle className="h-5 w-5 text-blue-600" />
           <div>
             <p className="font-medium text-blue-800">No trades found</p>
-            <p className="text-sm text-blue-700">Add your first trade using the "Add Trade" button above.</p>
+            <p className="text-sm text-blue-700">Add your first trade using the &quot;Add Trade&quot; button above.</p>
           </div>
         </div>
       )}
@@ -216,8 +216,8 @@ export default function Journal() {
 
             <Card className="bg-white text-black dark:bg-[#1b1d20] dark:text-white">
               <CardHeader>
-                <CardTitle className="dark:text-white">Today's Performance</CardTitle>
-                <CardDescription>Today's trading activity</CardDescription>
+                <CardTitle className="dark:text-white">Today&apos;s Performance</CardTitle>
+                <CardDescription>Today&apos;s trading activity</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className={`text-2xl font-bold ${todayProfitLoss >= 0 ? "text-green-500" : "text-red-500"}`}>
@@ -258,7 +258,7 @@ export default function Journal() {
 
           <Card className="bg-white dark:bg-[#1b1d20]">
             <CardHeader>
-              <CardTitle className="text-black dark:text-white">{isCurrentWeek ? "This Week's Trades" : "Last Week's Trades"}</CardTitle>
+              <CardTitle className="text-black dark:text-white">{isCurrentWeek ? "This Week&apos;s Trades" : "Last Week&apos;s Trades"}</CardTitle>
               <CardDescription>
                 {recentTrades.length === 0
                   ? "No trades found for the last two weeks"
