@@ -67,7 +67,7 @@ const SimpleCalendar = ({ trades }: SimpleCalendarProps) => {
         const dayTrades = tradeDates[dateString]
         const isCurrentMonth = format(day, "M") === format(currentDate, "M")
         const isTodayDate = isToday(day)
-        const hasTrades = !!dayTrades && isCurrentMonth
+        //const hasTrades = !!dayTrades && isCurrentMonth
 
         // Determine background color based on conditions
         let bgColor = ""
