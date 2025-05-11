@@ -10,10 +10,10 @@ interface TradeUpdate {
   symbol?: string;
   type?: string;
   trade_type?: string;
-  entry_price?: number;
-  exit_price?: number;
-  quantity?: number;
-  profit_loss?: number;
+  entry_price?: number | null;
+  exit_price?: number | null;
+  quantity?: number | null;
+  profit_loss?: number | null;
   note?: string;
   strategy?: string;
   stop_loss?: number | null;
