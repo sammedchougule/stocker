@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts"
+import type { Payload } from "recharts/types/component/DefaultTooltipContent"
 import {
   format,
   parseISO,
@@ -32,6 +33,14 @@ type Trade = Database["public"]["Tables"]["journal"]["Row"]
 interface PerformanceChartProps {
   trades: Trade[]
 }
+
+interface ChartDataPoint {
+  tradeCount: number
+  value: number
+  positiveValue: number
+  negativeValue: number
+}
+
 
 type TimeFilter = "all" | "daily" | "weekly" | "monthly"
 
@@ -414,10 +423,10 @@ export default function PerformanceChart({ trades }: PerformanceChartProps) {
                 formatter={(
                   value: number,
                   name: string,
-                  props: any
+                  props?: Payload<number, string>
                 ) => {
                   if (name === "Positive" || name === "Negative") return null
-                  const tradeCount = props.payload?.tradeCount || 0
+                  const tradeCount = props?.payload?.tradeCount ?? 0
                   return [
                     <div key="profit-loss">₹{value.toFixed(2)}</div>,
                     <div key="trade-count">
