@@ -34,14 +34,6 @@ interface PerformanceChartProps {
   trades: Trade[]
 }
 
-interface ChartDataPoint {
-  tradeCount: number
-  value: number
-  positiveValue: number
-  negativeValue: number
-}
-
-
 type TimeFilter = "all" | "daily" | "weekly" | "monthly"
 
 // Standardized colors for profit and loss
