@@ -18,6 +18,7 @@ interface TradeUpdate {
   strategy?: string;
   stop_loss?: number | null;
   expiry?: string | null;
+  updated_at?: string | null;
 }
 
 export async function addTrade(formData: FormData) {
