@@ -150,7 +150,7 @@ export function EditTradeModal({ isOpen, onClose, trade, onTradeUpdated }: EditT
       <DialogContent className="sm:max-w-[750px] w-[calc(100%-2rem)] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Trade</DialogTitle>
-          <DialogDescription>Update the details of your trade. Click save when you're done.</DialogDescription>
+          <DialogDescription>Update the details of your trade. Click save when you&apos;re done.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
