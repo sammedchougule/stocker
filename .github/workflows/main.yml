@@ -1,0 +1,12 @@
+name: Ingest Stocks at 8:10 PM IST
+
+on:
+  schedule:
+    - cron: '40 14 * * *' # Runs every day at 14:40 UTC (8:10 PM IST)
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call ingestStocks endpoint
+        run: curl -X GET "https://stocker.co.in/api/ingestStocks"
