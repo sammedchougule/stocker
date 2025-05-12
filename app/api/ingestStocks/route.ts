@@ -9,7 +9,7 @@ const supabase = createClient(
 
 export async function GET() {
   try {
-    const res = await fetch('https://script.google.com/macros/s/AKfycb.../exec')
+    const res = await fetch('https://script.google.com/macros/s/AKfycbzK8oDQse4ERT_jddWwlK9iTLz3TNhiVAyb0Jp5L4U3q-XOyplps-HLNY0uLcNiNn0ERg/exec')
     const json = await res.json()
 
     if (!json?.data || !Array.isArray(json.data)) {
