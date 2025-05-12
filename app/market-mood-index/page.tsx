@@ -9,12 +9,25 @@ import { MarketGauge } from "@/components/market-mood/market-gauge"
 import { MarketTrends } from "@/components/market-mood/market-trends"
 import { MarketMetrics } from "@/components/market-mood/market-metrics"
 import { HowItWorks } from "@/components/market-mood/how-it-works"
+import { getStocks } from "@/lib/getStocks"
+import { getMarketMoodValueAndText } from "@/components/Gauge"
 
-export default function Home() {
+export default async function Home() {
+
+   const stocks = await getStocks()
+   const { value: marketMoodValue, text: marketMoodText } = getMarketMoodValueAndText(stocks)
+
+   // Dynamic gradient for sentiment
+   let sentimentGradient = "from-emerald-100 to-white";
+   if (marketMoodValue <= 30) sentimentGradient = "from-green-100 to-white";
+   else if (marketMoodValue <= 50) sentimentGradient = "from-yellow-100 to-white";
+   else if (marketMoodValue <= 70) sentimentGradient = "from-orange-100 to-white";
+   else sentimentGradient = "from-red-100 to-white";
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1 container mx-auto px-4 py-8 md:px-6 md:py-12">
-        <section className="py-12 md:py-16 px-6 md:px-10 bg-gradient-to-b from-emerald-50 to-white dark:from-emerald-950/20 dark:to-background rounded-lg">
+        <section className={`py-12 md:py-16 px-6 md:px-10 bg-gradient-to-b ${sentimentGradient} dark:from-emerald-950/20 dark:to-background rounded-lg`}>
           <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_500px]">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
@@ -24,7 +37,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Button className="inline-flex h-10 items-center justify-center rounded-md bg-emerald-600 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-emerald-700 dark:hover:bg-emerald-600">
+                <Button className="inline-flex h-10 items-center justify-center rounded-md bg-gray-700 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-emerald-700 dark:hover:bg-emerald-600">
                   Explore Metrics
                   <ArrowRightIcon className="ml-2 h-4 w-4" />
                 </Button>
@@ -33,7 +46,7 @@ export default function Home() {
             </div>
             <div className="flex items-center justify-center">
               {/* You will add your custom gauge design in the MarketGauge component */}
-              <MarketGauge value={72} />
+              <MarketGauge stocks={stocks}/>
             </div>
           </div>
         </section>
@@ -43,8 +56,8 @@ export default function Home() {
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Current Market Mood</h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                The Market Mood Index is currently at <span className="font-bold text-emerald-600">72</span>, indicating{" "}
-                <span className="font-bold text-emerald-600">Optimistic</span> sentiment
+                The Market Mood Index is currently at <span className="font-bold" style={{ color: marketMoodValue <= 30 ? '#16a34a' : marketMoodValue <= 50 ? '#ca8a04' : marketMoodValue <= 70 ? '#f97316' : '#dc2626' }}>{marketMoodValue.toFixed(2)}</span>, indicating{" "}
+                <span className="font-bold" style={{ color: marketMoodValue <= 30 ? '#16a34a' : marketMoodValue <= 50 ? '#ca8a04' : marketMoodValue <= 70 ? '#f97316' : '#dc2626' }}>{marketMoodText}</span> sentiment
               </p>
             </div>
           </div>
@@ -57,8 +70,10 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold tracking-tighter sm:text-3xl">What This Means</h3>
                 <p className="max-w-[600px] text-muted-foreground md:text-lg/relaxed">
-                  A reading of 72 suggests investors are optimistic but not euphoric. Markets typically perform well in
-                  this range, though caution is advised as we approach extreme optimism levels.
+                  {marketMoodValue <= 30 && "Extreme fear (<30) suggests a good time to open fresh positions, as markets are likely to be oversold and might turn upwards. Historically, periods of extreme fear have often preceded strong market recoveries."}
+                  {marketMoodValue > 30 && marketMoodValue <= 50 && "Investors are fearful in the market; action depends on the MMI trajectory. A declining trend may indicate more downside risk, while a stabilizing or rising index could signal recovery potential."}
+                  {marketMoodValue > 50 && marketMoodValue <= 70 && "Investors are acting greedy; action depends on the MMI trajectory. Continued upward momentum may offer short-term gains, but caution is advised as valuations may begin to stretch."}
+                  {marketMoodValue > 70 && "Extreme greed (>70) suggests avoiding fresh positions as markets are overbought. This often precedes corrections or increased volatility as optimism peaks and risk appetite becomes excessive."}
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -177,28 +192,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="border-t bg-background py-6 md:py-8">
-        <div className="container mx-auto px-4 md:px-6 flex flex-col items-center justify-between gap-4 md:flex-row">
-          <div className="flex items-center gap-2 font-semibold">
-            <div className="h-6 w-6 rounded-full bg-emerald-500"></div>
-            Market Mood Index
-          </div>
-          <p className="text-center text-sm text-muted-foreground md:text-left">
-            © 2025 Market Mood Index. All rights reserved.
-          </p>
-          <div className="flex gap-4">
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
-              Terms
-            </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
-              Privacy
-            </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
-              Contact
-            </Link>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

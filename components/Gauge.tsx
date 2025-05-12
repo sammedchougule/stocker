@@ -52,6 +52,26 @@ const moodRanges = [
   { id: "extreme-greed", label: "Extreme Greed", color: "#dc2626", range: [70, 100] },
 ]
 
+export function getMarketMoodValueAndText(stocks: Stock[]) {
+  const NIFTY50_STOCKS = [
+    "ADANIENT", "ADANIPORTS", "APOLLOHOSP", "ASIANPAINT", "AXISBANK", "BAJAJ-AUTO", "BAJFINANCE", "BAJAJFINSV",
+    "BPCL", "BHARTIARTL", "BRITANNIA", "CIPLA", "COALINDIA", "DIVISLAB", "DRREDDY", "EICHERMOT", "GRASIM", "HCLTECH",
+    "HDFCBANK", "HDFCLIFE", "HEROMOTOCO", "HINDALCO", "HINDUNILVR", "ICICIBANK", "INDUSINDBK", "INFY", "ITC",
+    "JSWSTEEL", "KOTAKBANK", "LT", "M&M", "MARUTI", "NESTLEIND", "NTPC", "ONGC", "POWERGRID", "RELIANCE",
+    "SBILIFE", "SBIN", "SUNPHARMA", "TCS", "TATACONSUM", "TATAMOTORS", "TATASTEEL", "TECHM", "TITAN",
+    "ULTRACEMCO", "UPL", "WIPRO"
+  ];
+  const niftyStocks = stocks.filter((stock) => NIFTY50_STOCKS.includes(stock.symbol));
+  const green = niftyStocks.filter((stock) => stock.changepct > 0).length;
+  const total = niftyStocks.length;
+  const value = total > 0 ? (green / total) * 100 : 0;
+  let text = "Extreme Greed";
+  if (value <= 30) text = "Extreme Fear";
+  else if (value <= 50) text = "Fear";
+  else if (value <= 70) text = "Greed";
+  return { value, text };
+}
+
 export default function Gauge({ stocks }: GaugeProps) {
 
   const nifty50Data = useMemo(() => {
