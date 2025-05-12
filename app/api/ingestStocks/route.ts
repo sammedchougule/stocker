@@ -18,106 +18,66 @@ export async function GET() {
 
     const stocks: Stock[] = json.data
 
-    for (const stock of stocks) {
-      const {
-        symbol,
-        companyname,
-        industry,
-        sector,
-        type,
-        exchange,
-        currency,
-        indices,
-        shares,
+    const stocksInsert = stocks.map(stock => ({
+      symbol: stock.symbol,
+      companyname: stock.companyname,
+      industry: stock.industry,
+      sector: stock.sector,
+      type: stock.type,
+      exchange: stock.exchange,
+      currency: stock.currency,
+      indices: stock.indices,
+      shares: stock.shares,
+    }))
 
-        // daily data
-        closeyest,
-        priceopen,
-        price,
-        low,
-        high,
-        change,
-        changepct,
-        tradetime,
-        volume,
-        volumeavg,
-        volumespike,
-        todayHLCross,
-        monthHigh,
-        monthLow,
-        monthHLCross,
-        highYear,
-        lowYear,
-        yearHLCross,
-        marketcap,
-        eps,
-        pe,
-        nearYearHigh,
-        nearYearLow,
-      } = stock
+    const dailyDataInsert = stocks.map(stock => ({
+      symbol: stock.symbol,
+      date: stock.tradetime,
+      closeyest: stock.closeyest,
+      priceopen: stock.priceopen,
+      price: stock.price,
+      low: stock.low,
+      high: stock.high,
+      change: stock.change,
+      changepct: stock.changepct,
+      tradetime: stock.tradetime,
+      volume: stock.volume,
+      volumeavg: stock.volumeavg,
+      volumespike: stock.volumespike,
+      todayHLCross: stock.todayHLCross,
+      monthHigh: stock.monthHigh,
+      monthLow: stock.monthLow,
+      monthHLCross: stock.monthHLCross,
+      highYear: stock.highYear,
+      lowYear: stock.lowYear,
+      yearHLCross: stock.yearHLCross,
+      marketcap: stock.marketcap,
+      eps: stock.eps,
+      pe: stock.pe,
+      nearYearHigh: stock.nearYearHigh,
+      nearYearLow: stock.nearYearLow,
+    }))
 
-      // 1. Upsert to `stocks` table
-      await supabase.from('stocks').upsert(
-        {
-          symbol,
-          companyname,
-          industry,
-          sector,
-          type,
-          exchange,
-          currency,
-          indices,
-          shares,
-        },
-        { onConflict: 'symbol' }
-      )
+    const historicalInsert = stocks.map(stock => ({
+      symbol: stock.symbol,
+      date: stock.tradetime,
+      open: stock.priceopen,
+      close: stock.price,
+      high: stock.high,
+      low: stock.low,
+      volume: stock.volume,
+      volumeavg: stock.volumeavg,
+    }))
 
-      // 2. Upsert to `dailydata` table
-      await supabase.from('dailydata').upsert(
-        {
-          symbol,
-          date: tradetime,
-          closeyest,
-          priceopen,
-          price,
-          low,
-          high,
-          change,
-          changepct,
-          tradetime,
-          volume,
-          volumeavg,
-          volumespike,
-          todayHLCross,
-          monthHigh,
-          monthLow,
-          monthHLCross,
-          highYear,
-          lowYear,
-          yearHLCross,
-          marketcap,
-          eps,
-          pe,
-          nearYearHigh,
-          nearYearLow,
-        },
-        { onConflict: 'symbol,date' }
-      )
+    const [stocksRes, dailyRes, histRes] = await Promise.all([
+      supabase.from('stocks').upsert(stocksInsert, { onConflict: 'symbol' }),
+      supabase.from('dailydata').upsert(dailyDataInsert, { onConflict: 'symbol,date' }),
+      supabase.from('historical').upsert(historicalInsert, { onConflict: 'symbol,date' }),
+    ])
 
-      // 3. Upsert to `historical` table
-      await supabase.from('historical').upsert(
-        {
-          symbol,
-          date: tradetime,
-          open: priceopen,
-          close: price,
-          high,
-          low,
-          volume,
-          volumeavg,
-        },
-        { onConflict: 'symbol,date' }
-      )
+    if (stocksRes.error || dailyRes.error || histRes.error) {
+      console.error('Supabase error:', stocksRes.error || dailyRes.error || histRes.error)
+      return NextResponse.json({ error: 'Supabase insert error' }, { status: 500 })
     }
 
     return NextResponse.json({ status: 'success', count: stocks.length })
