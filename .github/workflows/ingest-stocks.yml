@@ -1,0 +1,14 @@
+name: Ingest Stock Data Daily
+
+on:
+  schedule:
+    - cron: '30 11 * * *'  # 4:30 PM IST (11:00 AM UTC)
+  workflow_dispatch:       # allows manual trigger from GitHub UI
+
+jobs:
+  fetch-and-store:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send request to ingestStocks API
+        run: curl -sS https://stocker.co.in/api/ingestStocks
