@@ -1,12 +1,25 @@
-name: Ingest Stocks at 8:10 PM IST
+name: Fetch Stocks Data
 
 on:
   schedule:
-    - cron: '40 14 * * *' # Runs every day at 14:40 UTC (8:10 PM IST)
+    - cron: '50 14 * * *' # Runs at 8:20 PM IST
+  workflow_dispatch: # Allows manual trigger too
 
 jobs:
-  ingest:
+  fetch-stocks:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Call ingestStocks endpoint
-        run: curl -X GET "https://stocker.co.in/api/ingestStocks"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ingest script
+        run: curl -s -X GET 'https://stocker.co.in/api/ingestStocks'
