@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart"
@@ -49,7 +50,7 @@ const generateData = (period: Period) => {
 }
 
 export function MarketTrends({ period }: { period: Period }) {
-  const data = generateData(period)
+  const data = useMemo(() => generateData(period), [period])
 
   return (
     <div className="w-full h-[400px] mb-8">
