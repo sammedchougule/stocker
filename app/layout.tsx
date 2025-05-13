@@ -16,17 +16,16 @@ export default async function RootLayout({ children }: {children: React.ReactNod
   return (
     <html lang="en">
       <head>
-        {/* MetadataManager will handle dynamic metadata updates */}
-        <MetadataManager />
+        {/* Place only static tags here, do not render React components */}
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {/* Pass the stocks data directly to any component that requires it */}
+          {/* Dynamic metadata manager should be rendered here, not in <head> */}
+          <MetadataManager />
           <div className="bg-white dark:bg-black min-h-screen">
             <Marquee />
             <Navbar />
             <PageLayout>
-              {/* Pass the stocks data to children or a component that requires it */}
               {children}
               <Analytics />
             </PageLayout>
