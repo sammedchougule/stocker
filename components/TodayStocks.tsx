@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useMemo } from "react"
-import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, ListFilter, Plus } from "lucide-react"
+import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, ListFilter } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import type { Stock } from "@/types/Stock"
@@ -169,9 +169,9 @@ const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks, loading = false }) 
 
           <CardContent className="px-2 sm:px-6">
             <div className="grid grid-cols-12 gap-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 px-2 sm:px-0">
-              <div className="col-span-4 sm:col-span-4 text-left">STOCKS</div>
-              <div className="col-span-4 sm:col-span-4 text-right">PRICE</div>
-              <div className="col-span-4 sm:col-span-4 text-right pr-2">CHANGE</div>
+              <div className="col-span-4 text-left">STOCKS</div>
+              <div className="col-span-4 text-right">PRICE</div>
+              <div className="col-span-4 text-right pr-2">CHANGE</div>
             </div>
             {loading ? (
               renderSkeleton()
@@ -183,38 +183,59 @@ const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks, loading = false }) 
                     className="grid grid-cols-12 gap-4 items-center py-3 px-2 sm:px-4 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md cursor-pointer"
                     onClick={() => handleStockClick(stock)}
                   >
-                    <div className="hidden sm:flex col-span-1 sm:col-span-1 items-center justify-center">
-                      <Image
-                        className="rounded-full"
-                        width={30}
-                        height={30}
-                        src={`/images/${stock.symbol}.svg`}
-                        alt={stock.companyname}
-                      />
-                    </div>
-                    <div className="col-span-3 sm:col-span-3">
-                      <div
-                        className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
-                        style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
-                      >
-                        <span
-                          className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
+                    {/* STOCKS column (col-span-4) */}
+                    <div className="col-span-4 flex items-center">
+                      <div className="hidden sm:flex items-center justify-center mr-3">
+                        <Image
+                          className="rounded-full"
+                          width={30}
+                          height={30}
+                          src={`/images/${stock.symbol}.svg`}
+                          alt={stock.companyname}
+                          onError={e => {
+                            const target = e.target as HTMLImageElement;
+                            target.onerror = null;
+                            target.src = "/no_image.jpeg";
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <div
+                          className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
+                          style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
+                        >
+                          <span
+                            className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
+                            style={{
+                              paddingLeft: "2px",
+                              paddingRight: "2px",
+                              maxWidth: "100%",
+                              fontSize: stock.symbol.length > 10 ? "10px" : "12px",
+                            }}
+                          >
+                            {stock.symbol}
+                          </span>
+                        </div>
+                        <div
+                          className="text-sm mt-1 text-gray-700 dark:text-gray-300 truncate hidden sm:block"
                           style={{
-                            paddingLeft: "2px",
-                            paddingRight: "2px",
-                            maxWidth: "100%",
-                            fontSize: stock.symbol.length > 10 ? "10px" : "12px",
+                            maxWidth: "140px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            display: "block"
                           }}
                         >
-                          {stock.symbol}
-                        </span>
+                          {stock.companyname}
+                        </div>
                       </div>
-                      <div className="text-sm mt-1 text-gray-700 dark:text-gray-300 truncate">{stock.companyname}</div>
                     </div>
-                    <div className="col-span-4 sm:col-span-4 text-right">
+                    {/* PRICE column (col-span-4) */}
+                    <div className="col-span-4 text-right">
                       <span className="font-medium text-md dark:text-white">₹{Number(stock.price).toFixed(2)}</span>
                     </div>
-                    <div className="col-span-4 sm:col-span-4 flex items-center justify-end gap-2">
+                    {/* CHANGE column (col-span-4) */}
+                    <div className="col-span-4 flex items-center justify-end gap-2">
                       <span
                         className={`inline-flex items-center rounded p-1 ${
                           stock.changepct >= 0
@@ -229,9 +250,6 @@ const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks, loading = false }) 
                         )}
                         <span className="font-medium text-sm">{Number(stock.changepct).toFixed(2)}%</span>
                       </span>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <Plus className="h-4 w-4" />
-                      </Button>
                     </div>
                   </div>
                 ))}
