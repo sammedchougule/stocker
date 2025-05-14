@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Button } from "@/components/ui/button";
-import { format, subDays, subMonths, subYears } from "date-fns";
+import { format } from "date-fns";
 import { supabase } from "@/lib/supabase";
 import CustomizedProgressBars from "./CustomizedProgressBars";
 
