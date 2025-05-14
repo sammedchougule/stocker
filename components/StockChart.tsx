@@ -1,161 +1,3 @@
-// import { useState, useMemo, useCallback } from "react";
-// import {
-//   AreaChart,
-//   Area,
-//   XAxis,
-//   YAxis,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from "recharts";
-// import { Stock } from "@/types/Stock";
-// import { Button } from "@/components/ui/button";
-// import { format } from "date-fns";
-
-// interface StockChartProps {
-//   stock: Stock;
-// }
-
-// type TimeFrame = "5D" | "15D" | "1M" | "6M" | "1Y" | "5Y" | "MAX";
-
-// export function StockChart({ stock }: StockChartProps) {
-//   const [timeFrame, setTimeFrame] = useState<TimeFrame>("5D");
-
-//   const getFilteredData = useCallback(() => {
-//     const currentDate = new Date();
-//     const chartData = Object.entries(stock.closings)
-//       .map(([date, price]) => ({
-//         date,
-//         closingPrice: price,
-//       }))
-//       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-//     switch (timeFrame) {
-//       case "5D":
-//         return chartData.slice(-5);
-//       case "15D":
-//         return chartData.slice(-15);
-//       case "1M": {
-//         const oneMonthAgo = new Date(
-//           currentDate.setMonth(currentDate.getMonth() - 1)
-//         );
-//         return chartData.filter((item) => new Date(item.date) >= oneMonthAgo);
-//       }
-//       case "6M": {
-//         const sixMonthsAgo = new Date(
-//           currentDate.setMonth(currentDate.getMonth() - 6)
-//         );
-//         return chartData.filter((item) => new Date(item.date) >= sixMonthsAgo);
-//       }
-//       case "1Y": {
-//         const oneYearAgo = new Date(
-//           currentDate.setFullYear(currentDate.getFullYear() - 1)
-//         );
-//         return chartData.filter((item) => new Date(item.date) >= oneYearAgo);
-//       }
-//       case "5Y": {
-//         const fiveYearsAgo = new Date(
-//           currentDate.setFullYear(currentDate.getFullYear() - 5)
-//         );
-//         return chartData.filter((item) => new Date(item.date) >= fiveYearsAgo);
-//       }
-//       case "MAX":
-//         return chartData; // No slicing or filtering for MAX, show all data
-//       default:
-//         return chartData;
-//     }
-//   }, [timeFrame, stock.closings]);
-
-//   const { filteredData, isPositive } = useMemo(() => {
-//     const data = getFilteredData();
-//     if (data.length < 2) return { filteredData: data, isPositive: true };
-
-//     const startPrice = data[0].closingPrice;
-//     const endPrice = data[data.length - 1].closingPrice;
-
-//     return {
-//       filteredData: data,
-//       isPositive: endPrice >= startPrice,
-//     };
-//   }, [getFilteredData, timeFrame, stock.closings]);
-
-//   const yAxisDomain = useMemo(() => {
-//     if (filteredData.length === 0) return [0, 100];
-
-//     const prices = filteredData.map((item) => item.closingPrice);
-//     const minPrice = Math.min(...prices);
-//     const maxPrice = Math.max(...prices);
-
-//     const pricePadding = (maxPrice - minPrice) * 0.1;
-
-//     return [Math.max(0, minPrice - pricePadding), maxPrice + pricePadding];
-//   }, [filteredData]);
-
-//   const timeFrameButtons: TimeFrame[] = ["5D", "15D", "1M", "6M", "1Y", "5Y", "MAX"];
-
-//   const chartColor = isPositive ? "#22c55e" : "#ef4444"; // green-500 : red-500
-
-//   return (
-//     <div className="space-y-4 bg-white dark:bg-[#151719]">
-//       <div className="flex gap-2 mt-2">
-//         {timeFrameButtons.map((frame) => (
-//           <Button
-//             key={frame}
-//             variant={timeFrame === frame ? "default" : "outline"}
-//             size="sm"
-//             onClick={() => setTimeFrame(frame)}
-//           >
-//             {frame}
-//           </Button>
-//         ))}
-//       </div>
-//       <div className="w-full h-[400px]">
-//         <ResponsiveContainer width="100%" height="100%">
-//           <AreaChart data={filteredData}>
-//             <XAxis
-//               dataKey="date"
-//               tickFormatter={(date) => format(new Date(date), "MMM d")}
-//               minTickGap={30}
-//             />
-//             <YAxis
-//               domain={yAxisDomain}
-//               tickFormatter={(value) => `₹${value.toFixed(0)}`}
-//             />
-//             <Tooltip
-//               labelFormatter={(date) => {
-//                 const dateObj = new Date(date);
-//                 const year = dateObj.getFullYear();
-//                 const currentYear = new Date().getFullYear();
-//                 return year !== currentYear
-//                   ? format(dateObj, "MMM d, yy")
-//                   : format(dateObj, "MMM d");
-//               }}
-//               formatter={(value) => [`₹${Number(value).toFixed(2)}`, "Price"]}
-//             />
-//             <defs>
-//               <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-//                 <stop offset="0%" stopColor={chartColor} stopOpacity={25} />
-//                 <stop offset="100%" stopColor={chartColor} stopOpacity={0} />
-//               </linearGradient>
-//             </defs>
-//             <Area
-//               type="monotone"
-//               dataKey="closingPrice"
-//               stroke={chartColor}
-//               fill="url(#colorGradient)"
-//               strokeWidth={2}
-//               isAnimationActive={true} // Enable animation
-//               animationDuration={1000} // Animation duration in milliseconds
-//               animationEasing="ease-out" // Smooth easing
-//             />
-//           </AreaChart>
-//         </ResponsiveContainer>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -168,12 +10,18 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { format, subDays, subMonths, subYears } from "date-fns";
 import { supabase } from "@/lib/supabase";
+import CustomizedProgressBars from "./CustomizedProgressBars";
 
 interface HistoricalDataPoint {
   date: string;
+  open: number;
+  high: number;
+  low: number;
   close: number;
+  volume: number;
+  volumeavg?: number | null;
 }
 
 interface StockChartProps {
@@ -186,15 +34,15 @@ export function StockChart({ symbol }: StockChartProps) {
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("5D");
   const [data, setData] = useState<HistoricalDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
+      // Always fetch all historical data to ensure we have complete data range
       const { data, error } = await supabase
         .from("historical")
-        .select("date, close")
+        .select("date, open, high, low, close, volume, volumeavg")
         .eq("symbol", symbol)
-        .order("date", { ascending: true });
+        .order("date", { ascending: false }); // Get newest first to ensure we have latest data
 
       if (error) {
         console.error("Error fetching data:", error.message);
@@ -202,7 +50,21 @@ export function StockChart({ symbol }: StockChartProps) {
         return;
       }
 
-      setData(data.map((d) => ({ date: d.date, close: d.close })));
+      const processedData = data.map((d) => {
+        const normalizedDate = new Date(d.date.trim().replace(/,/g, ""));
+        return {
+          date: format(normalizedDate, "yyyy-MM-dd"),
+          normalizedDate, // Keep the date object for easier comparison
+          open: Number(d.open),
+          high: Number(d.high),
+          low: Number(d.low),
+          close: Number(d.close),
+          volume: Number(d.volume),
+          volumeavg: d.volumeavg !== undefined ? Number(d.volumeavg) : null,
+        };
+      });
+
+      setData(processedData);
       setLoading(false);
     }
 
@@ -212,39 +74,49 @@ export function StockChart({ symbol }: StockChartProps) {
   const getFilteredData = useCallback(() => {
     if (!data || data.length === 0) return [];
 
-    const now = new Date();
-    let startDate: Date | null = null;
+    // Sort data by date in ascending order
+    const sortedData = [...data].sort((a, b) => {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
 
+    // Calculate start index based on timeframe (show last N available close prices)
+    let sliceCount: number | undefined;
     switch (timeFrame) {
       case "5D":
-        startDate = new Date(now.setDate(now.getDate() - 5));
+        sliceCount = 5;
         break;
       case "15D":
-        startDate = new Date(now.setDate(now.getDate() - 15));
+        sliceCount = 15;
         break;
       case "1M":
-        startDate = new Date(now.setMonth(now.getMonth() - 1));
+        sliceCount = 22; // Approximate trading days in a month
         break;
       case "6M":
-        startDate = new Date(now.setMonth(now.getMonth() - 6));
+        sliceCount = 22 * 6;
         break;
       case "1Y":
-        startDate = new Date(now.setFullYear(now.getFullYear() - 1));
+        sliceCount = 252; // Approximate trading days in a year
         break;
       case "5Y":
-        startDate = new Date(now.setFullYear(now.getFullYear() - 5));
+        sliceCount = 252 * 5;
         break;
-      case "MAX":
+      case "MAX": {
+        // For MAX, show all data from 1990-01-01 to latest
+        const minDate = new Date("1990-01-01");
+        return sortedData.filter(item => new Date(item.date) >= minDate);
+      }
       default:
-        return data;
+        return sortedData;
     }
 
-    return data.filter((item) => new Date(item.date) >= startDate!);
+    // If sliceCount is set, show only the last N available close prices
+    return sortedData.slice(-sliceCount);
   }, [data, timeFrame]);
 
   const { filteredData, isPositive } = useMemo(() => {
     const filtered = getFilteredData();
     if (filtered.length < 2) return { filteredData: filtered, isPositive: true };
+
     const first = filtered[0].close;
     const last = filtered[filtered.length - 1].close;
     return { filteredData: filtered, isPositive: last >= first };
@@ -261,10 +133,10 @@ export function StockChart({ symbol }: StockChartProps) {
   const chartColor = isPositive ? "#22c55e" : "#ef4444";
   const timeFrames: TimeFrame[] = ["5D", "15D", "1M", "6M", "1Y", "5Y", "MAX"];
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div><CustomizedProgressBars /></div>;
 
   return (
-    <div className="space-y-4 bg-white dark:bg-[#151719]">
+    <div className="space-y-4 bg-white dark:bg-[#151719] -ml-2">
       <div className="flex gap-2 mt-2">
         {timeFrames.map((frame) => (
           <Button
@@ -279,22 +151,35 @@ export function StockChart({ symbol }: StockChartProps) {
       </div>
       <div className="w-full h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={filteredData}>
+          <AreaChart
+            data={filteredData}
+            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+          >
             <XAxis
               dataKey="date"
               tickFormatter={(d) => format(new Date(d), "MMM d")}
+              tick={{ fontSize: window?.innerWidth < 768 ? 12 : 14 }}
+              interval="preserveStartEnd"
+              minTickGap={30}
             />
             <YAxis
               domain={yAxisDomain}
               tickFormatter={(v) => `₹${v.toFixed(0)}`}
+              tick={{ fontSize: window?.innerWidth < 768 ? 12 : 14 }}
+              width={60}
             />
             <Tooltip
               labelFormatter={(d) => format(new Date(d), "MMM d, yyyy")}
               formatter={(v) => [`₹${(v as number).toFixed(2)}`, "Close"]}
+              contentStyle={{
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
             />
             <defs>
               <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={chartColor} stopOpacity={0.3} />
+                <stop offset="0%" stopColor={chartColor} stopOpacity={0.5} />
                 <stop offset="100%" stopColor={chartColor} stopOpacity={0} />
               </linearGradient>
             </defs>
@@ -306,6 +191,7 @@ export function StockChart({ symbol }: StockChartProps) {
               strokeWidth={2}
               isAnimationActive={true}
               animationDuration={800}
+              connectNulls={true}
             />
           </AreaChart>
         </ResponsiveContainer>
