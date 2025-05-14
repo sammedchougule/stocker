@@ -19,7 +19,7 @@ export async function getStocks(): Promise<Stock[]> {
 
     return data.data
   } catch (error) {
-    //console.error("Error fetching stocks:", error)
+    console.error("Error fetching stocks:", error)
     return [] // Return an empty array to prevent crashes
   }
 }
