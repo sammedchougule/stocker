@@ -1,195 +1,138 @@
-import { ArrowRightIcon, InfoIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarketGauge } from "@/components/market-mood/market-gauge"
-import { MarketTrends } from "@/components/market-mood/market-trends"
-import { MarketMetrics } from "@/components/market-mood/market-metrics"
-import { HowItWorks } from "@/components/market-mood/how-it-works"
-import { getStocks } from "@/lib/getStocks"
-import { getMarketMoodValueAndText } from "@/components/Gauge"
+import type { Metadata } from "next"
+import { fetchStocks } from "@/lib/utils/fetchStocks"
+import MarketMoodHero from "@/components/MarketMoodHero"
+import MarketMoodExplanation from "@/components/MarketMoodExplanation"
+import MarketMoodIndicators from "@/components/MarketMoodIndicators"
+import MarketMoodFAQ from "@/components/MarketMoodFAQ"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
-export default async function Home() {
+export const metadata: Metadata = {
+  metadataBase: new URL("https://stocker.co.in"),
+  title: "Market Mood Index | Track Market Sentiment Live | Stocker",
+  description:
+    "Analyze investor sentiment with Stocker's Market Mood Index. Live fear and greed data, market psychology, and sentiment indicators to help you invest smarter.",
+  keywords:
+    "market mood index, stock market sentiment, fear and greed index, investor psychology, live market sentiment, trading psychology, sentiment indicators, stocker market tools, market fear gauge, investor behavior analysis",
+  authors: [{ name: "Stocker", url: "https://stocker.co.in" }],
+  category: "Finance",
+  applicationName: "Stocker",
+  themeColor: "#0ea5e9",
+  viewport: "width=device-width, initial-scale=1",
+  openGraph: {
+    title: "Market Mood Index | Track Market Sentiment Live | Stocker",
+    description:
+      "Monitor live investor emotions with Stocker's Market Mood Index. Get a clear view of fear and greed levels to make better trading and investment decisions.",
+    url: "https://stocker.co.in/market-mood-index",
+    siteName: "Stocker",
+    images: [
+      {
+        url: "/og-market-mood.png",
+        width: 1200,
+        height: 630,
+        alt: "Live Market Mood Index - Stocker",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Live Market Mood Index | Fear & Greed Sentiment | Stocker",
+    description:
+      "Explore real-time investor sentiment with Stocker's Market Mood Index. Decode fear & greed to navigate the market confidently.",
+    images: ["/og-market-mood.png"],
+    creator: "@stocker",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+  },
+  alternates: {
+    canonical: "https://stocker.co.in/market-mood-index",
+  },
+};
 
-   const stocks = await getStocks()
-   const { value: marketMoodValue, text: marketMoodText } = getMarketMoodValueAndText(stocks)
 
-   // Dynamic gradient for sentiment
-   let sentimentGradient = "from-emerald-100 to-white";
-   if (marketMoodValue <= 30) sentimentGradient = "from-green-100 to-white";
-   else if (marketMoodValue <= 50) sentimentGradient = "from-yellow-100 to-white";
-   else if (marketMoodValue <= 70) sentimentGradient = "from-orange-100 to-white";
-   else sentimentGradient = "from-red-100 to-white";
+export default async function MarketMoodIndexPage() {
+  // Fetch stock data server-side for initial load
+  let stockData: any[] = []
+  let error = null
+
+  try {
+    stockData = await fetchStocks()
+  } catch (e) {
+    console.error("Error in page component:", e)
+    error = e instanceof Error ? e.message : "Failed to fetch stock data"
+    // Provide empty array to allow client-side to attempt refresh
+    stockData = []
+  }
+
+  // Calculate market mood based on percentage of stocks with positive change
+  const calculateMoodValue = () => {
+    // Filter only EQ type stocks
+    const equityStocks = stockData.filter((stock) => stock.type === "EQ")
+
+    if (equityStocks.length === 0) return 50 // Default to neutral if no stocks
+
+    // Count stocks with positive change percentage
+    const positiveStocks = equityStocks.filter((stock) => {
+      const changePct = Number(stock.changepct)
+      return !isNaN(changePct) && changePct > 0
+    })
+
+    // Calculate percentage of positive stocks
+    const moodValue = (positiveStocks.length / equityStocks.length) * 100
+
+    return moodValue
+  }
+
+  const moodValue = calculateMoodValue()
+
+  // Find Nifty 50 index data
+  const nifty50 = stockData.find((stock) => stock.symbol === "NIFTY_50") || {
+    price: "22600.00",
+    change: "100.00",
+    changepct: "0.44",
+  }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <main className="flex-1 container mx-auto px-4 py-8 md:px-6 md:py-12">
-        <section className={`py-12 md:py-16 px-6 md:px-10 bg-gradient-to-b ${sentimentGradient} dark:from-emerald-950/20 dark:to-background rounded-lg`}>
-          <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_500px]">
-            <div className="flex flex-col justify-center space-y-4">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">Market Mood Index</h1>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  A comprehensive sentiment analysis tool that gauges market psychology and investor emotions
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Button className="inline-flex h-10 items-center justify-center rounded-md bg-gray-700 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-emerald-700 dark:hover:bg-emerald-600">
-                  Explore Metrics
-                  <ArrowRightIcon className="ml-2 h-4 w-4" />
-                </Button>
-                <Button variant="outline">Learn More</Button>
-              </div>
-            </div>
-            <div className="flex items-center justify-center">
-              {/* You will add your custom gauge design in the MarketGauge component */}
-              <MarketGauge stocks={stocks}/>
-            </div>
-          </div>
-        </section>
+    <div className="container mx-auto px-4 py-8 space-y-16">
+      {error && (
+        <Alert variant="destructive" className="mb-6">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
-        <section className="py-12 md:py-16 mb-8">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Current Market Mood</h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                The Market Mood Index is currently at <span className="font-bold" style={{ color: marketMoodValue <= 30 ? '#16a34a' : marketMoodValue <= 50 ? '#ca8a04' : marketMoodValue <= 70 ? '#f97316' : '#dc2626' }}>{marketMoodValue.toFixed(2)}</span>, indicating{" "}
-                <span className="font-bold" style={{ color: marketMoodValue <= 30 ? '#16a34a' : marketMoodValue <= 50 ? '#ca8a04' : marketMoodValue <= 70 ? '#f97316' : '#dc2626' }}>{marketMoodText}</span> sentiment
-              </p>
-            </div>
-          </div>
-          <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
-            <div className="flex flex-col justify-center space-y-4">
-              <div className="space-y-2">
-                <div className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm">
-                  <InfoIcon className="mr-1 h-4 w-4" />
-                  <span>Market Sentiment Analysis</span>
-                </div>
-                <h3 className="text-2xl font-bold tracking-tighter sm:text-3xl">What This Means</h3>
-                <p className="max-w-[600px] text-muted-foreground md:text-lg/relaxed">
-                  {marketMoodValue <= 30 && "Extreme fear (<30) suggests a good time to open fresh positions, as markets are likely to be oversold and might turn upwards. Historically, periods of extreme fear have often preceded strong market recoveries."}
-                  {marketMoodValue > 30 && marketMoodValue <= 50 && "Investors are fearful in the market; action depends on the MMI trajectory. A declining trend may indicate more downside risk, while a stabilizing or rising index could signal recovery potential."}
-                  {marketMoodValue > 50 && marketMoodValue <= 70 && "Investors are acting greedy; action depends on the MMI trajectory. Continued upward momentum may offer short-term gains, but caution is advised as valuations may begin to stretch."}
-                  {marketMoodValue > 70 && "Extreme greed (>70) suggests avoiding fresh positions as markets are overbought. This often precedes corrections or increased volatility as optimism peaks and risk appetite becomes excessive."}
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Button variant="outline" className="inline-flex h-10 items-center justify-center">
-                  Historical Data
-                </Button>
-              </div>
-            </div>
-            <div className="flex flex-col space-y-4">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle>Sentiment Breakdown</CardTitle>
-                  <CardDescription>Key factors influencing the current mood</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span>Retail Sentiment</span>
-                        <span className="font-medium">78%</span>
-                      </div>
-                      <Progress value={78} className="h-2 w-full bg-emerald-100" indicatorClassName="bg-emerald-600" />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span>Institutional Sentiment</span>
-                        <span className="font-medium">65%</span>
-                      </div>
-                      <Progress value={65} className="h-2 w-full bg-emerald-100" indicatorClassName="bg-emerald-600" />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span>Technical Indicators</span>
-                        <span className="font-medium">70%</span>
-                      </div>
-                      <Progress value={70} className="h-2 w-full bg-emerald-100" indicatorClassName="bg-emerald-600" />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span>News Sentiment</span>
-                        <span className="font-medium">75%</span>
-                      </div>
-                      <Progress value={75} className="h-2 w-full bg-emerald-100" indicatorClassName="bg-emerald-600" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
+      <MarketMoodHero moodValue={moodValue} stockCount={stockData.filter((stock) => stock.type === "EQ").length} />
 
-        <section className="py-12 md:py-16 mb-8 bg-muted/50 rounded-lg">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Market Metrics</h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Key market indicators that influence the Market Mood Index
-              </p>
-            </div>
-          </div>
-          <div className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
-            <MarketMetrics />
-          </div>
-        </section>
+      <MarketMoodExplanation moodValue={moodValue} nifty50={nifty50} />
 
-        <section className="py-12 md:py-16 mb-8">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Historical Trends</h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Track how market sentiment has evolved over time
-              </p>
-            </div>
-          </div>
-          <div className="mx-auto max-w-5xl py-12 mb-10">
-            <Tabs defaultValue="6m" className="w-full">
-              <div className="flex justify-center">
-                <TabsList>
-                  <TabsTrigger value="1m">1M</TabsTrigger>
-                  <TabsTrigger value="3m">3M</TabsTrigger>
-                  <TabsTrigger value="6m">6M</TabsTrigger>
-                  <TabsTrigger value="1y">1Y</TabsTrigger>
-                  <TabsTrigger value="all">All</TabsTrigger>
-                </TabsList>
-              </div>
-              <TabsContent value="1m" className="mt-6">
-                <MarketTrends period="1m" />
-              </TabsContent>
-              <TabsContent value="3m" className="mt-6">
-                <MarketTrends period="3m" />
-              </TabsContent>
-              <TabsContent value="6m" className="mt-6">
-                <MarketTrends period="6m" />
-              </TabsContent>
-              <TabsContent value="1y" className="mt-6">
-                <MarketTrends period="1y" />
-              </TabsContent>
-              <TabsContent value="all" className="mt-6">
-                <MarketTrends period="all" />
-              </TabsContent>
-            </Tabs>
-          </div>
-        </section>
+      <MarketMoodIndicators />
 
-        <section className="py-12 md:py-16 mb-8 bg-muted/50 rounded-lg">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">How It Works</h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Understanding the methodology behind the Market Mood Index
-              </p>
-            </div>
-          </div>
-          <div className="mx-auto max-w-5xl py-12">
-            <HowItWorks />
-          </div>
-        </section>
-      </main>
+      <MarketMoodFAQ />
+
+      <div className="mt-16 max-w-6xl mx-auto">
+        <h3 className="text-lg font-semibold mb-2 text-red-100 p-2 rounded-t-lg bg-gradient-to-r from-red-700/50 to-red-900/25 inline-block px-4">
+          Disclaimer:
+        </h3>
+        <p className="text-sm p-6 border border-red-800/50 rounded-b-lg rounded-tr-lg">
+          <span className="block mb-2">
+            The Market Mood Index (MMI) is provided solely for informational and educational purposes. It is designed to
+          reflect general market sentiment based on predefined parameters, but it should not be interpreted as financial
+          advice or a recommendation to invest.
+          </span>
+
+          <span>
+            The accuracy or completeness of the data is not guaranteed, and any
+          trading or investment decisions made using the MMI are done at your own risk.
+          </span>
+        </p>
+
+      </div>
     </div>
   )
 }

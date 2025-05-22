@@ -7,38 +7,24 @@
     <priority>1.00</priority>
   </url>
 
-  <!-- Intrabuzz page -->
+  <!-- Intraday page -->
   <url>
-    <loc>https://stocker.co.in/intrabuzz</loc>
-    <lastmod>2025-03-01</lastmod>
+    <loc>https://stocker.co.in/intraday</loc>
+    <lastmod>2025-05-20</lastmod>
     <priority>0.80</priority>
   </url>
 
-  <!-- Sector page -->
+  <!-- Market Mood Index page -->
   <url>
-    <loc>https://stocker.co.in/sector</loc>
-    <lastmod>2025-03-01</lastmod>
+    <loc>https://stocker.co.in/market-mood-index</loc>
+    <lastmod>2025-05-20</lastmod>
     <priority>0.80</priority>
   </url>
 
-  <!-- Screener page -->
+    <!-- Journal page -->
   <url>
-    <loc>https://stocker.co.in/screener</loc>
-    <lastmod>2025-03-01</lastmod>
-    <priority>0.80</priority>
-  </url>
-
-  <!-- Heatmap page -->
-  <url>
-    <loc>https://stocker.co.in/heatmap</loc>
-    <lastmod>2025-03-01</lastmod>
-    <priority>0.80</priority>
-  </url>
-
-  <!-- News page -->
-  <url>
-    <loc>https://stocker.co.in/news</loc>
-    <lastmod>2025-03-01</lastmod>
+    <loc>https://stocker.co.in/journal</loc>
+    <lastmod>2025-05-20</lastmod>
     <priority>0.80</priority>
   </url>
 

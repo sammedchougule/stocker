@@ -1,182 +1,233 @@
-
 "use client"
-
-import { useMemo, useState, useCallback } from "react"
-import { ArrowUpIcon, ArrowDownIcon } from "lucide-react"
-import { useSwipeable } from "react-swipeable"
-import Image from "next/image"
-import { Card, CardHeader, CardContent } from "@/components/ui/card"
-import type { Stock } from "@/types/Stock"
-import { StockModal } from "@/components/StockModal"
-
-const INDICES = [
-  "NIFTY_50",
-  "NIFTY_AUTO",
-  "NIFTY_BANK",
-  "NIFTY_ENERGY",
-  "NIFTY_FIN_SERVICE",
-  "NIFTY_FMCG",
-  "NIFTY_IT",
-  "NIFTY_MEDIA",
-  "NIFTY_METAL",
-  "NIFTY_PHARMA",
-  "NIFTY_PSU_BANK",
-  "NIFTY_REALTY",
-]
+import { useState, useRef, useEffect, type TouchEvent } from "react"
+import { ArrowUp, ArrowDown } from "lucide-react"
+import type { Stock } from "@/lib/utils/fetchStocks"
+import Link from "next/link"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import { getSymbolColor } from "@/lib/utils/getSymbolColor"
+import StockModal from "./StockModal"
 
 interface IndicesProps {
   stocks: Stock[]
 }
 
-const Indices: React.FC<IndicesProps> = ({ stocks }) => {
-  const [activeCard, setActiveCard] = useState(0)
+export default function Indices({ stocks }: IndicesProps) {
+  // Filter out only INDEX type stocks and limit to 9
+  const indexStocks = (stocks ?? []).filter((stock) => stock.type === "INDEX").slice(0, 9)
+
+  // State for mobile slider
+  const [currentPage, setCurrentPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const sliderRef = useRef<HTMLDivElement>(null)
 
-  // Memoized filtering logic
-  const filteredSectors = useMemo(() => {
-    return stocks.filter((stock) => INDICES.includes(stock.symbol)).slice(0, 9)
-  }, [stocks])
+  // Check if we're on mobile
+  const isMobile = useMediaQuery("(max-width: 640px)")
 
-  // Loading state derived from stocks availability
-  const isLoading = stocks.length === 0
+  // Items per page on mobile
+  const itemsPerPage = 3
 
-  const handlers = useSwipeable({
-    onSwipedLeft: () => setActiveCard((prev) => Math.min(prev + 1, 2)),
-    onSwipedRight: () => setActiveCard((prev) => Math.max(prev - 1, 0)),
-    trackMouse: true,
-  })
-
-  const handleStockClick = useCallback((stock: Stock) => {
-    setSelectedStock(stock)
-    setIsModalOpen(true)
-  }, [])
-
-  const renderSkeleton = () => (
-    <div className="grid grid-cols-1 gap-1">
-      {Array(3)
-        .fill(null)
-        .map((_, idx) => (
-          <div key={idx} className="flex justify-between items-start py-4 px-1">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>
-              <div className="w-24 h-5 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
-            </div>
-            <div className="text-right">
-              <div className="w-20 h-5 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
-              <div className="flex items-center justify-end mt-0.5">
-                <div className="w-10 h-4 bg-gray-300 dark:bg-gray-700 rounded animate-pulse ml-2"></div>
-              </div>
-            </div>
-          </div>
-        ))}
-    </div>
-  )
-
-  const renderCard = (startIndex: number, endIndex: number) => {
-    if (isLoading) {
-      return renderSkeleton()
+  useEffect(() => {
+    if (indexStocks.length > 0) {
+      setTotalPages(Math.ceil(indexStocks.length / itemsPerPage))
     }
+  }, [indexStocks])
 
-    return (
-      <div className="grid grid-cols-1 gap-8">
-        {filteredSectors.slice(startIndex, endIndex).map((sector) => (
-          <div
-            key={sector.symbol}
-            className="flex justify-between items-start px-1 cursor-pointer"
-            onClick={() => handleStockClick(sector)}
-          >
-            <div className="flex items-center space-x-2">
-              <Image
-                src={`/images/${sector.symbol}.svg`}
-                alt={sector.companyname}
-                width={30}
-                height={30}
-                className="rounded-full border border-gray-200"
-              />
-              <span className="text-md font-medium text-gray-800 dark:text-gray-200 truncate max-w-[120px]">
-                {sector.companyname}
-              </span>
-            </div>
-
-            <div className="text-right">
-              <span className="text-md font-medium text-gray-900 dark:text-gray-100">
-                {Number(sector.price).toFixed(2)}
-              </span>
-              <div className="flex items-center justify-end mt-0.5">
-                <span
-                  className={`inline-flex items-center rounded px-1.5 py-1 ${
-                    sector.changepct >= 0
-                      ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50 rounded-lg"
-                      : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50 rounded-lg"
-                  }`}
-                >
-                  {sector.changepct >= 0 ? (
-                    <ArrowUpIcon className="w-3.5 h-3.5 mr-0.5" />
-                  ) : (
-                    <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
-                  )}
-                  <span className="text-sm font-medium">{Number(sector.changepct).toFixed(2)}%</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    )
+  const handleNext = () => {
+    if (currentPage < totalPages - 1) {
+      setIsTransitioning(true)
+      setCurrentPage(currentPage + 1)
+    }
   }
 
-  return (
-    <div className="container mx-auto">
-      <Card className="bg-white dark:bg-[#151719] overflow-hidden">
-        <CardHeader>
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">Sectoral Indices</h2>
-            <a href="/sectors" className="text-sm text-blue-500 dark:text-blue-400">
-              See All
-            </a>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {/* Desktop and Tablet View */}
-          <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-            <div className="pr-4">{renderCard(0, 3)}</div>
-            <div className="px-4">{renderCard(3, 6)}</div>
-            <div className="pl-4 sm:col-span-2 md:col-span-1">{renderCard(6, 9)}</div>
-          </div>
+  const handlePrev = () => {
+    if (currentPage > 0) {
+      setIsTransitioning(true)
+      setCurrentPage(currentPage - 1)
+    }
+  }
 
-          {/* Mobile View */}
-          <div className="sm:hidden overflow-hidden" {...handlers}>
-            <div
-              className="flex transition-transform duration-300 ease-in-out"
-              style={{
-                transform: `translateX(-${activeCard * 100}%)`,
-              }}
+  // Touch handlers for swiping
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      // Swipe left
+      handleNext()
+    }
+
+    if (touchStart - touchEnd < -75) {
+      // Swipe right
+      handlePrev()
+    }
+  }
+
+  // Handle transition end
+  const handleTransitionEnd = () => {
+    setIsTransitioning(false)
+  }
+
+
+  const handleIndexClick = (stock: Stock) => {
+    setSelectedStock(stock)
+    setIsModalOpen(true)
+  }
+
+
+  return (
+    <>
+    <div className="bg-card rounded-lg p-6 shadow-md border">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">Sectoral Indices</h2>
+        <Link href="/intrabuzz" className="text-blue-500 hover:underline text-sm">
+          See All
+        </Link>
+      </div>
+
+      {/* Desktop view - grid layout */}
+      <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {indexStocks.map((index) => {
+          const changeValue = Number.parseFloat(index.change)
+          const changePctValue = Number.parseFloat(index.changepct)
+          const isPositive = changeValue >= 0
+
+          return (
+            <div key={index.symbol} className="flex items-start gap-3 cursor-pointer hover:bg-muted/30 p-2 rounded-md transition-colors"
+             onClick={() => handleIndexClick(index)}
             >
-              <div className="w-full flex-shrink-0">{isLoading ? renderSkeleton() : renderCard(0, 3)}</div>
-              <div className="w-full flex-shrink-0">{isLoading ? renderSkeleton() : renderCard(3, 6)}</div>
-              <div className="w-full flex-shrink-0">{isLoading ? renderSkeleton() : renderCard(6, 9)}</div>
-            </div>
-            <div className="flex justify-center mt-6">
-              <div className="flex space-x-2">
-                {[0, 1, 2].map((index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveCard(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      activeCard === index ? "bg-blue-500" : "bg-gray-300 dark:bg-gray-600"
+              <div
+                className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mt-1">
+                <img
+                  src={`/images/${index.symbol}.svg`}
+                  alt={index.symbol}
+                  className="w-8 h-8 object-contain rounded-full"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/no_image.jpeg';
+                  }}
+                />
+              </div>
+              <div className="flex-grow">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium truncate mr-2">{index.companyname}</h3>
+                  <span className="font-bold whitespace-nowrap">{Number.parseFloat(index.price).toLocaleString()}</span>
+                </div>
+                <div className="flex justify-end mt-1">
+                  <div
+                    className={`text-sm flex items-center justify-center rounded px-2 py-1 font-semibold ${
+                      isPositive ? "bg-green-900/30 text-green-400" : "bg-red-900/30 text-red-400"
                     }`}
-                  />
-                ))}
+                  >
+                    {isPositive ? <ArrowUp className="h-3 w-3 mr-1" /> : <ArrowDown className="h-3 w-3 mr-1" />}
+                    {Math.abs(changePctValue).toFixed(2)}%
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          )
+        })}
+      </div>
 
-      <StockModal stock={selectedStock} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* Mobile view - horizontal sliding carousel */}
+      <div className="sm:hidden">
+        <div className="relative">
+          <div
+            className="overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div
+              ref={sliderRef}
+              className="flex transition-transform duration-300 ease-in-out"
+              style={{ transform: `translateX(-${currentPage * 100}%)` }}
+              onTransitionEnd={handleTransitionEnd}
+            >
+              {/* Create groups of 3 indices */}
+              {Array.from({ length: totalPages }).map((_, pageIndex) => (
+                <div key={pageIndex} className="w-full flex-shrink-0 space-y-4">
+                  {indexStocks.slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage).map((index) => {
+                    const changeValue = Number.parseFloat(index.change)
+                    const changePctValue = Number.parseFloat(index.changepct)
+                    const isPositive = changeValue >= 0
+
+                    return (
+                      <div key={index.symbol} className="flex items-start gap-3 cursor-pointer hover:bg-muted/100 p-2 rounded-md transition-colors"
+                      onClick={() => handleIndexClick(index)}
+                      >
+                        <div
+                          className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mt-1"
+                          style={{ backgroundColor: getSymbolColor(index.symbol) }}
+                        >
+                          <img
+                            src={`/images/${index.symbol}.svg`}
+                            alt={index.symbol}
+                            className="w-7 h-7 object-contain rounded-full"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = '/no_image.jpeg';
+                            }}
+                          />
+                        </div>
+                        <div className="flex-grow">
+                          <div className="flex justify-between items-center">
+                            <h3 className="font-medium truncate mr-2">{index.companyname}</h3>
+                            <span className="font-bold whitespace-nowrap">
+                              {Number.parseFloat(index.price).toLocaleString()}
+                            </span>
+                          </div>
+                          <div className="flex justify-end mt-1">
+                            <div
+                              className={`text-sm flex items-center justify-center rounded px-2 py-1 font-semibold ${
+                                isPositive ? "bg-green-900/30 text-green-400" : "bg-red-900/30 text-red-400"
+                              }`}
+                            >
+                              {isPositive ? (
+                                <ArrowUp className="h-3 w-3 mr-1" />
+                              ) : (
+                                <ArrowDown className="h-3 w-3 mr-1" />
+                              )}
+                              {Math.abs(changePctValue).toFixed(2)}%
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Pagination dots */}
+          <div className="flex justify-center mt-4 space-x-2">
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <button
+                key={index}
+                className={`h-2 w-2 rounded-full ${currentPage === index ? "bg-blue-500" : "bg-gray-400"}`}
+                onClick={() => {
+                  setIsTransitioning(true)
+                  setCurrentPage(index)
+                }}
+                disabled={isTransitioning}
+                aria-label={`Go to page ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
+
+    <StockModal stock={selectedStock} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      
+    </>
   )
 }
-
-export default Indices

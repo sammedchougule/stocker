@@ -1,147 +1,128 @@
 "use client"
 
-import type React from "react"
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
-import { Flame, ArrowUp, ArrowDown } from "lucide-react"
-import type { Stock } from "@/types/Stock"
-import { getStockBgColor } from "@/lib/getstockBgColor"
+import { useState } from "react"
+import { Card } from "@/components/ui/card"
+import { ArrowDown, ArrowUp, Flame } from "lucide-react"
+import type { Stock } from "@/lib/utils/fetchStocks"
+import { getSymbolColor } from "@/lib/utils/getSymbolColor"
+import StockModal from "./StockModal"
 
 interface StockCardProps {
   stock: Stock
-  onClick?: (stock: Stock) => void
-  spikeFilterOn: boolean
-  highLowFilterOn: boolean
-  showChangePctOnly?: boolean
+  viewMode: "change" | "spike" | "highLow"
 }
 
-const StockCard: React.FC<StockCardProps> = ({
-  stock,
-  onClick,
-  spikeFilterOn,
-  highLowFilterOn,
-  showChangePctOnly = false,
-}) => {
-  // Don't render the card if highLowFilterOn is true and all HL values are "..."
-  if (
-    highLowFilterOn &&
-    (!stock.todayHLCross || stock.todayHLCross === "...") &&
-    (!stock.monthHLCross || stock.monthHLCross === "...") &&
-    (!stock.yearHLCross || stock.yearHLCross === "...")
-  ) {
-    return null
-  }
+export default function StockCard({ stock, viewMode }: StockCardProps) {
+   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { symbol, companyname, price, change, changepct, volumespike, todayHLCross, monthHLCross, yearHLCross } = stock
 
-  const renderHLValue = (value: string | null | undefined, type: string) => {
-    if (!value || value === "...") return null
-    const isHigh = value.includes("H")
-    return (
-      <div
-        key={type}
-        className={`flex items-center text-[15px] rounded px-1 py-1 font-medium ${
-          isHigh ? "text-green-500 bg-green-50" : "text-red-500 bg-red-50"
-        }`}
-      >
-        {isHigh ? <ArrowUp className="w-3.5 h-3.5 mr-1" /> : <ArrowDown className="w-3.5 h-3.5 mr-1" />}
-        <span>{value}</span>
-      </div>
-    )
-  }
+  const changeValue = Number.parseFloat(change)
+  const changePctValue = Number.parseFloat(changepct)
+  const volumeSpikeValue = Number.parseFloat(volumespike)
+  const isPositive = changeValue >= 0
+  const hasPositiveSpike = !isNaN(volumeSpikeValue) && volumeSpikeValue > 0
+  const isHighSpike = hasPositiveSpike && volumeSpikeValue >= 1.0
 
-  const renderHLValues = () => {
-    const hlValues = [
-      renderHLValue(stock.todayHLCross, "today"),
-      renderHLValue(stock.monthHLCross, "month"),
-      renderHLValue(stock.yearHLCross, "year"),
-    ].filter(Boolean)
+  const getHighLowInfo = () => {
+    // Check for high values first (prioritize yearly > monthly > daily)
+    if (yearHLCross === "52W High") {
+      return { text: "52W High", isHigh: true }
+    }
+    if (monthHLCross === "Month High") {
+      return { text: "Month High", isHigh: true }
+    }
+    if (todayHLCross === "Today High") {
+      return { text: "Today High", isHigh: true }
+    }
 
-    return <div className="flex flex-col space-y-1">{hlValues}</div>
+    // Then check for low values
+    if (yearHLCross === "52W Low") {
+      return { text: "52W Low", isHigh: false }
+    }
+    if (monthHLCross === "Month Low") {
+      return { text: "Month Low", isHigh: false }
+    }
+    if (todayHLCross === "Today Low") {
+      return { text: "Today Low", isHigh: false }
+    }
+
+    // Default case (shouldn't happen due to filtering)
+    return { text: "No Data", isHigh: null }
   }
 
   return (
-    <Card
-      className="relative flex flex-col cursor-pointer transition-transform duration-300 transform hover:scale-105 bg-white dark:bg-[#151719]"
-      onClick={() => onClick?.(stock)}
-      style={{
-        boxShadow: stock.changepct >= 0 ? "4px 4px 8px rgba(34, 197, 94, 0.5)" : "4px 4px 8px rgba(239, 68, 68, 0.5)",
-      }}
+    <>
+    <Card className="p-4 hover:shadow-md transition-all duration-200 transform hover:scale-105 bg-card cursor-pointer"
+     onClick={() => setIsModalOpen(true)}
     >
-      <CardHeader>
-        <div
-          className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
-          style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
+      <div className="mb-2">
+        <span
+          className="inline-block w-26 text-center text-xs font-bold text-white px-3 py-1 rounded-md"
+          style={{ backgroundColor: getSymbolColor(symbol) }}
         >
+          {symbol}
+        </span>
+      </div>
+
+      <h3 className="font-medium text-sm mb-3 line-clamp-2 h-10">{companyname}</h3>
+
+      <div className="text-2xl font-bold mb-2">₹{Number.parseFloat(price).toFixed(2)}</div>
+
+      {viewMode === "change" ? (
+        <div className={`text-sm flex items-center ${isPositive ? "text-green-400" : "text-red-400"}`}>
           <span
-            className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
-            style={{
-              paddingLeft: "2px",
-              paddingRight: "2px",
-              maxWidth: "100%",
-              fontSize: stock.symbol.length > 10 ? "10px" : "12px",
-            }}
+            className={`flex items-center px-3 py-1 rounded-md font-semibold ${
+              isPositive ? "bg-green-900/30 text-green-400" : "bg-red-900/30 text-red-400"
+            }`}
           >
-            {stock.symbol}
+            {isPositive ? <ArrowUp className="h-3 w-3 mr-1" /> : <ArrowDown className="h-3 w-3 mr-1" />}
+            {changePctValue.toFixed(2)}%
           </span>
         </div>
-      </CardHeader>
-      <CardContent className="flex-grow">
-        <h3 className="text-md font-medium text-gray-900 dark:text-gray-100 leading-tight line-clamp-2">
-          {stock.companyname}
-        </h3>
-      </CardContent>
-      <CardFooter className="flex flex-col">
-        <div className="text-xl font-semibold mb-1 w-full text-gray-900 dark:text-gray-100">
-          <span>₹{Number(stock.price).toFixed(2)}</span>
+      ) : viewMode === "spike" && hasPositiveSpike ? (
+        <div className="text-sm flex items-center">
+          <span
+            className={`flex items-center px-3 py-1 rounded-md font-semibold ${
+              isHighSpike ? "bg-orange-900/30 text-orange-400" : "bg-yellow-900/30 text-yellow-400"
+            }`}
+          >
+            <Flame className="h-3 w-3 mr-1" />
+            {volumeSpikeValue.toFixed(2)}
+          </span>
         </div>
-        <div className="flex justify-between items-center w-full">
-          {showChangePctOnly ? (
-            <div
-              className={`flex items-center text-[15px] rounded px-1 py-1 font-medium ${
-                stock.changepct >= 0
-                  ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50"
-                  : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50"
-              }`}
-            >
-              {stock.changepct >= 0 ? (
-                <ArrowUp className="w-3.5 h-3.5 mr-1" />
-              ) : (
-                <ArrowDown className="w-3.5 h-3.5 mr-1" />
-              )}
-              {Number(stock.changepct).toFixed(2)}%
-            </div>
-          ) : highLowFilterOn ? (
-            renderHLValues()
-          ) : spikeFilterOn ? (
-            <div
-              className={`flex items-center px-1 py-1 rounded-md text-[15px] font-medium ${
-                (stock.volumespike ?? 0) >= 0
-                  ? "text-orange-700 bg-orange-100 dark:text-orange-400 dark:bg-orange-900/50"
-                  : "text-yellow-700 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/50"
-              }`}
-            >
-              <Flame className="w-4 h-4 mr-1" />
-              <span>{Number(stock.volumespike).toFixed(2)}X</span>
-            </div>
-          ) : (
-            <div
-              className={`flex items-center text-[15px] rounded px-1 py-1 font-medium ${
-                stock.changepct >= 0
-                  ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900/50"
-                  : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900/50"
-              }`}
-            >
-              {stock.changepct >= 0 ? (
-                <ArrowUp className="w-3.5 h-3.5 mr-1" />
-              ) : (
-                <ArrowDown className="w-3.5 h-3.5 mr-1" />
-              )}
-              {Number(stock.changepct).toFixed(2)}%
-            </div>
-          )}
+      ) : viewMode === "spike" ? (
+        <div className="text-sm flex items-center">
+          <span className="flex items-center px-3 py-1 rounded-md font-semibold bg-gray-800 text-gray-400">
+            No spike
+          </span>
         </div>
-      </CardFooter>
+      ) : viewMode === "highLow" ? (
+        (() => {
+          const { text, isHigh } = getHighLowInfo()
+          return (
+            <div className="text-sm flex items-center">
+              <span
+                className={`flex items-center px-3 py-1 rounded-md font-semibold ${
+                  isHigh === true
+                    ? "bg-green-900/30 text-green-400"
+                    : isHigh === false
+                      ? "bg-red-900/30 text-red-400"
+                      : "bg-gray-800 text-gray-400"
+                }`}
+              >
+                {isHigh === true ? (
+                  <ArrowUp className="h-3 w-3 mr-1" />
+                ) : isHigh === false ? (
+                  <ArrowDown className="h-3 w-3 mr-1" />
+                ) : null}
+                {text}
+              </span>
+            </div>
+          )
+        })()
+      ) : null}
     </Card>
+    <StockModal stock={stock} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
   )
 }
-
-export default StockCard
-

@@ -2,8 +2,8 @@ import { Facebook, Twitter, Instagram, Linkedin, Mail } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="bg-white dark:bg-black text-gray-800 dark:text-white">
-      <div className="container mx-auto px-6 py-12">
+    <footer className="text-gray-800 dark:text-white">
+      <div className="container mx-auto px-6 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">About StockDataTable</h3>

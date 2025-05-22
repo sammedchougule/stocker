@@ -1,272 +1,244 @@
 "use client"
-
+import { useState, useRef } from "react"
 import type React from "react"
-import { useState, useMemo } from "react"
-import { ArrowUpIcon, ArrowDownIcon, TrendingUp, TrendingDown, Activity, ListFilter } from "lucide-react"
+
+import { ArrowUp, ArrowDown, TrendingUp, LineChart, Activity, ListFilter } from "lucide-react"
+import type { Stock } from "@/lib/utils/fetchStocks"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import type { Stock } from "@/types/Stock"
-import Image from "next/image"
-import MarketMood from "./MarketMood"
-import { StockModal } from "@/components/StockModal"
-import { getStockBgColor } from "@/lib/getstockBgColor"
+import { getSymbolColor } from "@/lib/utils/getSymbolColor"
+import StockModal from "./StockModal"
 
-type FilterType = "gainers" | "losers" | "most-active" | "52w-high" | "52w-low"
+interface TodayStocksProps {
+  stocks: Stock[]
+}
 
-type LargeCapFilter =
-  | "All"
-  | "Nifty Auto"
-  | "Nifty Bank"
-  | "Nifty FMCG"
-  | "Nifty Healthcare"
-  | "Nifty IT"
-  | "Nifty Media"
-  | "Nifty Metal"
-  | "Nifty Pharma"
-  | "Nifty PVT Bank"
-  | "Nifty PSU Bank"
-  | "Nifty Realty"
-
-const largeCapFilters: LargeCapFilter[] = [
-  "All",
+// List of indices to cycle through (excluding Nifty 50 and Nifty FnO)
+const INDICES = [
+  "All Stocks",
   "Nifty Auto",
   "Nifty Bank",
+  "Nifty Energy",
+  "Nifty Financial Services",
   "Nifty FMCG",
   "Nifty Healthcare",
   "Nifty IT",
   "Nifty Media",
   "Nifty Metal",
   "Nifty Pharma",
-  "Nifty PVT Bank",
   "Nifty PSU Bank",
+  "Nifty PVT Bank",
   "Nifty Realty",
 ]
 
-interface TodaysStocksProps {
-  stocks: Stock[]
-  loading?: boolean
-}
+// Stock categories
+type StockCategory = "gainers" | "losers" | "mostActive" | "52wHigh" | "52wLow"
 
-const TodaysStocks: React.FC<TodaysStocksProps> = ({ stocks, loading = false }) => {
-  const [activeFilter, setActiveFilter] = useState<FilterType>("gainers")
-  const [largeCapFilterIndex, setLargeCapFilterIndex] = useState(0)
+const CATEGORIES: {
+  value: StockCategory
+  label: string
+  icon: React.ReactNode
+  activeClass: string
+}[] = [
+  {
+    value: "gainers",
+    label: "Gainers",
+    icon: <ArrowUp className="h-4 w-4" />,
+    activeClass: "bg-green-900/30 text-green-400 border-green-800 hover:bg-green-900/40",
+  },
+  {
+    value: "losers",
+    label: "Losers",
+    icon: <ArrowDown className="h-4 w-4" />,
+    activeClass: "bg-red-900/30 text-red-400 border-red-800 hover:bg-red-900/40",
+  },
+  {
+    value: "mostActive",
+    label: "Most Active",
+    icon: <Activity className="h-4 w-4" />,
+    activeClass: "bg-orange-900/30 text-orange-400 border-orange-800 hover:bg-orange-900/40",
+  },
+  {
+    value: "52wHigh",
+    label: "52W High",
+    icon: <TrendingUp className="h-4 w-4" />,
+    activeClass: "bg-green-900/30 text-green-400 border-green-800 hover:bg-green-900/40",
+  },
+  {
+    value: "52wLow",
+    label: "52W Low",
+    icon: <LineChart className="h-4 w-4" />,
+    activeClass: "bg-red-900/30 text-red-400 border-red-800 hover:bg-red-900/40",
+  },
+]
+
+export default function TodayStocks({ stocks }: TodayStocksProps) {
+  const [selectedIndexIdx, setSelectedIndexIdx] = useState(0)
+  const [activeCategory, setActiveCategory] = useState<StockCategory>("gainers")
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
 
-  const largeCapFilter = largeCapFilters[largeCapFilterIndex]
+  const selectedIndex = INDICES[selectedIndexIdx]
 
-  const filteredStocks = useMemo(() => {
-    let filtered = stocks.filter((stock) => stock.type === "EQ")
+  // Filter out only "EQ" type stocks
+  const equityStocks = stocks.filter((stock) => stock.type === "EQ")
 
-    if (largeCapFilter !== "All") {
-      filtered = stocks.filter((stock) => stock.indices && stock.indices[largeCapFilter])
-    }
+  // Filter stocks by selected index
+  const filteredStocks =
+    selectedIndex === "All Stocks"
+      ? equityStocks
+      : equityStocks.filter((stock) => stock.indices && stock.indices[selectedIndex] === true)
 
-    const sorted = [...filtered]
-    switch (activeFilter) {
+  // Get stocks based on active category
+  const getStocksByCategory = () => {
+    switch (activeCategory) {
       case "gainers":
-        return sorted.sort((a, b) => b.changepct - a.changepct).slice(0, 5)
+        return [...filteredStocks].sort((a, b) => Number(b.changepct) - Number(a.changepct)).slice(0, 5)
       case "losers":
-        return sorted.sort((a, b) => a.changepct - b.changepct).slice(0, 5)
-      case "most-active":
-        return sorted.sort((a, b) => (b.volume || 0) - (a.volume || 0)).slice(0, 5)
-      case "52w-high":
-        return sorted.filter((stock) => stock.price >= stock.highYear).slice(0, 5)
-      case "52w-low":
-        return sorted.filter((stock) => stock.price <= stock.lowYear).slice(0, 5)
+        return [...filteredStocks].sort((a, b) => Number(a.changepct) - Number(b.changepct)).slice(0, 5)
+      case "mostActive":
+        return [...filteredStocks]
+          .filter((stock) => Number(stock.volumespike) > 0)
+          .sort((a, b) => Number(b.volumespike) - Number(a.volumespike))
+          .slice(0, 5)
+      case "52wHigh":
+        return filteredStocks.filter((stock) => stock.yearHLCross === "52W High").slice(0, 5)
+      case "52wLow":
+        return filteredStocks.filter((stock) => stock.yearHLCross === "52W Low").slice(0, 5)
       default:
-        return sorted.slice(0, 5)
+        return []
     }
-  }, [stocks, activeFilter, largeCapFilter])
-
-  const cycleLargeCapFilter = () => {
-    setLargeCapFilterIndex((prevIndex) => (prevIndex + 1) % largeCapFilters.length)
   }
 
-  const renderSkeleton = () => (
-    <div className="space-y-4">
-      {Array(5)
-        .fill(null)
-        .map((_, idx) => (
-          <div key={idx} className="grid grid-cols-12 gap-4 items-center px-2 py-3">
-            <div className="col-span-1 sm:col-span-1">
-              <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
-            </div>
-            <div className="col-span-5 sm:col-span-4 flex flex-col">
-              <div className="w-24 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-              <div className="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded mt-1 animate-pulse"></div>
-            </div>
-            <div className="col-span-3 sm:col-span-3 text-right">
-              <div className="w-16 h-5 bg-gray-200 dark:bg-gray-700 rounded ml-auto animate-pulse"></div>
-            </div>
-            <div className="col-span-3 sm:col-span-4 flex justify-end items-center gap-2">
-              <div className="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-              <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-        ))}
-    </div>
-  )
+  const displayedStocks = getStocksByCategory()
 
-  const handleStockClick = (stock: Stock) => {
-    setSelectedStock(stock)
-    setIsModalOpen(true)
+  // Cycle to the next index when the filter link is clicked
+  const handleFilterClick = () => {
+    setSelectedIndexIdx((prevIdx) => (prevIdx + 1) % INDICES.length)
+  }
+
+  // Get display name for the selected index
+  const getDisplayName = () => {
+    if (selectedIndex === "All Stocks") return "All"
+    return selectedIndex.replace("Nifty ", "")
   }
 
   return (
-    <div className="container mx-auto flex flex-col lg:flex-row gap-4">
-      <div className="w-full lg:w-4/6 flex flex-col">
-        <Card className="bg-white dark:bg-[#151719] overflow-hidden">
-          <CardHeader className="pb-4 px-2 sm:px-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold dark:text-white">Today&apos;s Stocks</h2>
-              <button
-                onClick={cycleLargeCapFilter}
-                className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 bg-transparent border-none cursor-pointer"
-              >
-                {largeCapFilter}
-                <ListFilter className="h-4 w-4" />
-              </button>
-            </div>
-            <div className="flex overflow-x-auto gap-2 mt-4">
-              <Button
-                variant={activeFilter === "gainers" ? "default" : "outline"}
-                onClick={() => setActiveFilter("gainers")}
-              >
-                <ArrowUpIcon className="h-4 w-4" />
-                Gainers
-              </Button>
-              <Button
-                variant={activeFilter === "losers" ? "default" : "outline"}
-                onClick={() => setActiveFilter("losers")}
-              >
-                <ArrowDownIcon className="h-4 w-4" />
-                Losers
-              </Button>
-              <Button
-                variant={activeFilter === "most-active" ? "default" : "outline"}
-                onClick={() => setActiveFilter("most-active")}
-              >
-                <Activity className="h-4 w-4" />
-                Most Active
-              </Button>
-              <Button
-                variant={activeFilter === "52w-high" ? "default" : "outline"}
-                onClick={() => setActiveFilter("52w-high")}
-              >
-                <TrendingUp className="h-4 w-4" />
-                52W High
-              </Button>
-              <Button
-                variant={activeFilter === "52w-low" ? "default" : "outline"}
-                onClick={() => setActiveFilter("52w-low")}
-              >
-                <TrendingDown className="h-4 w-4" />
-                52W Low
-              </Button>
-            </div>
-          </CardHeader>
+    <div className="bg-card rounded-lg p-6 border shadow-md">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">Today Stocks</h2>
+        <Button
+          variant="link"
+          className="p-0 h-auto text-blue-500 text-sm flex items-center"
+          onClick={handleFilterClick}
+        >
+          {getDisplayName()}
+          <ListFilter className="h-4 w-4 ml-1" />
+        </Button>
+      </div>
 
-          <CardContent className="px-2 sm:px-6">
-            <div className="grid grid-cols-12 gap-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 px-2 sm:px-0">
-              <div className="col-span-4 text-left">STOCKS</div>
-              <div className="col-span-4 text-right">PRICE</div>
-              <div className="col-span-4 text-right pr-2">CHANGE</div>
-            </div>
-            {loading ? (
-              renderSkeleton()
-            ) : (
-              <div className="divide-y dark:divide-gray-700">
-                {filteredStocks.map((stock) => (
-                  <div
-                    key={stock.symbol}
-                    className="grid grid-cols-12 gap-4 items-center py-3 px-2 sm:px-4 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md cursor-pointer"
-                    onClick={() => handleStockClick(stock)}
-                  >
-                    {/* STOCKS column (col-span-4) */}
-                    <div className="col-span-4 flex items-center">
-                      <div className="hidden sm:flex items-center justify-center mr-3">
-                        <Image
-                          className="rounded-full"
-                          width={30}
-                          height={30}
-                          src={`/images/${stock.symbol}.svg`}
-                          alt={stock.companyname}
-                          onError={e => {
-                            const target = e.target as HTMLImageElement;
-                            target.onerror = null;
-                            target.src = "/no_image.jpeg";
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <div
-                          className="px-1 py-1 rounded-md text-white font-semibold flex items-center justify-center"
-                          style={{ backgroundColor: getStockBgColor(stock.symbol), width: "6rem" }}
-                        >
-                          <span
-                            className="whitespace-nowrap text-[12px] leading-none text-center block overflow-hidden text-ellipsis"
-                            style={{
-                              paddingLeft: "2px",
-                              paddingRight: "2px",
-                              maxWidth: "100%",
-                              fontSize: stock.symbol.length > 10 ? "10px" : "12px",
-                            }}
-                          >
-                            {stock.symbol}
-                          </span>
-                        </div>
-                        <div
-                          className="text-sm mt-1 text-gray-700 dark:text-gray-300 truncate hidden sm:block"
-                          style={{
-                            maxWidth: "140px",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            display: "block"
-                          }}
-                        >
-                          {stock.companyname}
-                        </div>
-                      </div>
-                    </div>
-                    {/* PRICE column (col-span-4) */}
-                    <div className="col-span-4 text-right">
-                      <span className="font-medium text-md dark:text-white">₹{Number(stock.price).toFixed(2)}</span>
-                    </div>
-                    {/* CHANGE column (col-span-4) */}
-                    <div className="col-span-4 flex items-center justify-end gap-2">
-                      <span
-                        className={`inline-flex items-center rounded p-1 ${
-                          stock.changepct >= 0
-                            ? "text-green-500 bg-green-50 dark:text-green-400 dark:bg-green-900 rounded-lg"
-                            : "text-red-500 bg-red-50 dark:text-red-400 dark:bg-red-900 rounded-lg"
-                        }`}
-                      >
-                        {stock.changepct >= 0 ? (
-                          <ArrowUpIcon className="w-3.5 h-3.5 mr-0.5" />
-                        ) : (
-                          <ArrowDownIcon className="w-3.5 h-3.5 mr-0.5" />
-                        )}
-                        <span className="font-medium text-sm">{Number(stock.changepct).toFixed(2)}%</span>
-                      </span>
-                    </div>
-                  </div>
-                ))}
+      {/* Horizontally scrollable buttons */}
+      <div className="relative mb-6">
+        <div
+          ref={scrollContainerRef}
+          className="flex overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          <div className="flex space-x-2">
+            {CATEGORIES.map((category) => (
+              <Button
+                key={category.value}
+                variant="outline"
+                size="sm"
+                className={`flex items-center whitespace-nowrap ${
+                  activeCategory === category.value ? category.activeClass : ""
+                }`}
+                onClick={() => setActiveCategory(category.value)}
+              >
+                {category.icon}
+                <span className="ml-1">{category.label}</span>
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-hidden">
+        <div className="grid grid-cols-3 gap-4 mb-2 px-4 text-sm text-muted-foreground">
+          <div>STOCKS</div>
+          <div className="text-right">PRICE</div>
+          <div className="text-right">CHANGE</div>
+        </div>
+
+        <div className="space-y-4">
+          {displayedStocks.length > 0 ? (
+            displayedStocks.map((stock) => (
+              <div key={stock.symbol} 
+              onClick={() => { setSelectedStock(stock); setModalOpen(true); }} 
+              className="cursor-pointer hover:bg-muted/100 p-1 rounded-md transition-colors">
+                <StockRow stock={stock} />
               </div>
-            )}
-          </CardContent>
-        </Card>
+            ))
+          ) : (
+            <NoStocksMessage />
+          )}
+        </div>
       </div>
-
-      <div className="w-full lg:w-2/6">
-        <MarketMood stocks={stocks} />
-      </div>
-
-      <StockModal stock={selectedStock} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <StockModal stock={selectedStock} isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </div>
   )
 }
 
-export default TodaysStocks
+function NoStocksMessage() {
+  return <div className="flex justify-center items-center py-10 text-muted-foreground">No Stocks Available</div>
+}
 
+interface StockRowProps {
+  stock: Stock
+}
+
+function StockRow({ stock }: StockRowProps) {
+  const changeValue = Number.parseFloat(stock.change)
+  const changePctValue = Number.parseFloat(stock.changepct)
+  const isPositive = changeValue >= 0
+
+  return (
+    <div className="grid grid-cols-3 gap-4 items-center">
+      <div className="flex items-center gap-3">
+        {/* Only show the circle on non-mobile screens */}
+        <div
+          className={`hidden sm:flex w-10 h-10 rounded-full items-center justify-center flex-shrink-0`}
+        >
+          <img
+            src={`/images/${stock.symbol}.svg`}
+            alt={stock.symbol}
+            className="w-8 h-8 object-contain rounded-full"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = '/no_image.jpeg';
+            }}
+          />
+        </div>
+        <div className="min-w-0">
+          <div
+            className={`text-xs px-2 py-0.5 rounded font-medium inline-block mb-1 text-white`}
+            style={{ backgroundColor: getSymbolColor(stock.symbol) }}
+          >
+            {stock.symbol}
+          </div>
+          <div className="text-sm font-medium truncate max-w-full">{stock.companyname}</div>
+        </div>
+      </div>
+      <div className="text-right font-bold">₹{Number.parseFloat(stock.price).toLocaleString()}</div>
+      <div className="text-right">
+        <div
+          className={`inline-flex items-center justify-center rounded px-2 py-1 font-semibold ${
+            isPositive ? "bg-green-900/30 text-green-400" : "bg-red-900/30 text-red-400"
+          }`}
+        >
+          {isPositive ? <ArrowUp className="h-3 w-3 mr-1" /> : <ArrowDown className="h-3 w-3 mr-1" />}
+          {Math.abs(changePctValue).toFixed(2)}%
+        </div>
+      </div>
+    </div>
+  )
+}

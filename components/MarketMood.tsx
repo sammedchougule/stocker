@@ -1,41 +1,53 @@
-// components/MarketMood.tsx
-
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
-import Gauge from "@/components/Gauge"
-import type { Stock } from "@/types/Stock"
+import Gauge from "./Gauge"
+import type { Stock } from "@/lib/utils/fetchStocks"
 
 interface MarketMoodProps {
   stocks: Stock[]
 }
 
 export default function MarketMood({ stocks }: MarketMoodProps) {
+  // Calculate market mood based on percentage of stocks with positive change
+  const calculateMoodValue = () => {
+    // Filter only EQ type stocks
+    const equityStocks = stocks.filter((stock) => stock.type === "EQ")
 
+    if (equityStocks.length === 0) return 50 // Default to neutral if no stocks
+
+    // Count stocks with positive change percentage
+    const positiveStocks = equityStocks.filter((stock) => {
+      const changePct = Number(stock.changepct)
+      return !isNaN(changePct) && changePct > 0
+    })
+
+    // Calculate percentage of positive stocks
+    const moodValue = (positiveStocks.length / equityStocks.length) * 100
+
+    return moodValue
+  }
+
+  const moodValue = calculateMoodValue()
 
   return (
-    <Card className="h-full bg-white dark:bg-[#151719] dark:dark-noise overflow-hidden">
-      <CardContent className="pt-6 px-2 sm:px-4">
-        <div className="text-center">
-          <h3 className="text-2xl font-bold dark:text-white">Market Mood Index</h3>
-          <p className="text-md text-gray-500 dark:text-gray-400">Know what&apos;s the sentiment on the street today</p>
+    <div className="bg-card rounded-lg border p-6 shadow-md h-full">
+      <div className="text-center mb-2">
+        <h2 className="text-xl font-bold">Market Mood Index</h2>
+      </div>
 
-          {/* Use the Gauge component */}
-          <div className="flex justify-between text-sm font-medium my-6 px-4">
-            <span className="text-green-600 dark:text-green-400">Extreme Fear</span>
-            <span className="text-yellow-500 dark:text-yellow-400">Fear</span>
-            <span className="text-orange-500 dark:text-orange-400">Greed</span>
-            <span className="text-red-600 dark:text-red-400">Extreme Greed</span>
-          </div>
-          <Gauge stocks={stocks} />
+      <p className="text-muted-foreground text-center">Know the sentiment on the street today</p>
 
-          <div className="text-blue-600 dark:text-blue-400 mt-4">
-            <Link href="/market-mood-index">See More</Link>
-          </div>
+      {/* Market Mood Gauge */}
+      <div className="flex justify-center items-center">
+        <Gauge value={moodValue} />
+      </div>
 
-        </div>
-      </CardContent>
-    </Card>
+      <div className="mt-4 text-center">
+        <Link href="/market-mood-index" className="text-blue-500 hover:underline text-md">
+            See More
+        </Link>
+      </div>
+    </div>
   )
 }
